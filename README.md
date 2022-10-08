@@ -2,7 +2,7 @@
 ### p2system 商城系统
 ### vue_manage 后台管理系统
 
-### 使用步骤
+
 1. 将项目拉到本地，使用VSCode或者Hbuilder
 2. 进入各自的项目路径下打开控制台执行npm install安装插件
 3. 使用vant组件对界面进行替换
