@@ -1,0 +1,50 @@
+body{
+    background-color: white;
+    font-family: YouYuan;
+}
+.main{
+    position: relative;
+    margin: auto;
+    width: 1500px;
+    /*height: 1000px;*/
+}
+.main-bkgImg{
+    position: fixed;
+    z-index: 10;
+    left: 150px;
+    top: 0px;
+    width: 1200px;
+    height: 600px;
+    border-radius: 5px;
+}
+.main-2{
+    position: fixed;
+    z-index: 20;
+    left: 150px;
+    top: 0px;
+    width: 1200px;
+    height: 600px;
+    background-color: white;
+    opacity: 0.4;
+}
+.login-bkg{
+    position: fixed;
+    z-index: 30;
+    left: 800px;
+    top:100px;
+    width: 350px;
+    height: 350px;
+    background-color: white;
+    border-radius: 5px;
+    border-color: white;
+    opacity: 0.8;
+}
+.login-area{
+    position: fixed;
+    z-index: 40;
+    left: 800px;
+    top:100px;
+    width: 350px;
+    height: 350px;
+    font-family: YouYuan;
+}

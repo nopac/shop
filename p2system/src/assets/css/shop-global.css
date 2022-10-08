@@ -1,0 +1,24 @@
+.Contain{
+    padding: 10px;
+}
+.opeBoard{
+    margin: 10px 0;
+}
+.searchBoard{
+    margin: 10px 0;
+}
+.fixedOpe{
+    width: 120px;
+    text-align: center;
+}
+
+.userForm{
+    width: 80%;
+    display: block;
+    margin: 0 55px;
+    /*text-align: center;*/
+}
+.formItem{
+    display: inline-flex;
+    width: 250px;
+}

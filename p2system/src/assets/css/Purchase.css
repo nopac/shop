@@ -1,0 +1,39 @@
+box{
+    text-align:right;
+    margin-top:15px;
+    float: right;
+}
+.box__wrapper{
+    display: inline-block;
+    border:1px solid #ff0036
+}
+.box__shadow{
+    border:3px solid #fff0e8;
+    min-width:230px;
+    padding:10px 5px 10px 20px
+}
+.realpay--title{
+    font-weight:700;
+    color:#333
+}
+.realpay--price-symbol{
+    font-size:26px;
+    margin-right:4px;
+    color:#999
+}
+.realpay--price{
+    color:#ff0036;
+    font:700 26px tahoma
+}
+.order-confirmAddr{
+    line-height:1.6;
+    margin-top:10px
+}
+.confirmAddr-title{
+    font-weight:700;
+    color:#333
+}
+.order-confirm-eticket{
+    line-height:1.6;
+    margin-top:10px
+}
