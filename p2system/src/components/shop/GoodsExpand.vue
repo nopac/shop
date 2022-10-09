@@ -120,7 +120,7 @@ export default {
         status:"",
       },
       canBargain: 4,
-      baseURL:"http://localhost:9090/files/",
+      baseURL:"http://39.105.220.225:8081/shop/files/",
       showPictureUrl:""
     }
   },

@@ -76,7 +76,7 @@ export default {
 
       this.$router.push("/shoppingCart");
       // // this.$router.push("/shoppingCart");
-      // let href = "http://localhost:8080/shoppingCart"; //网站链接
+      // let href = "39.105.220.225:8081/shop/shoppingCart"; //网站链接
       // window.open(href, "_blank");
     }
   }

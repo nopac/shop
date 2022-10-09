@@ -68,7 +68,7 @@ export default {
   },
   methods:{
     load(){
-      axios.get("http://localhost:9090/cart", {
+      axios.get("http://39.105.220.225:8081/shop/cart", {
         params:{
           uid: window.localStorage.getItem("uid")
         }
@@ -85,13 +85,13 @@ export default {
       })
     },
     alterNum(cart){
-      axios.put("http://localhost:9090/cart", cart).then(res => {
+      axios.put("http://39.105.220.225:8081/shop/cart", cart).then(res => {
         console.log(res)
       })
 
     },
     handleDelete(cid){
-      axios.delete("http://localhost:9090/cart/" + cid).then(res => {
+      axios.delete("http://39.105.220.225:8081/shop/cart/" + cid).then(res => {
         console.log(res)
         if (res.data.code === '0'){
           this.$message({

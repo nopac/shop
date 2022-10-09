@@ -127,7 +127,7 @@ export default {
         uid:window.localStorage.getItem("uid"),
         status: 2,
       }
-      axios.get("http://localhost:9090/orders/user",{
+      axios.get("http://39.105.220.225:8081/shop/orders/user",{
         params: params
       })
           .then(res=>{
@@ -161,7 +161,7 @@ export default {
         type:2,
         oid:this.order.oid
       };
-      axios.post("http://localhost:9090/review",params1).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review",params1).then(res=>{
         console.log(res.data);
       })
 
@@ -173,7 +173,7 @@ export default {
         type:1,
         oid:this.order.oid
       };
-      axios.post("http://localhost:9090/review",params2).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review",params2).then(res=>{
         console.log(res.data);
       })
       this.$message({

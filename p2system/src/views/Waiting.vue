@@ -95,7 +95,7 @@ export default {
         uid:window.localStorage.getItem("uid"),
         status: 0,
       }
-      axios.get("http://localhost:9090/orders/user",{
+      axios.get("http://39.105.220.225:8081/shop/orders/user",{
         params: params
       })
           .then(res=>{
@@ -111,7 +111,7 @@ export default {
 
     deleteGoods(id){
       console.log(id);
-      axios.delete("http://localhost:9090/orders/"+id).then(res=>{
+      axios.delete("http://39.105.220.225:8081/shop/orders/"+id).then(res=>{
 
         if(res.data.code === '0'){
           this.$message({

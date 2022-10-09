@@ -102,7 +102,7 @@ export default {
       pageSize: 5,
       total: 10,
       addUserVisible: false,
-      url:"http://localhost:9090/",
+      url:"http://39.105.220.225:8081/shop/",
       DataList:[],
       tableData : [
         {

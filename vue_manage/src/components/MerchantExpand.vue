@@ -68,7 +68,7 @@ export default {
         likeRate:"",
         MLikeRate:"",
       },
-      baseURL:"http://localhost:9090/files/download/",
+      baseURL:"http://39.105.220.225:8081/shop/files/download/",
       licenseURL:"",
       identityURL:"",
     }

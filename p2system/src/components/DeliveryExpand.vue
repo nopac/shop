@@ -107,7 +107,7 @@ export default {
     onload(){
       this.ordersForm=toRaw(this.order);
       console.log(this.ordersForm)
-      axios.get("http://localhost:9090/goods/goodDetails", {
+      axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
         params:{
           Gid: this.ordersForm.gid
         }

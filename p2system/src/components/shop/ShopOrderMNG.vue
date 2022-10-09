@@ -259,7 +259,7 @@ export default {
         type:3,
         oid:this.order.oid
       };
-      axios.post("http://localhost:9090/review",params1).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review",params1).then(res=>{
         console.log(res.data);
       })
       this.$message({

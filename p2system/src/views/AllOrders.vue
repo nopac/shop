@@ -187,7 +187,7 @@ export default {
         uid:window.localStorage.getItem("uid"),
         status: 5,
       }
-      axios.get("http://localhost:9090/orders/user",{
+      axios.get("http://39.105.220.225:8081/shop/orders/user",{
         params: params
       })
           .then(res=>{
@@ -235,7 +235,7 @@ export default {
         type:2,
         oid:this.order.oid
       };
-      axios.post("http://localhost:9090/review",params1).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review",params1).then(res=>{
         console.log(res.data);
       })
 
@@ -247,7 +247,7 @@ export default {
         type:1,
         oid:this.order.oid
       };
-      axios.post("http://localhost:9090/review",params2).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review",params2).then(res=>{
         console.log(res.data);
       })
       this.$message({
@@ -280,7 +280,7 @@ export default {
     },
     deleteGoods(id){
       console.log(id);
-      axios.delete("http://localhost:9090/orders/"+id).then(res=>{
+      axios.delete("http://39.105.220.225:8081/shop/orders/"+id).then(res=>{
 
         if(res.data.code === '0'){
           this.$message({
@@ -297,7 +297,7 @@ export default {
       })
     },
     receiveGoods(order){
-      axios.put("http://localhost:9090/orders?status=2",order).then(res=>{
+      axios.put("http://39.105.220.225:8081/shop/orders?status=2",order).then(res=>{
 
         if(res.data.code === '0'){
           this.$message({
@@ -314,7 +314,7 @@ export default {
       })
     },
     returnGoods(order){
-      axios.put("http://localhost:9090/orders?status=-1",order).then(res=>{
+      axios.put("http://39.105.220.225:8081/shop/orders?status=-1",order).then(res=>{
 
         if(res.data.code === '0'){
           this.$message({

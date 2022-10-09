@@ -157,7 +157,7 @@ export default {
       diseditable: true,
       userForm:{},
       recordForm:{},
-      baseURL:"http://localhost:9090/files/upload/",
+      baseURL:"http://39.105.220.225:8081/shop/files/upload/",
       imageUrl:"",
       licenseUrl: "",
       idUrl: "",

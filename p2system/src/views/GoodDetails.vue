@@ -64,7 +64,7 @@ export default {
       num: 1,
       good: {},
       reviewData:[],
-      baseURL:"http://localhost:9090/files/download/",
+      baseURL:"http://39.105.220.225:8081/shop/files/download/",
     }
   },
   created() {
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     searchGood(){
-      axios.get("http://localhost:9090/goods/goodDetails", {
+      axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
         params:{
           Gid: this.gid
         }
@@ -84,7 +84,7 @@ export default {
       })
     },
     loadReview(){
-      axios.get("http://localhost:9090/review", {
+      axios.get("http://39.105.220.225:8081/shop/review", {
         params:{
           gid: this.gid
         }
@@ -100,7 +100,7 @@ export default {
       return moment(date).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
     },
     addCart() {
-      axios.post("http://localhost:9090/cart", {
+      axios.post("http://39.105.220.225:8081/shop/cart", {
         uid: window.localStorage.getItem("uid"),//用户名！！！
         gid: this.gid,
         number: this.num,

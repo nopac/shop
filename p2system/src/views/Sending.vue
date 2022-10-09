@@ -92,7 +92,7 @@ export default {
         mid:'2',
         status: 0,
       }
-      axios.get("http://localhost:9090/orders/merchant",{
+      axios.get("http://39.105.220.225:8081/shop/orders/merchant",{
         params: params
       }).then(res=>{
             console.log(res);
@@ -113,7 +113,7 @@ export default {
       this.load()
     },
     sendDelivery(order){
-      axios.put("http://localhost:9090/orders?status=1",order).then(res=>{
+      axios.put("http://39.105.220.225:8081/shop/orders?status=1",order).then(res=>{
         console.log(res.data);
 
       })

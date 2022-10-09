@@ -122,7 +122,7 @@ export default {
           label: '新旧度从低到高',
         }
       ],
-      baseURL:"http://localhost:9090/files/download/",
+      baseURL:"http://39.105.220.225:8081/shop/files/download/",
     }
   },
   created() {
@@ -153,7 +153,7 @@ export default {
       console.log(val);
     },
     addCart(value) {
-      axios.post("http://localhost:9090/cart", {
+      axios.post("http://39.105.220.225:8081/shop/cart", {
         uid: window.localStorage.getItem("uid"),//用户名！！！
         gid: value.gid,
         number: 1,

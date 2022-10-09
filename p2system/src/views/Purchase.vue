@@ -84,7 +84,7 @@ export default {
         item.sum = item.price*item.number
         this.sum += item.sum
       })
-      axios.get("http://localhost:9090/user/userone", {
+      axios.get("http://39.105.220.225:8081/shop/user/userone", {
         params:{
           uid: this.uid
         }
@@ -108,7 +108,7 @@ export default {
         orders.push(order);
       }
       // alert(JSON.stringify(carts))
-      axios.post("http://localhost:9090/orders/insertOrders",orders).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/orders/insertOrders",orders).then(res=>{
         console.log(res.data)
         if (res.data.code=='0'){
           this.$message({
