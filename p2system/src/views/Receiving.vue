@@ -10,40 +10,62 @@
                  @click="search">查询</el-button>
     </div>
     <div class="displayBoard">
-      <el-table :data="tableData"
-                border
-                stripe
-                style="width: 100%"
-      >
-        <el-table-column type="expand">
+
+<!--      <el-table :data="tableData"-->
+<!--                border-->
+<!--                stripe-->
+<!--                style="width: 100%"-->
+<!--      >-->
+<!--        <el-table-column type="expand">-->
           <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props">
-            <deliveryExpand v-bind:order="props.row" />
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="gname"
-            label="商品" />
-        <el-table-column
-            prop="price"
-            label="单价" />
-        <el-table-column
-            prop="number"
-            label="数量" />
-        <el-table-column
-            prop="sum"
-            label="实付款" />
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope">
-            <el-popconfirm title="确认收货？" @confirm="receiveGoods(scope.row)">
+
+<!--          <template #default="props">-->
+<!--            <deliveryExpand v-bind:order="props.row" />-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--            prop="gname"-->
+<!--            label="商品" />-->
+<!--        <el-table-column-->
+<!--            prop="price"-->
+<!--            label="单价" />-->
+<!--        <el-table-column-->
+<!--            prop="number"-->
+<!--            label="数量" />-->
+<!--        <el-table-column-->
+<!--            prop="sum"-->
+<!--            label="实付款" />-->
+<!--        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">-->
+<!--          <template #default="scope">-->
+<!--            <el-popconfirm title="确认收货？" @confirm="receiveGoods(scope.row)">-->
+<!--              <template #reference>-->
+<!--                <el-button text type="danger">收货</el-button>-->
+<!--              </template>-->
+<!--            </el-popconfirm>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table>-->
+
+      <van-cell v-for="(item, index) in tableData" :key="item">
+
+        <van-card
+            :num="item.number"
+            :price="item.price"
+            :title="item.gname"
+            thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg">
+          <template #footer>
+            <el-popconfirm title="确认收货吗？" @confirm="receiveGoods(item),load()">
               <template #reference>
-                <el-button text type="danger">收货</el-button>
+                <el-button type="text" size="small">收货</el-button>
               </template>
             </el-popconfirm>
           </template>
-        </el-table-column>
-      </el-table>
+        </van-card>
+
+      </van-cell>
+
     </div>
+
     <!--    分页-->
     <div style="margin: 10px">
       <el-pagination
@@ -105,6 +127,7 @@ export default {
     },
 
     receiveGoods(order){
+      // console.log(order);
       axios.put("http://39.105.220.225:8081/shop/orders?status=2",order).then(res=>{
 
         if(res.data.code === '0'){

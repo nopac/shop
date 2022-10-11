@@ -2,7 +2,7 @@
   <div>
     <Header/>
     <div style="display: flex">
-      <SidebarShop/>
+<!--      <SidebarShop/>-->
       <router-view style="flex: 1"/>
     </div>
   </div>

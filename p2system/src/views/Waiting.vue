@@ -1,5 +1,6 @@
 <template>
   <div class="waiting" style="margin: 10px">
+
     <div class="opeBoard">
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
@@ -10,40 +11,68 @@
                  @click="search">查询</el-button>
     </div>
     <div class="displayBoard">
-      <el-table :data="tableData"
-                border
-                stripe
-                style="width: 100%"
-      >
-        <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props">
-            <deliveryExpand v-bind:order="props.row" />
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="gname"
-            label="商品" />
-        <el-table-column
-            prop="price"
-            label="单价" />
-        <el-table-column
-            prop="number"
-            label="数量" />
-        <el-table-column
-            prop="sum"
-            label="实付款" />
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope">
-            <el-popconfirm title="确认取消？" @confirm="deleteGoods(scope.row.oid)">
-              <template #reference>
-                <el-button text type="danger">取消订单</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
+      <!--     <el-table :data="tableData"
+                      border
+                      stripe
+                      style="width: 100%"
+            >
+              <el-table-column type="expand"> -->
+
+
+      <!--        修改为自定义组件，显示其他信息-->
+      <!--         <template #default="props">
+                  <deliveryExpand v-bind:order="props.row" />
+                </template>
+              </el-table-column>
+              <el-table-column
+                  prop="gname"
+                  label="商品" />
+              <el-table-column
+                  prop="price"
+                  label="单价" />
+              <el-table-column
+                  prop="number"
+                  label="数量" />
+              <el-table-column
+                  prop="sum"
+                  label="实付款" />
+              <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
+                <template #default="scope">
+                  <el-popconfirm title="确认取消？" @confirm="deleteGoods(scope.row.oid)">
+                    <template #reference>
+                      <el-button text type="danger">取消订单</el-button>
+                    </template>
+                  </el-popconfirm>
+                </template>
+              </el-table-column>
+            </el-table> -->
+
+      <van-cell v-for="(item, index) in tableData" :key="item">
+
+          <van-card
+              :num="item.number"
+              :price="item.price"
+              :title="item.gname"
+              thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg">
+            <template #footer>
+              <el-popconfirm title="确认取消订单吗？" @confirm="deleteGoods(item.oid),load()">
+                <template #reference>
+                  <el-button type="text" size="small">取消订单</el-button>
+                </template>
+              </el-popconfirm>
+            </template>
+          </van-card>
+
+      </van-cell>
+
     </div>
+
+
+
+
+
+
+
     <!--    分页-->
     <div style="margin: 10px">
       <el-pagination
