@@ -37,6 +37,7 @@ export default {
     },
     showMy(){
       this.$router.push({
+        name: 'UserPage'
       })
     },
     showOrders(){

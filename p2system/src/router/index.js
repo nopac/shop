@@ -94,6 +94,11 @@ const routes = [
           }
         ]
       },
+      {
+        path:'/userPage',
+        name:'UserPage',
+        component: ()=> import( '@/views/UserPage')
+      }
     ]
 
   },
