@@ -6,8 +6,13 @@
       </van-col>
 
       <van-col span="6" offset="6">
-        <van-icon name="https://fastly.jsdelivr.net/npm/@vant/assets/icon-demo.png" />
-        <sapn>{{ user.uname }}</sapn>
+        <van-popover v-model:show="showPopover" >
+          <van-button type="default" style="width: 100%" @click="showInfo">个人信息</van-button><br>
+          <van-button type="default" style="width: 100%" @click="exitSystem">退出系统</van-button>
+          <template #reference>
+            <van-button type="primary">{{ user.uname }}</van-button>
+          </template>
+        </van-popover>
       </van-col>
     </van-row>
   </div>
@@ -43,13 +48,17 @@
 <script>
 import {ArrowDown} from "@element-plus/icons-vue";
 import { ref } from 'vue';
+import { Toast } from 'vant';
 import { toRaw } from '@vue/reactivity';
 import request from "@/util/request";
 import jwtDecode from "jwt-decode";
+
 export default {
-  setup(){
-    const value1 = ref(0);
+  setup() {
+    const showPopover = ref(false);
+    return { showPopover };
   },
+
   name: "Header",
   data(){
     return{
@@ -64,6 +73,9 @@ export default {
     ArrowDown
   },
   methods:{
+    test(){
+      Toast("????")
+    },
     exitSystem(){
       localStorage.clear();
       this.$router.push("/")
