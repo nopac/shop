@@ -10,23 +10,24 @@
                 @click="showMyInfo">我的信息</van-cell>
     </div>
     <div class="cellContainer">
-      <van-cell center icon="balance-o" class="cell" is-link
-                @click="showMyInfo">我的余额
+      <van-cell center icon="balance-o" class="cell" title="我的余额"
+                @click="showMyInfo">
+        <van-button type="default" @click="">充值</van-button>
       </van-cell>
     </div>
     <div class="cellContainer">
-      <van-cell center icon="balance-o" class="cell" is-link
+      <van-cell center icon="balance-list-o" class="cell" is-link
                 @click="showMyInfo">收支记录
       </van-cell>
     </div>
     <div class="cellContainer" >
       <van-cell center disabled="{{isMerchant}}"
-                icon="balance-o" class="cell" is-link
+                icon="send-gift-o" class="cell" is-link
                 @click="showMyInfo" >商品管理
       </van-cell>
     </div>
     <div class="cellContainer">
-      <van-cell center icon="balance-o" class="cell" is-link
+      <van-cell center class="cell"
                 @click="showMyInfo">成为商家
       </van-cell>
     </div>
@@ -35,13 +36,14 @@
 </template>
 
 <script>
-import {Cell,Image,Icon} from 'vant'
+import {Cell,Image,Icon,Button} from 'vant'
 export default {
   name: "UserPage",
   components:{
     [Cell.name]: Cell,
     [Image.name]: Image,
     [Icon.name]: Icon,
+    [Button.name] : Button,
   },
   data(){
     return{
