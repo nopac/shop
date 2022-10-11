@@ -1,21 +1,33 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
-import { Button,Form, Field, CellGroup,NavBar } from 'vant'
+import {Button, Form, Field, CellGroup, NavBar} from 'vant'
 import 'element-plus/dist/index.css'
 import '@/assets/css/global.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import "amfe-flexible"
+import {DropdownMenu, DropdownItem} from 'vant';
+import {Icon} from 'vant';
+import {Cell} from 'vant';
+import {Col, Row} from 'vant';
+
 
 createApp(App).use(store)
+    .use(Col)
+    .use(Row)
+    .use(Cell)
+    .use(CellGroup)
     .use(router)
     .use(Button)
     .use(Form)
     .use(Field)
     .use(CellGroup)
     .use(NavBar)
-    .use(ElementPlus,{
-        locale: zhCn,
+    .use(DropdownMenu)
+    .use(DropdownItem)
+    .use(Icon)
+    .use(ElementPlus, {
+      locale: zhCn,
     }).mount('#app')
