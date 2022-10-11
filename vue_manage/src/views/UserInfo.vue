@@ -88,7 +88,7 @@
             text-color="#ff9900"
             :texts="userForm.MlikeRate">
         </el-rate>
-      </div>-->
+      </div>   -->
     </div>
 
   </div>
