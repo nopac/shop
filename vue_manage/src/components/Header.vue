@@ -3,6 +3,11 @@
     <div class="leftMenu">后台管理</div>
     <div style="flex: 1"></div>
     <div class="rightMenu">
+      <!--<van-cell-group>
+        <van-cell title="个人信息" value="" @click="showInfo"/>
+        <van-cell title="退出系统" value="" label="" @click="exitSystem"/>
+      </van-cell-group>-->
+
       <el-dropdown>
         <span class="el-dropdown-link">
           <el-avatar> {{ user.uname }} </el-avatar>
@@ -12,7 +17,7 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="showInfo">个人信息</el-dropdown-item>
+            <el-dropdown-item @click="showInfo">个人信息test</el-dropdown-item>
             <el-dropdown-item @click="exitSystem">退出系统</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -23,11 +28,14 @@
 
 <script>
 import {ArrowDown} from "@element-plus/icons-vue";
-
+import { ref } from 'vue';
 import { toRaw } from '@vue/reactivity';
 import request from "@/util/request";
 import jwtDecode from "jwt-decode";
 export default {
+  setup(){
+    const value1 = ref(0);
+  },
   name: "Header",
   data(){
     return{

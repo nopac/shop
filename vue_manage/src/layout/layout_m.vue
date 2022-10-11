@@ -1,10 +1,32 @@
 <template>
   <div>
-    <Header/>
+    <van-row>
+      <van-col span="24">
+        顶部栏
+        <!--<Header/>-->
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="6">
+        <Sidebar/>
+      </van-col>
+      <van-col span="18">
+        主内容
+        <router-view style="flex: 1"/>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        底部栏
+      </van-col>
+    </van-row>
+
+
+    <!--<Header/>
     <div style="display: flex">
       <Sidebar/>
       <router-view style="flex: 1"/>
-    </div>
+    </div>-->
   </div>
 </template>
 

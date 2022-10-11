@@ -1,6 +1,46 @@
 <template>
   <div>
-    <el-menu
+    <van-row>
+      <van-col span="24">
+         <span @click="showUserEXM">用户审核</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span @click="showMerchantEXM">商家审核</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span @click="showGoodsEXM">商品审核</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span @click="showUserMNG">用户管理</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span @click="showGoodsMNG">商品管理</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span @click="showMerchantMNG">商家管理</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span @click="showChargeMNG">手续费管理</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col span="24">
+        <span>黑名单管理</span>
+      </van-col>
+    </van-row>
+    <!--<el-menu
         :uniqueOpened="true"
         :default-openeds="['1']"
         class="el-menu-vertical-demo"
@@ -46,17 +86,17 @@
         <i class="el-icon-document"></i>
         <template #title>黑名单管理</template>
       </el-menu-item>
-<!--      <el-menu-item index="4">-->
-<!--        <i class="el-icon-setting"></i>-->
-<!--        <template #title>黑名单</template>-->
-<!--      </el-menu-item>-->
-<!--      <el-sub-menu index="5">-->
-<!--        <template #title>-->
-<!--          <i class="el-icon-location"></i>-->
-<!--          <span>导航一</span>-->
-<!--        </template>-->
-<!--      </el-sub-menu>-->
-    </el-menu>
+&lt;!&ndash;      <el-menu-item index="4">&ndash;&gt;
+&lt;!&ndash;        <i class="el-icon-setting"></i>&ndash;&gt;
+&lt;!&ndash;        <template #title>黑名单</template>&ndash;&gt;
+&lt;!&ndash;      </el-menu-item>&ndash;&gt;
+&lt;!&ndash;      <el-sub-menu index="5">&ndash;&gt;
+&lt;!&ndash;        <template #title>&ndash;&gt;
+&lt;!&ndash;          <i class="el-icon-location"></i>&ndash;&gt;
+&lt;!&ndash;          <span>导航一</span>&ndash;&gt;
+&lt;!&ndash;        </template>&ndash;&gt;
+&lt;!&ndash;      </el-sub-menu>&ndash;&gt;
+    </el-menu>-->
 
   </div>
 </template>
