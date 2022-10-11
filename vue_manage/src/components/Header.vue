@@ -5,12 +5,13 @@
         <span style="color: #409EFF;font-weight: bolder">后台管理</span>
       </van-col>
 
-      <van-col span="6" offset="6">
+      <van-col span="9" offset="3">
+        <van-icon name="manager" />
         <van-popover v-model:show="showPopover" >
           <van-button type="default" style="width: 100%" @click="showInfo">个人信息</van-button><br>
           <van-button type="default" style="width: 100%" @click="exitSystem">退出系统</van-button>
           <template #reference>
-            <van-button type="primary">{{ user.uname }}</van-button>
+            <van-button type="primary" style="width: 100%">管理员: {{ user.uname }}</van-button>
           </template>
         </van-popover>
       </van-col>

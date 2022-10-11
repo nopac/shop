@@ -16,6 +16,7 @@ import {ActionSheet} from 'vant';
 import {Tabbar, TabbarItem} from 'vant';
 import { Popover } from 'vant';
 
+
 createApp(App).use(store)
     .use(Col)
     .use(Popover)

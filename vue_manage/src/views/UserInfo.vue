@@ -1,7 +1,33 @@
 <template>
   <div class="UserInfo">
     <div class="infoBoard">
-      <el-form class="userForm" :model="userForm" >
+      <van-form @submit="onSubmit" class="userForm" :model="userForm">
+        <van-cell-group inset>
+          <van-field
+                  v-model="userForm.uname"
+                  name="用户名"
+                  label="用户名"
+                  placeholder="用户名"
+          />
+          <van-field
+                  v-model="userForm.upsw"
+                  type="password"
+                  name="密码"
+                  label="密码"
+          />
+
+
+
+        </van-cell-group>
+        <div style="margin: 16px;">
+          <van-button round block type="primary" native-type="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
+<!--///////////////-->
+      <!--多余的表单-->
+      <!--<el-form class="userForm" :model="userForm" >
         <el-form-item class="formItem" label="用户名" label-width="100px">
           <el-input style="width: 120px" v-model="userForm.uname" :disabled="true"/>
         </el-form-item>
@@ -24,17 +50,17 @@
         <el-form-item class="formItem" label-width="100px" label="邮件">
           <el-input style="width: 200px" v-model="userForm.email"  :disabled="editable"/>
         </el-form-item>
-<!--        身份证号需要额外点击身份认证-->
+&lt;!&ndash;        身份证号需要额外点击身份认证&ndash;&gt;
         <el-form-item class="formItem" label-width="100px" label="身份证号">
           <el-input style="width: 200px" v-model="userForm.identityNumber" :disabled="true"/>
         </el-form-item>
-        <!--        银行账号需要额外点击绑定银行卡-->
+        &lt;!&ndash;        银行账号需要额外点击绑定银行卡&ndash;&gt;
         <el-form-item class="formItem" label-width="100px" label="银行账户">
           <el-input style="width: 200px" v-model="userForm.bank" :disabled="true"/>
         </el-form-item>
 
-      </el-form>
-      <div class="UserDisplayBoard">
+      </el-form>-->
+      <!--<div class="UserDisplayBoard">
         <div class="account">
           <span>余额:</span>{{userForm.account}}
         </div>
@@ -46,9 +72,9 @@
             text-color="#ff9900"
             :texts="userForm.ulikeRate">
         </el-rate>
-      </div>
-      <!--    仅在已成为商人后显示-->
-      <div class="MerchantDisplayBoard">
+      </div>-->
+      <!--仅在已成为商人后显示-->
+      <!--div class="MerchantDisplayBoard">
         <div class="turnover">
           <span>总交易额:</span>{{userForm.turnover}}
         </div>
@@ -62,7 +88,7 @@
             text-color="#ff9900"
             :texts="userForm.MlikeRate">
         </el-rate>
-      </div>
+      </div>-->
     </div>
 
   </div>
@@ -70,10 +96,14 @@
 
 <script>
 import request from "@/util/request";
+import { ref } from 'vue';
 
 export default {
   name: "UserInfo",
-
+  setup() {
+    const checked = ref('1');
+    return { checked };
+  },
   data(){
     return {
       operate: "",
