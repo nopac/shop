@@ -1,33 +1,55 @@
 <template>
-  <div class="head">
-    <div class="leftMenu">后台管理</div>
+  <div>
+    <van-row>
+      <van-col span="12">
+        <span style="color: #409EFF;font-weight: bolder">后台管理</span>
+      </van-col>
+
+      <van-col span="6" offset="6">
+        <van-icon name="https://fastly.jsdelivr.net/npm/@vant/assets/icon-demo.png" />
+        <sapn>{{ user.uname }}</sapn>
+      </van-col>
+    </van-row>
+  </div>
+
+
+  <!--<div class="head">
+    &lt;!&ndash;<div class="leftMenu">后台管理</div>&ndash;&gt;
     <div style="flex: 1"></div>
     <div class="rightMenu">
-      <el-dropdown>
+      &lt;!&ndash;<van-cell-group>
+        <van-cell title="个人信息" value="" @click="showInfo"/>
+        <van-cell title="退出系统" value="" label="" @click="exitSystem"/>
+      </van-cell-group>&ndash;&gt;
+
+      &lt;!&ndash;<el-dropdown>
         <span class="el-dropdown-link">
           <el-avatar> {{ user.uname }} </el-avatar>
-<!--          <el-icon class="el-icon&#45;&#45;right">-->
-<!--            <arrow-down/>-->
-<!--          </el-icon>-->
+&lt;!&ndash;          <el-icon class="el-icon&#45;&#45;right">&ndash;&gt;
+&lt;!&ndash;            <arrow-down/>&ndash;&gt;
+&lt;!&ndash;          </el-icon>&ndash;&gt;
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="showInfo">个人信息</el-dropdown-item>
+            <el-dropdown-item @click="showInfo">个人信息test</el-dropdown-item>
             <el-dropdown-item @click="exitSystem">退出系统</el-dropdown-item>
           </el-dropdown-menu>
         </template>
-      </el-dropdown>
+      </el-dropdown>&ndash;&gt;
     </div>
-  </div>
+  </div>-->
 </template>
 
 <script>
 import {ArrowDown} from "@element-plus/icons-vue";
-
+import { ref } from 'vue';
 import { toRaw } from '@vue/reactivity';
 import request from "@/util/request";
 import jwtDecode from "jwt-decode";
 export default {
+  setup(){
+    const value1 = ref(0);
+  },
   name: "Header",
   data(){
     return{
