@@ -2,12 +2,14 @@
   <div><!--导航栏一级,下部-->
     <van-tabbar v-model="active">
       <van-tabbar-item >
-        <van-cell is-link title="审核管理" @click="show = true"  close-on-click-action="true"/>
-        <van-action-sheet v-model:show="show" title="审核管理" close-on-click-action="true">
+        <van-popover v-model:show="showPopover" placement="top" >
           <van-button type="default" style="width: 100%" @click="showUserEXM">用户审核</van-button><br>
           <van-button type="default" style="width: 100%" @click="showMerchantEXM">商家审核</van-button><br>
           <van-button type="default" style="width: 100%" @click="showGoodsEXM">商品审核</van-button>
-        </van-action-sheet>
+          <template #reference>
+            <van-button type="default">审核管理</van-button>
+          </template>
+        </van-popover>
       </van-tabbar-item>
       <van-tabbar-item>
         <div @click="showUserMNG">
@@ -87,10 +89,11 @@
       }
     },
     setup() {
+      const showPopover = ref(false);
       const show = ref(false);
       const active = ref(0);
       return {
-        show,active
+        show,active,showPopover
       };
     },
     methods: {
