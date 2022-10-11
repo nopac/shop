@@ -1,10 +1,10 @@
 <template>
   <div>
     <van-tabbar v-model="active" safe-area-inset-bottom border>
-      <van-tabbar-item icon="home-o" @click="showHome">首页</van-tabbar-item>
-      <van-tabbar-item icon="cart-o" @click="showCart">购物车</van-tabbar-item>
-      <van-tabbar-item icon="setting-o" @click="showOrders">订单</van-tabbar-item>
-      <van-tabbar-item icon="friends-o" @click="showMy">我的</van-tabbar-item>
+      <van-tabbar-item name="home" icon="home-o" @click="showHome">首页</van-tabbar-item>
+      <van-tabbar-item name="cart" icon="cart-o" @click="showCart">购物车</van-tabbar-item>
+      <van-tabbar-item name="order" icon="orders-o" @click="showOrders">订单</van-tabbar-item>
+      <van-tabbar-item name="my" icon="friends-o" @click="showMy">我的</van-tabbar-item>
     </van-tabbar>
 
   </div>
@@ -21,7 +21,7 @@ export default {
     [ConfigProvider.name]:ConfigProvider,
   },
   setup() {
-    const active = ref(0);
+    const active = ref('home');
     return { active };
   },
   methods:{
@@ -41,7 +41,7 @@ export default {
     },
     showOrders(){
       this.$router.push({
-        name: 'layout_m'
+        name: 'layout_order'
       })
     },
 

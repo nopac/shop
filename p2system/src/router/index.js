@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import layout_m from "@/layout/layout_m";
+import layout_order from "@/layout/layout_order";
 import layout_shop from "@/layout/layout_shop";
 import AddGood from "@/components/shop/AddGood";
 import Layout from "@/layout/Layout";
+import OrderNav from "../components/OrderNav";
 
 const routes = [
 
@@ -54,43 +55,19 @@ const routes = [
       },
       {
         path: '/layout',
-        name: 'layout_m',
-        component: layout_m,
-        redirect: "/infoU",
+        name: 'layout_order',
+        component: layout_order,
+        redirect: "/orderNav",
         children:[
           {
-            path: '/infoU',
-            name: 'UserInfo',
-            component:()=>import("@/views/UserInfo"),
-          },{
-            path: '/record',
-            name: 'AmountRecordMNG',
-            component:()=>import("@/views/AmountRecordMNG"),
+            path: '/orderNav',
+            name: 'OrderNav',
+            component: ()=> import('@/components/OrderNav')
           },
           {
-            path: '/waiting',
-            name: 'Waiting',
-            component: () => import( '@/views/Waiting')
-          },
-          {
-            path: '/sending',
-            name: 'Sending',
-            component: () => import( '@/views/Sending')
-          },
-          {
-            path: '/receiving',
-            name: 'Receiving',
-            component: () => import( '@/views/Receiving')
-          },
-          {
-            path: '/allOrders',
-            name: 'AllOrders',
-            component: () => import( '@/views/AllOrders')
-          },
-          {
-            path: '/review',
-            name: 'Review',
-            component: () => import( '@/views/Review')
+            path: 'merchantOrder',
+            name: 'MerOrderNav',
+            component: () => import('@/components/MerOrderNav')
           }
         ]
       },
