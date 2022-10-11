@@ -5,53 +5,7 @@ import AddGood from "@/components/shop/AddGood";
 import Layout from "@/layout/Layout";
 
 const routes = [
-  {
-    path: '/layout',
-    name: 'layout_m',
-    component: layout_m,
-    redirect: "/infoU",
-    children:[
-        {
-        path: '/infoU',
-        name: 'UserInfo',
-        component:()=>import("@/views/UserInfo"),
-      },{
-        path: '/record',
-        name: 'AmountRecordMNG',
-        component:()=>import("@/views/AmountRecordMNG"),
-      },
-      {
-        path: '/shoppingCart',
-        name: 'ShoppingCart',
-        component: () => import( '@/views/ShoppingCart')
-      },
-      {
-        path: '/waiting',
-        name: 'Waiting',
-        component: () => import( '@/views/Waiting')
-      },
-      {
-        path: '/sending',
-        name: 'Sending',
-        component: () => import( '@/views/Sending')
-      },
-      {
-        path: '/receiving',
-        name: 'Receiving',
-        component: () => import( '@/views/Receiving')
-      },
-      {
-        path: '/allOrders',
-        name: 'AllOrders',
-        component: () => import( '@/views/AllOrders')
-      },
-      {
-        path: '/review',
-        name: 'Review',
-        component: () => import( '@/views/Review')
-      }
-    ]
-  },
+
   {
     path: '/shop',
     name: 'layout_shop',
@@ -93,7 +47,53 @@ const routes = [
         name: 'Home',
         component: () => import("@/views/Home"),
       },
-
+      {
+        path: '/shoppingCart',
+        name: 'ShoppingCart',
+        component: () => import( '@/views/ShoppingCart')
+      },
+      {
+        path: '/layout',
+        name: 'layout_m',
+        component: layout_m,
+        redirect: "/infoU",
+        children:[
+          {
+            path: '/infoU',
+            name: 'UserInfo',
+            component:()=>import("@/views/UserInfo"),
+          },{
+            path: '/record',
+            name: 'AmountRecordMNG',
+            component:()=>import("@/views/AmountRecordMNG"),
+          },
+          {
+            path: '/waiting',
+            name: 'Waiting',
+            component: () => import( '@/views/Waiting')
+          },
+          {
+            path: '/sending',
+            name: 'Sending',
+            component: () => import( '@/views/Sending')
+          },
+          {
+            path: '/receiving',
+            name: 'Receiving',
+            component: () => import( '@/views/Receiving')
+          },
+          {
+            path: '/allOrders',
+            name: 'AllOrders',
+            component: () => import( '@/views/AllOrders')
+          },
+          {
+            path: '/review',
+            name: 'Review',
+            component: () => import( '@/views/Review')
+          }
+        ]
+      },
     ]
 
   },

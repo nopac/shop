@@ -1,17 +1,19 @@
 <template>
   <div>
-    <Header/>
-    <div style="display: flex">
-      <SidebarU/>
-      <router-view style="flex: 1"/>
+    <div>
+      <van-button type="primary">切换</van-button>
+    </div>
+    <div>
+      <OrderNav/>
+<!--      <router-view style="flex: 1"/>-->
     </div>
   </div>
 </template>
 
 <script>
 
-import Header from "@/components/Header";
-import SidebarU from "@/components/SidebarU"
+import OrderNav from "@/components/OrderNav";
+import { Button } from 'vant';
 export default {
   name: "layout_m",
   data(){
@@ -24,8 +26,8 @@ export default {
     // console.log("get user:"+this.$route.query.uname)
   },
   components:{
-    Header,
-    SidebarU
+    [Button.name]: Button,
+    OrderNav,
   }
 }
 </script>
