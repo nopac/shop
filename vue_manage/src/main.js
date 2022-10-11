@@ -12,10 +12,15 @@ import {DropdownMenu, DropdownItem} from 'vant';
 import {Icon} from 'vant';
 import {Cell} from 'vant';
 import {Col, Row} from 'vant';
+import {ActionSheet} from 'vant';
+import {Tabbar, TabbarItem} from 'vant';
 
 
 createApp(App).use(store)
     .use(Col)
+    .use(ActionSheet)
+    .use(Tabbar)
+    .use(TabbarItem)
     .use(Row)
     .use(Cell)
     .use(CellGroup)

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-row>
+    <!--<van-row>
       <van-col span="24">
          <span @click="showUserEXM">用户审核</span>
       </van-col>
@@ -39,8 +39,8 @@
       <van-col span="24">
         <span>黑名单管理</span>
       </van-col>
-    </van-row>
-    <!--<el-menu
+    </van-row>-->
+    <el-menu
         :uniqueOpened="true"
         :default-openeds="['1']"
         class="el-menu-vertical-demo"
@@ -96,7 +96,7 @@
 &lt;!&ndash;          <span>导航一</span>&ndash;&gt;
 &lt;!&ndash;        </template>&ndash;&gt;
 &lt;!&ndash;      </el-sub-menu>&ndash;&gt;
-    </el-menu>-->
+    </el-menu>
 
   </div>
 </template>
