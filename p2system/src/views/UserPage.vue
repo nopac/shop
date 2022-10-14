@@ -1,7 +1,7 @@
 <template>
 <div class="UserPage" >
   <div class="HeadContainer">
-    <van-image class="headImg" :src="require('../assets/img/head.png')"/>
+    <van-image class="headImg" :src="require('../assets/img/head.png')" @click="toLogin"/>
     <span class="headName">{{userForm.uname}}</span>
   </div>
   <div class="contentContainer">
@@ -44,6 +44,11 @@ export default {
     [Image.name]: Image,
     [Icon.name]: Icon,
     [Button.name] : Button,
+  },
+  methods: {
+    gotoLogin(){
+      this.$router.push("/login")
+    },
   },
   data(){
     return{
