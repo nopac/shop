@@ -52,6 +52,9 @@ export default {
     toLogin(){
       this.$router.push("/login")
     },
+    showMyInfo(){
+      this.$router.push("/infoU")
+    }
   },
   data(){
     return{
