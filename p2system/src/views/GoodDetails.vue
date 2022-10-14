@@ -75,7 +75,8 @@ export default {
     searchGood(){
       axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
         params:{
-          Gid: this.gid
+          Gid: this.gid,
+          Uid: window.localStorage.getItem("uid")
         }
       }).then(res => {
         console.log(res.data)
