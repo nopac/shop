@@ -46,7 +46,7 @@ export default {
     [Button.name] : Button,
   },
   methods: {
-    gotoLogin(){
+    toLogin(){
       this.$router.push("/login")
     },
   },
