@@ -62,6 +62,7 @@
 <script>
     import request from "@/util/request";
     import jwtDecode from "jwt-decode"
+    import axios from "axios";
 
     export default {
         name: 'Login',
@@ -73,24 +74,21 @@
         },
         methods: {
           Login(){
-            request.post("/user/login",this.user).then(res =>{
-              if(res.code === '0'){
+            axios.post("http://39.105.220.225:8081/shop/user/login",this.user).then(res =>{
+              if(res.data.code === "0"){
                 this.$message({
                   type:"success",
                   message: "登录成功",
                 });
-                let decode = jwtDecode(res.token)
+                let decode = jwtDecode(res.data.token)
                 console.log("decode:"+JSON.stringify(decode))
                 localStorage.setItem("uid",decode.info.uid)
                 localStorage.setItem("uname",decode.info.uname)
-                this.$router.push({
-                  name:'Layout',
-                  // name:'layout_shop',
-                })
+                this.$router.push('/')
               }else{
                 this.$message({
                   type:"error",
-                  message: res.msg,
+                  message: res.data.msg,
                 })
               }
             })
