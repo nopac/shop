@@ -46,6 +46,9 @@ export default {
     [Button.name] : Button,
   },
   methods: {
+    created() {
+      this.userForm.uname = window.localStorage.getItem("uname")
+    },
     toLogin(){
       this.$router.push("/login")
     },

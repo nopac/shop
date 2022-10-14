@@ -82,9 +82,10 @@
                 });
                 let decode = jwtDecode(res.data.token)
                 console.log("decode:"+JSON.stringify(decode))
+                // localStorage.setItem("user",decode.info.data())
                 localStorage.setItem("uid",decode.info.uid)
                 localStorage.setItem("uname",decode.info.uname)
-                this.$router.push('/')
+                this.$router.push('/userPage')
               }else{
                 this.$message({
                   type:"error",
