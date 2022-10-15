@@ -25,6 +25,8 @@ createApp(App).use(store)
     .use(Cell)
     .use(Card)
     .use(Dialog)
+    .use(Card)
+    .use(List)
     .use(ElementPlus,{
         locale: zhCn,
     }).mount('#app')
