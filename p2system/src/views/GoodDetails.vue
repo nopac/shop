@@ -1,6 +1,6 @@
 <template>
-  <div style="margin: 20px 40px">
-    <div style="float: left;width: 35%;">
+  <div style="margin: 20px 40px;position:relative;bottom: 50px">
+    <div style="width: 100%;">
       <el-image class="imageArea"
                 style=""
                 :src="good.picture">
@@ -11,9 +11,9 @@
         </template>
       </el-image>
     </div>
-    <div style="float: right;width: 60%">
-      <p style="margin-top: 0;">名称：{{good.gname}}</p>
-      <p style="margin-top: 0;">价格：{{good.price}}</p>
+    <div style="width: 100%">
+      <p style="margin-top: 0;color: #fe4d19">￥{{good.price}}</p>
+      <p style="margin-top: 0;">{{good.gname}}</p>
       <p style="margin-top: 0;">大小：{{good.size}}</p>
       <p style="margin-top: 0;">是否议价：{{good.bargain}}</p>
       <p style="margin-top: 0;">详情信息：{{good.introduction}}</p>
@@ -21,13 +21,8 @@
       <p style="margin-top: 0;">成色：{{good.gcondition}}</p>
       <p style="margin-top: 0;">销量：{{good.sale}}</p>
       <p style="margin-top: 0;">好评率：{{good.likeRate}}</p>
-      <el-input-number v-model="num" :min="1" :max="this.good.storage"/>
-      <div style="margin: 10px auto;">
-        <el-button type="danger" plain size="large" @click="gotoPurchase">立即购买</el-button>
-        <el-button type="danger" size="large" @click="addCart">
-          <el-icon style="color: white"><ShoppingCart /></el-icon>&ensp;加入购物车
-        </el-button>
-      </div>
+      购买数量：<van-stepper v-model="num" integer :min="1" :max="this.good.storage"/>
+
     </div>
     <div style="width: 100%">
       <el-table
@@ -45,6 +40,13 @@
       </el-table>
     </div>
   </div>
+  <div>
+    <van-action-bar safe-area-inset-bottom style="background-color: #fff">
+      <van-action-bar-icon icon="cart-o" text="购物车" @click="showCart"/>
+      <van-action-bar-button type="warning" text="加入购物车" @click="addCart"/>
+      <van-action-bar-button type="danger" text="立即购买" @click="gotoPurchase"/>
+    </van-action-bar>
+  </div>
 </template>
 
 <script>
@@ -52,11 +54,17 @@ import { ref } from 'vue'
 import axios from "axios";
 import { ShoppingCart } from '@element-plus/icons-vue'
 import moment from "moment";
+import { ActionBar, ActionBarIcon, ActionBarButton } from 'vant';
+import { Stepper } from 'vant';
 
 export default {
   name: 'GoodDetails',
   components: {
-    ShoppingCart
+    ShoppingCart,
+    [ActionBar.name]: ActionBar,
+    [ActionBarIcon.name]: ActionBarIcon,
+    [ActionBarButton.name]: ActionBarButton,
+    [Stepper.name]: Stepper,
   },
   data(){
     return {
@@ -125,7 +133,12 @@ export default {
     },
     gotoPurchase(){
       this.$router.push({name: "Purchase", params: {good: JSON.stringify(this.good),number: this.num}});
-    }
+    },
+    showCart(){
+      this.$router.push({
+        name:'ShoppingCart',
+      })
+    },
   }
 
 }
