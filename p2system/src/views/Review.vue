@@ -21,6 +21,16 @@
           :title="order.gname"
           :thumb="order.picture"
       >
+        <template #tags >
+          <div style="margin-top: 3%;margin-bottom: 3%">
+            <div>
+              <van-tag plain>{{order.mname}}</van-tag>
+            </div>
+            <div style="color: #ED9B78">
+              <van-tag plain>待评价</van-tag>
+            </div>
+          </div>
+        </template>
         <template #footer>
           <div style="width: 72%;margin-left: auto">
             <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{order.sum}}</div>
@@ -118,9 +128,14 @@ export default {
               }).then(res=>{
                 console.log("aaa",res.data.data.picture);
                 item.picture = this.baseUrl + res.data.data.picture;
-                this.key++;
+              })
+              axios.get("http://39.105.220.225:8081/shop/user/userone",{
+                params:{uid:item.mid}
+              }).then(res =>{
+                item.mname = res.data.data.uname;
               })
             })
+        this.key++;
       })
     },
     search(){

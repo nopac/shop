@@ -1,5 +1,5 @@
 <template>
-  <div class="AllOrder">
+  <div class="AllOrder" :key="key">
     <div class="searchBoard">
       <el-input v-model="searchText" placeholder="输入商品名" style="width: 20%" clearable>
       </el-input>
@@ -14,20 +14,19 @@
           :price="order.price"
           :title="order.gname"
           :thumb="order.picture"
-          :key="key"
       >
         <template #tags >
           <div style="margin-top: 3%;margin-bottom: 3%">
-            <div class="van_tag">
-              <van-tag plain>商家</van-tag>
+            <div>
+              <van-tag plain>{{order.mname}}</van-tag>
             </div>
-            <div :style="'color:'+order.tag_color" class="van_tag">
+            <div :style="'color:'+order.tag_color" >
               <van-tag plain>{{ tags(order) }}</van-tag>
             </div>
           </div>
         </template>
         <template #footer>
-          <div style="width: 72%;margin-left: auto" :key="key">
+          <div style="width: 72%;margin-left: auto">
             <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
             <van-button size="small" @click="orderOperate(order)"
                         :style="{'visibility': order.operate===''?'hidden':'visible'}">{{ order.operate }}</van-button>
@@ -102,7 +101,8 @@ export default {
       formLabelWidth: '120px',
       order: {},
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-      key:0
+      key:0,
+      baseUrl:"http://39.105.220.225:8081/shop/files/download/"
     }
   },
   created() {
@@ -136,12 +136,13 @@ export default {
               }).then(res => {
                 item.picture = this.baseUrl + res.data.data.picture;
               })
-              axios.get("http://39.105.220.225:8081/user/userone",{
-                params:{Uid:item.mid}
+              axios.get("http://39.105.220.225:8081/shop/user/userone",{
+                params:{uid:item.mid}
               }).then(res =>{
-                console.log("ddd",res);
+                item.mname = res.data.data.uname;
               })
             })
+            this.key++;
           })
     },
     //搜索商品
@@ -351,8 +352,6 @@ export default {
   margin-right: 20px;
 }
 
-.van_tag {
-  font-size: small;
-}
+
 
 </style>
