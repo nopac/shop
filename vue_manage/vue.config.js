@@ -13,8 +13,8 @@ module.exports = {
         }
     },
 
-    // publicPath: "./",   //本地测试
-    publicPath: "/manage/",      //打包上线
+    publicPath: "./",   //本地测试
+    // publicPath: "/manage/",      //打包上线
     configureWebpack: config => {
         // 为生产环境修改配置...
         if (process.env.NODE_ENV === 'production') {
