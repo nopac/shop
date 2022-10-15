@@ -61,7 +61,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  base: "/manage/",  //打包上线
+  // base: "/manage/",  //打包上线
   routes
 })
 
