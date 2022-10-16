@@ -132,7 +132,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  // base: "/shopping/",  //打包上线
+  // base: "/mobileShop/",  //打包上线
   // base: "",          //本地测试
   routes
 })
