@@ -161,7 +161,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/exmU",{
+      request.get("http://39.105.220.225:8081/shop/exmU",{
         params: params
       })
       .then(res=>{
@@ -185,7 +185,7 @@ export default {
     agreeUser(row){
       this.userForm = row
       console.log(this.userForm)
-      request.put("/exmU/"+1,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmU/"+1,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.addUserVisible = false;
@@ -195,7 +195,7 @@ export default {
     refuseUser(row){
       this.userForm = row
       console.log(this.userForm)
-      request.put("/exmU/"+0,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmU/"+0,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.addUserVisible = false;
@@ -204,7 +204,7 @@ export default {
     },
     deleteUser(id){
       console.log(id);
-      request.delete("/exmU/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/exmU/"+id).then(res=>{
 
         if(res.code === '0'){
           this.$message({

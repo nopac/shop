@@ -189,7 +189,7 @@ export default {
         pageSize: this.pageSize,
         searchText: this.searchText
       }
-      request.get("/goods/findgoods",{
+      request.get("http://39.105.220.225:8081/shop/goods/findgoods",{
         params: params
       }).then(res=>{
         console.log(res);
@@ -229,7 +229,7 @@ export default {
       }
     },
     updateUser(){
-      request.put("/goods",this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({
@@ -248,7 +248,7 @@ export default {
     },
     saveUser(){
       this.goodsForm.status=3
-      request.post("/goods",this.goodsForm).then(res=>{
+      request.post("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         console.log(res)
         this.addGoodsVisible = false;
         this.load();
@@ -256,7 +256,7 @@ export default {
     },
     deleteUser(id){
       console.log(id);
-      request.delete("/goods/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/goods/"+id).then(res=>{
 
         if(res.code === '0'){
           this.$message({
@@ -275,7 +275,7 @@ export default {
     upGoods(row){
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
-      request.put("/exmG/opeStatus/"+3,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/"+3,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -285,7 +285,7 @@ export default {
     downGoods(row){//下架商品
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
-      request.put("/exmG/opeStatus/"+4,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/"+4,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;

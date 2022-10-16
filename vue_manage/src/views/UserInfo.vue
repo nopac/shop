@@ -115,7 +115,7 @@ export default {
   created() {
     this.userForm.uname=this.$route.query.uname
     console.log("getUser"+this.userForm.uname)
-    request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+    request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
       if(res.code !== '0'){
         this.$message({
           type: "error",

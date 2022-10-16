@@ -161,7 +161,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/exmO",{
+      request.get("http://39.105.220.225:8081/shop/exmO",{
         params: params
       })
           .then(res=>{
@@ -192,7 +192,7 @@ export default {
     },
     saveGrade(){
       console.log("save:"+this.userForm)
-      request.put("/orders",this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/orders",this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.changeGradeVisible = false;
@@ -203,7 +203,7 @@ export default {
     deleteUser(id){
       //将该用户isMerchant改为0，则不显示
       console.log(id);
-      request.delete("/merchant",{
+      request.delete("http://39.105.220.225:8081/shop/merchant",{
         params: this.userForm
       }).then(res=>{
         if(res.code === '0'){

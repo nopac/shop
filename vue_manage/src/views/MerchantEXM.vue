@@ -138,7 +138,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/merchant",{
+      request.get("http://39.105.220.225:8081/shop/merchant",{
         params: params
       })
       .then(res=>{
@@ -161,7 +161,7 @@ export default {
     agreeUser(row){
       this.userForm = row
       console.log(this.userForm)
-      request.put("/merchant/"+1,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/merchant/"+1,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.addUserVisible = false;
@@ -171,7 +171,7 @@ export default {
     refuseUser(row){
       this.userForm = row
       console.log(this.userForm)
-      request.put("/merchant/"+-1,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/merchant/"+-1,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.addUserVisible = false;
@@ -181,7 +181,7 @@ export default {
     deleteUser(id){
       //将该用户isMerchant改为0，则不显示
       console.log(id);
-      request.delete("/merchant",{
+      request.delete("http://39.105.220.225:8081/shop/merchant",{
         params: this.userForm
       }).then(res=>{
         if(res.code === '0'){

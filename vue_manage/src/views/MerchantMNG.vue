@@ -156,7 +156,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/merchant",{
+      request.get("http://39.105.220.225:8081/shop/merchant",{
         params: params
       })
       .then(res=>{
@@ -182,7 +182,7 @@ export default {
     },
     saveGrade(){
       console.log("save:"+this.userForm)
-      request.put("/merchant/grade/"+this.userForm.grade,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/merchant/grade/"+this.userForm.grade,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.changeGradeVisible = false;
@@ -194,7 +194,7 @@ export default {
       //将该用户isMerchant改为0，则不显示
       console.log(row);
       this.userForm = row
-      request.put("/merchant",this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/merchant",this.userForm).then(res=>{
         if(res.code === '0'){
           this.$message({
             type:"success",

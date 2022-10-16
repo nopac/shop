@@ -134,7 +134,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/exmG",{
+      request.get("http://39.105.220.225:8081/shop/exmG",{
         params: params
       })
           .then(res=>{
@@ -158,7 +158,7 @@ export default {
     agreeGoods(row){
       this.goodsForm = row
       console.log(this.goodsForm)
-      request.put("/goods/exmStatus/"+1,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/goods/exmStatus/"+1,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -168,7 +168,7 @@ export default {
     refuseGoods(row){
       this.goodsForm = row
       console.log(this.goodsForm)
-      request.put("/goods/exmStatus/"+0,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/goods/exmStatus/"+0,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -177,7 +177,7 @@ export default {
     },
     deleteGoods(id){
       console.log(id);
-      request.delete("/exmG/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/exmG/"+id).then(res=>{
         if(res.code === '0'){
           this.$message({
             type:"success",
