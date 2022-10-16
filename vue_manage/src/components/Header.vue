@@ -1,12 +1,12 @@
 <template>
   <div>
-    <van-row>
+    <van-row justify="space-between">
       <van-col span="12">
         <span style="color: #409EFF;font-weight: bolder">后台管理</span>
       </van-col>
 
       <van-col span="9" offset="3">
-        <van-icon name="manager" />
+        <van-icon name="manager"  size="100%"/>
         <van-popover v-model:show="showPopover" >
           <van-button type="default" style="width: 100%" @click="showInfo">个人信息</van-button><br>
           <van-button type="default" style="width: 100%" @click="exitSystem">退出系统</van-button>
