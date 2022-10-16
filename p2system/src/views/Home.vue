@@ -161,7 +161,7 @@ export default {
         gname: value.gname,
       }).then(res => {
         console.log(res)
-        if(res.data.code=='0'){
+        if(res.data.code === '0'){
           this.$message({
             message:'成功加入购物车',
             type:"success"

@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     load(){
-      request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+      request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
         if(res.code !== '0'){
           this.$message({
             type: "error",
@@ -142,7 +142,7 @@ export default {
       this.recordForm.amount = this.investNum
       this.recordForm.uid = this.userForm.uid
       this.recordForm.account = this.userForm.account
-      request.post("/account",this.recordForm).then(res=>{
+      request.post("http://39.105.220.225:8081/shop/account",this.recordForm).then(res=>{
         if(res.code !== '0'){
           this.$message({
             type: "error",
@@ -160,7 +160,7 @@ export default {
       this.$router.push("/login")
     },
     clickBeMct(){
-      request.get("/merchant/isMerchant/"+this.userForm.uid).then(res=>{
+      request.get("http://39.105.220.225:8081/shop/merchant/isMerchant/"+this.userForm.uid).then(res=>{
         console.log("code="+res.code)
         if(res.code === '0'){
           this.$message({

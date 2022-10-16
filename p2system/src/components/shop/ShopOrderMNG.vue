@@ -148,7 +148,7 @@ export default {
       if(Object.keys(this.userForm).length===0){
         this.userForm.uname=localStorage.getItem("uname")
         console.log("getUser:"+this.userForm.uname)
-        request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+        request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
           if(res.code !== '0'){
             this.$message({
               type: "error",
@@ -166,7 +166,7 @@ export default {
               type: this.searchType
             }
             console.log("uid:"+this.userForm.uid)
-            request.get("/exmO/getOrder/"+this.userForm.uid,{
+            request.get("http://39.105.220.225:8081/shop/exmO/getOrder/"+this.userForm.uid,{
               params: params
             })
               .then(res=>{
@@ -195,7 +195,7 @@ export default {
         searchText: this.searchText,
         type: this.searchType
       }
-      request.get("/exmG/findFor/"+this.userForm.uid,{
+      request.get("http://39.105.220.225:8081/shop/exmG/findFor/"+this.userForm.uid,{
         params: params
       })
           .then(res=>{
@@ -222,7 +222,7 @@ export default {
     },
     deleteGoods(id){
       console.log(id);
-      request.delete("/goods/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/goods/"+id).then(res=>{
 
         if(res.code === '0'){
           this.$message({

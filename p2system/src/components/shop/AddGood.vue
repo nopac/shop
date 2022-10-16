@@ -89,7 +89,7 @@ export default {
     saveGoods(){
       this.goodsForm.mid=localStorage.getItem("uid")
       console.log("addGoods:"+this.goodsForm.picture)
-      request.post("/goods",this.goodsForm).then(res=>{
+      request.post("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         console.log(res)
         this.$router.push("/mngG")
       })
@@ -109,7 +109,7 @@ export default {
     },
     updateImgPath(){
       console.log("picture:"+this.goodsForm.picture)
-      request.put("/user",this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({

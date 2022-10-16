@@ -177,7 +177,7 @@ export default {
     load(){
       this.userForm.uname=localStorage.getItem("uname")
       console.log("getUser"+this.userForm.uname)
-      request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+      request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
         if(res.code !== '0'){
           this.$message({
             type: "error",
@@ -208,7 +208,7 @@ export default {
       this.recordForm.amount = this.investNum
       this.recordForm.uid = this.userForm.uid
       this.recordForm.account = this.userForm.account
-      request.post("/account",this.recordForm).then(res=>{
+      request.post("http://39.105.220.225:8081/shop/account",this.recordForm).then(res=>{
         if(res.code !== '0'){
           this.$message({
             type: "error",
@@ -237,7 +237,7 @@ export default {
       this.diseditable = true;
     },
     updateUser(){
-      request.put("/user",this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({
@@ -259,7 +259,7 @@ export default {
       this.beMctVisible = false
     },
     clickBeMct(){
-      request.get("/merchant/isMerchant/"+this.userForm.uid).then(res=>{
+      request.get("http://39.105.220.225:8081/shop/merchant/isMerchant/"+this.userForm.uid).then(res=>{
         console.log("code="+res.code)
         if(res.code === '0'){
           this.$message({
@@ -285,7 +285,7 @@ export default {
     updateImgPath(){
       console.log("license:"+this.userForm.license)
       this.userForm.isMerchant = 2
-      request.put("/user",this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({
