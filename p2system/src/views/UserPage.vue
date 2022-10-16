@@ -43,9 +43,11 @@
       </van-cell>
     </div>
     <van-popup v-model:show="investVisible"
-               closeable>
+               closeable style="display: flex">
+      <span>充值</span>
       <div class="popupBottom">
         <van-field v-model="investNum" type="number" placeholder="请输入充值金额" label="输入充值金额"/>
+        <van-button type="primary" @click="submit">充值</van-button>
       </div>
     </van-popup>
   </div>
@@ -135,6 +137,25 @@ export default {
     invest(){
       this.investVisible=true;
     },
+    submit(){
+      this.recordForm.type=0
+      this.recordForm.amount = this.investNum
+      this.recordForm.uid = this.userForm.uid
+      this.recordForm.account = this.userForm.account
+      request.post("/account",this.recordForm).then(res=>{
+        if(res.code !== '0'){
+          this.$message({
+            type: "error",
+            message: res.msg,
+          })
+        }else {
+          console.log(res)
+          this.investVisible=false;
+          this.load()
+        }
+      })
+
+    },
     toLogin(){
       this.$router.push("/login")
     },
@@ -218,6 +239,9 @@ export default {
   /*line-height: 90px;*/
 }
 .popupBottom{
-
+  width: 8rem;
+  height: 2rem;
+  display: flex;
+  margin-top: 1.2rem;
 }
 </style>

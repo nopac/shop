@@ -200,6 +200,9 @@ export default {
         }
       })
     },
+    invest(){
+      this.investVisible=true;
+    },
     submit(){
       this.recordForm.type=0
       this.recordForm.amount = this.investNum
@@ -218,9 +221,6 @@ export default {
         }
       })
 
-    },
-    invest(){
-      this.investVisible=true;
     },
     editInfo(){
       //退出不可修改状态
