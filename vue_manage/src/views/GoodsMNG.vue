@@ -221,6 +221,7 @@ export default {
         this.total = res.data.total;
         this.tableData = res.data.records;
         this.tableData.forEach(e => {
+          e.picture = "http://39.105.220.225:8081/shop/files/download/"+e.picture
           for (var key in e) {
             if (e[key] === "null") {
               delete e[key];
@@ -256,7 +257,7 @@ export default {
     updateUser() {
       request.put("http://39.105.220.225:8081/shop/goods", this.goodsForm).then(res => {
         // console.log(res)
-        if (res.code === '0') {
+        if (res.data.code === '0') {
           this.$message({
             type: "success",
             message: "更新成功",
@@ -265,7 +266,7 @@ export default {
         } else {
           this.$message({
             type: "error",
-            message: res.msg,
+            message: res.data.msg,
           })
         }
         this.load();

@@ -55,13 +55,13 @@ const routes = [
   {
     path: '/',
     name: 'Login',
-    component: ()=> import("@/views/GoodsMNG")
+    component: ()=> import("@/views/Login")
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  // base: "/mobileMNG/",  //打包上线
+  base: "/mobileMNG/",  //打包上线
   routes
 })
 
