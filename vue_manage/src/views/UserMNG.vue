@@ -5,7 +5,7 @@
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>
+      <el-input v-model="searchText" placeholder="输入关键字" style="width: 50%" clearable/>
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询</el-button>
     </div>
@@ -66,7 +66,7 @@
           v-model="addUserVisible"
           :title=userDialogTitle
           :visible.sync="addUserVisible"
-          width="800px"
+          width="300px"
       >
         <el-form class="userForm" :model="userForm" :inline="true">
           <el-form-item class="formItem" label="姓名" label-width="100px">
@@ -97,7 +97,7 @@
 
         </el-form>
         <template #footer>
-      <span class="dialog-footer">
+      <span class="dialog-footer" >
         <el-button @click="addUserVisible = false">取消</el-button>
         <el-button type="primary" @click="submitUser">提交</el-button>
       </span>
