@@ -8,7 +8,7 @@
             clearable
             placeholder="输入商品名">
           <template #button>
-            <van-button size="small" type="primary" @click="search">查询</van-button>
+            <van-button size="small" type="primary" :click="search">查询</van-button>
           </template>
         </van-field>
       </van-cell-group>
@@ -40,8 +40,37 @@
 
       </van-card>
     </div>
-
-    <el-dialog title="商品评价" v-model="dialogFormVisible" width="90%">
+    <van-popup v-model:show="dialogFormVisible"
+               round
+               position="bottom"
+               teleport="body"
+               :style="{ height: '50%' }"
+                @close="cancel">
+      <van-form v-model="form">
+        <van-field label="商品评价">
+          <template #input>
+            <van-rate v-model="form.Gvalue"/>
+          </template>
+        </van-field>
+        <van-field label="商家评价">
+          <template #input>
+            <van-rate v-model="form.Mvalue"/>
+          </template>
+        </van-field>
+        <van-field
+            v-model="form.textarea"
+            label="评价描述"
+            type="textarea"
+            placeholder="请输入评价"
+        />
+        <div style="margin: 16px;">
+          <van-button round block type="primary" @click="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
+    </van-popup>
+<!--    <el-dialog title="商品评价" v-model="dialogFormVisible" width="90%">
       <el-form :model="form">
         <el-form-item label="商品评价" style="padding-left: 5%">
           <el-rate
@@ -71,7 +100,7 @@
         <el-button @click="cancel" size="large">取 消</el-button>
         <el-button type="primary" @click="submit" size="large">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 
 </template>
@@ -81,7 +110,7 @@ import axios from "axios";
 import deliveryExpand from "@/components/DeliveryExpand";
 
 export default {
-  name: "Waiting",
+  name: "Review",
   components: {
     deliveryExpand,
   },
@@ -90,14 +119,13 @@ export default {
       searchText: "",
       total: 0,
       tableData : [],
-      dialogFormVisible: false,
-      form:{
+      form: {
         Gvalue: null,
         Mvalue: null,
         textarea: ""
       },
+      dialogFormVisible: false,
       order:{},
-      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       baseUrl:"http://39.105.220.225:8081/shop/files/download/",
       key:0
     }
@@ -142,11 +170,13 @@ export default {
       this.load();
     },
     review(order){
+
       this.dialogFormVisible = true
       this.order = order;
     },
 
     submit(){
+      console.log("aaa","评价提交")
       if (this.form.Gvalue===0||this.form.Mvalue===0){
         this.$message({
           type:'error',
@@ -183,11 +213,12 @@ export default {
       });
       this.dialogFormVisible=false;
       this.form={};
+      this.load()
     },
     cancel(){
-      this.dialogFormVisible = false;
       this.form.Gvalue = 0;
       this.form.Mvalue = 0;
+      this.form.textarea = ""
     }
   }
 }
@@ -195,15 +226,8 @@ export default {
 
 <style scoped>
 
-.opeBoard{
-  margin: 10px 0;
-}
 .searchBoard{
   margin: 10px 0;
-}
-.fixedOpe{
-  width: 120px;
-  text-align: center;
 }
 
 </style>

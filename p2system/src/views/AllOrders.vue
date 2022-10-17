@@ -1,11 +1,17 @@
 <template>
   <div class="AllOrder" :key="key">
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入商品名" style="width: 20%" clearable>
-      </el-input>
-      <el-button type="primary"  style="margin: 0 5px"
-                 @click="search">查询
-      </el-button>
+      <van-cell-group inset>
+        <van-field
+            v-model="searchText"
+            center
+            clearable
+            placeholder="输入商品名">
+          <template #button>
+            <van-button size="small" type="primary" @click="search">查询</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
     </div>
     <div class="displayBoard">
       <van-card
@@ -30,13 +36,42 @@
             <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
             <van-button size="small" @click="orderOperate(order)"
                         :style="{'visibility': order.operate===''?'hidden':'visible'}">{{ order.operate }}</van-button>
-            <van-button size="small" v-if="order.status === 2">立即评价</van-button>
+            <van-button size="small" v-if="order.status === 2" @click="review(order)">立即评价</van-button>
           </div>
         </template>
 
       </van-card>
     </div>
-
+    <van-popup v-model:show="dialogFormVisible"
+               round
+               position="bottom"
+               teleport="body"
+               :style="{ height: '50%' }"
+                @close="cancle">
+      <van-form v-model="form">
+        <van-field label="商品评价">
+          <template #input>
+            <van-rate v-model="form.Gvalue"/>
+          </template>
+        </van-field>
+        <van-field label="商家评价">
+          <template #input>
+            <van-rate v-model="form.Mvalue"/>
+          </template>
+        </van-field>
+        <van-field
+            v-model="form.textarea"
+            label="评价描述"
+            type="textarea"
+            placeholder="请输入评价"
+        />
+        <div style="margin: 16px;">
+          <van-button round block type="primary" @click="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
+    </van-popup>
 <!--    <el-dialog title="评价" v-model="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="商品评价" :label-width="formLabelWidth">
@@ -125,7 +160,6 @@ export default {
             this.total = res.data.data.total;
             this.tableData = res.data.data.records;
             this.formTable.tableData = this.tableData;
-            let that = this;
             this.tableData.forEach((item) => {
               item.operate = "";
               axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
@@ -264,6 +298,10 @@ export default {
           }
         })
       }
+      //
+      else if(order.operate === "删除订单"){
+        this.dialogFormVisible = true;
+      }
     },
 
     selectChange(data) {
@@ -315,6 +353,11 @@ export default {
           return "全部";
         }
       }
+    },
+    cancel(){
+      this.form.Gvalue = 0;
+      this.form.Mvalue = 0;
+      this.form.textarea = ""
     }
   }
 }
@@ -324,34 +367,9 @@ export default {
 .AllOrder {
   margin: 10px;
 }
-
-.opeBoard {
-  margin: 10px 0;
-}
-
 .searchBoard {
   margin: 10px 0;
 }
-
-.fixedOpe {
-  width: 120px;
-  text-align: center;
-}
-
-.el-dropdown-link {
-  cursor: pointer;
-  color: #38E917;
-}
-
-.el-icon-arrow-down {
-  font-size: 12px;
-}
-
-.button {
-  float: right;
-  margin-right: 20px;
-}
-
 
 
 </style>
