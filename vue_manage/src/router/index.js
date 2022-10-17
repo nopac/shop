@@ -55,7 +55,7 @@ const routes = [
   {
     path: '/',
     name: 'Login',
-    component: ()=> import("@/views/Login")
+    component: ()=> import("@/views/GoodsMNG")
   },
 ]
 

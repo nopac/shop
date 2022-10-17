@@ -7,148 +7,173 @@
     <div class="searchBoard">
       <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>
       <el-button type="primary" style="margin: 0 5px"
-                 @click="searchName">查询</el-button>
+                 @click="searchName">查询
+      </el-button>
     </div>
-    <div class="displayBoard">
-      <el-table :data="tableData"
-          border
-          stripe
-          style="width: 100%"
-      >
-        <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props">
-            <goods-expand v-bind:goods="props.row" >
-              <template v-slot:upButton>
-                <el-button
-                    @click="upGoods(props.row)"
-                    type="primary" plain
-                    class="opeButton"
-                    v-if="props.row.status===4">发布</el-button>
-              </template>
-              <template v-slot:downButton>
-                <el-button
-                    @click="downGoods(props.row)"
-                    type="danger" plain
-                    class="opeButton"
-                    v-if="props.row.status===1">下架</el-button>
-              </template>
-            </goods-expand>
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="gid"
-            label="ID"
-            sortable/>
-        <el-table-column
-            prop="gname"
-            label="商品名"
-            sortable />
-        <!--     后期添加查看密码功能 -->
-        <el-table-column
-            prop="type"
-            label="商品类型" />
-        <el-table-column
-            prop="price"
-            label="价格" />
-        <el-table-column
-            prop="storage"
-            label="库存" />
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope">
-            <el-button text @click="editUser(scope.row)" type="primary" plain>编辑</el-button>
-            <el-popconfirm title="确认删除？" @confirm="deleteUser(scope.row.gid)">
-              <template #reference>
-                <el-button text @click="" type="danger">删除</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-<!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
-<!--    新增商品弹窗-->
-    <div>
-      <el-dialog
-          v-model="addGoodsVisible"
-          :title=goodsDialogTitle
-          :visible.sync="addGoodsVisible"
-          width="700px"
-          style="margin-left: 20px"
-      >
-        <el-form class="userForm demo-form-inline" :model="goodsForm" :inline="true">
-          <el-form-item label="商品名" label-width="100px">
-            <el-input style="width: 120px" v-model="goodsForm.gname" />
-          </el-form-item>
-          <el-form-item label="商品类型" label-width="100px">
-            <el-input style="width: 120px" v-model="goodsForm.type" />
-          </el-form-item>
-          <el-form-item label-width="100px" label="商品价格">
-            <el-input style="width: 120px" v-model="goodsForm.price" />
-          </el-form-item>
-          <el-form-item label-width="100px" label="是否可议价">
-            <el-select v-model="goodsForm.bargain" style="width: 120px">
-              <el-option label="一口价" value="false" />
-              <el-option label="可议价" value="true" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label-width="100px" label="库存">
-            <el-input style="width: 200px" v-model="goodsForm.storage" />
-          </el-form-item>
-          <el-form-item label-width="100px" label="新旧程度">
-            <el-input style="width: 200px" v-model="goodsForm.gcondition" />
-          </el-form-item>
-          <el-form-item label-width="100px" label="折扣">
-            <el-input style="width: 200px" v-model="goodsForm.sale" />
-          </el-form-item>
-          <el-form-item label-width="100px" label="商品介绍">
-            <el-input style="width: 120px" v-model="goodsForm.introduction" />
-          </el-form-item>
-<!--          后期做成列表选择-->
-          <el-form-item label-width="100px" label="卖家id">
-            <el-input style="width: 120px" v-model="goodsForm.mid" />
-          </el-form-item>
-          <!--    商品图片上传-->
-          <el-form-item label-width="100px" label="商品图片">
-            <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
-                multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-            >
-              <el-button type="primary">点击上传营业执照</el-button>
-              <template #tip>
-                <div class="el-upload__tip" style="width: 200px">
-                  jpg/png 文件大小需小于 500KB.
-                </div>
-              </template>
-            </el-upload>
-          </el-form-item>
 
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="addGoodsVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitUser">提交</el-button>
-      </span>
+    <div>
+      <van-card
+          v-for="order in tableData"
+          :price="order.price"
+          :title="order.gname"
+          :thumb="order.picture">
+
+        <template #desc>
+          <div>
+            <van-row>
+              <van-col span="4">
+                <div>ID: {{ order.gid }}</div>
+              </van-col>
+              <van-col :offset="1" span="5">
+                <div>库存:{{ order.storage }}</div>
+              </van-col>
+              <van-col :offset="1" span="13">
+                <div>是否可议价:
+                  <span v-show="order.bargain == 'true'">可议价</span>
+                  <span v-show="order.bargain == 'false'">一口价</span>
+                </div>
+              </van-col>
+            </van-row>
+            <van-row>
+              <van-col span="8">
+                <div>销量:{{ order.sale }}</div>
+              </van-col>
+              <van-col :offset="1" span="7">
+                <div>尺寸:{{ order.size }}</div>
+              </van-col>
+              <van-col :offset="1" span="7">
+                <div>新旧程度:{{ order.gcondition }}</div>
+              </van-col>
+            </van-row>
+            <van-row>
+              <van-col span="6">
+                <div>类别:{{ order.storage }}</div>
+              </van-col>
+              <van-col :offset="1">
+                <div>好评率:{{ order.likeRate }}</div>
+              </van-col>
+            </van-row>
+            <van-row>
+              <van-col>
+                商品介绍:{{ order.introduction }}
+              </van-col>
+            </van-row>
+          </div>
         </template>
-      </el-dialog>
+
+        <template #tags>
+          <div style="margin-top: 3%;margin-bottom: 3%">
+            <div>
+              <van-row>
+                <van-col span="8">
+                  <div>商品类型：</div>
+                </van-col>
+                <van-col>
+                  <van-tag plain type="primary">{{ order.type }}</van-tag>
+                </van-col>
+              </van-row>
+              <van-row>
+                <van-col span="8">
+                  <div>商品状态：</div>
+                </van-col>
+                <van-col>
+                  <van-tag type="success">{{ order.status }}</van-tag>
+                </van-col>
+              </van-row>
+            </div>
+          </div>
+        </template>
+
+        <template #footer>
+          <div style="width: 72%;margin-left: auto">
+            <van-button type="primary" size="small" @click="editUser(order)">编 辑</van-button>
+            <van-button type="danger" size="small">删 除</van-button>
+          </div>
+        </template>
+
+      </van-card>
+    </div>
+
+    <!--    <div class="displayBoard">-->
+    <!--      <el-table :data="tableData"-->
+    <!--                border-->
+    <!--                stripe-->
+    <!--                style="width: 100%"-->
+    <!--      >-->
+    <!--        <el-table-column type="expand">-->
+    <!--          &lt;!&ndash;        修改为自定义组件，显示其他信息&ndash;&gt;-->
+    <!--          <template #default="props">-->
+    <!--            <goods-expand v-bind:goods="props.row">-->
+    <!--              <template v-slot:upButton>-->
+    <!--                <el-button-->
+    <!--                    @click="upGoods(props.row)"-->
+    <!--                    type="primary" plain-->
+    <!--                    class="opeButton"-->
+    <!--                    v-if="props.row.status===4">发布-->
+    <!--                </el-button>-->
+    <!--              </template>-->
+    <!--              <template v-slot:downButton>-->
+    <!--                <el-button-->
+    <!--                    @click="downGoods(props.row)"-->
+    <!--                    type="danger" plain-->
+    <!--                    class="opeButton"-->
+    <!--                    v-if="props.row.status===1">下架-->
+    <!--                </el-button>-->
+    <!--              </template>-->
+    <!--            </goods-expand>-->
+    <!--          </template>-->
+    <!--        </el-table-column>-->
+    <!--        <el-table-column-->
+    <!--            prop="gid"-->
+    <!--            label="ID"-->
+    <!--            sortable/>-->
+    <!--        <el-table-column-->
+    <!--            prop="gname"-->
+    <!--            label="商品名"-->
+    <!--            sortable/>-->
+    <!--        &lt;!&ndash;     后期添加查看密码功能 &ndash;&gt;-->
+    <!--        <el-table-column-->
+    <!--            prop="type"-->
+    <!--            label="商品类型"/>-->
+    <!--        <el-table-column-->
+    <!--            prop="price"-->
+    <!--            label="价格"/>-->
+    <!--        <el-table-column-->
+    <!--            prop="storage"-->
+    <!--            label="库存"/>-->
+    <!--        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">-->
+    <!--          <template #default="scope">-->
+    <!--            <el-button text @click="editUser(scope.row)" type="primary" plain>编辑</el-button>-->
+    <!--            <el-popconfirm title="确认删除？" @confirm="deleteUser(scope.row.gid)">-->
+    <!--              <template #reference>-->
+    <!--                <el-button text @click="" type="danger">删除</el-button>-->
+    <!--              </template>-->
+    <!--            </el-popconfirm>-->
+    <!--          </template>-->
+    <!--        </el-table-column>-->
+    <!--      </el-table>-->
+    <!--    </div>-->
+
+    <!--    分页-->
+    <!--    <div style="margin: 10px">-->
+    <!--      <el-pagination-->
+    <!--          @size-change="handleSizeChange"-->
+    <!--          @current-change="handleCurrentChange"-->
+    <!--          :current-page="currentPage"-->
+    <!--          :page-sizes="[5, 10, 20]"-->
+    <!--          :page-size="pageSize"-->
+    <!--          layout="total, sizes, prev, pager, next, jumper"-->
+    <!--          :total="total">-->
+    <!--      </el-pagination>-->
+    <!--    </div>-->
+    <!--    新增商品弹窗-->
+    <div>
+      <van-dialog
+      v-model="addGoodsVisible"
+      :title="goodsDialogTitle"
+      >
+
+      </van-dialog>
     </div>
 
   </div>
@@ -159,12 +184,13 @@
 import GoodsExpand from "@/components/GoodsExpand";
 import request from "@/util/request";
 import axios from "axios";
+
 export default {
   name: 'GoodsMNG',
   components: {
     GoodsExpand
   },
-  data(){
+  data() {
     return {
       operate: "",
       goodsDialogTitle: "",
@@ -173,98 +199,97 @@ export default {
       pageSize: 5,
       total: 10,
       addGoodsVisible: false,
-      DataList:[],
-      tableData : [
-      ],
-      goodsForm:{},
+      DataList: [],
+      tableData: [],
+      goodsForm: {},
     }
   },
   created() {
     this.load()
   },
   methods: {
-    load(){
-      let params={
+    load() {
+      let params = {
         pageNumber: this.currentPage,
-        pageSize: this.pageSize,
+        pageSize: 99999,
         searchText: this.searchText
       }
-      request.get("http://39.105.220.225:8081/shop/goods/findgoods",{
+      request.get("http://39.105.220.225:8081/shop/goods/findgoods", {
         params: params
-      }).then(res=>{
+      }).then(res => {
         console.log(res);
-        this.total=res.data.total;
+        this.total = res.data.total;
         this.tableData = res.data.records;
-        this.tableData.forEach(e=>{
-          for( var key in e){
-            if(e[key] === "null"){
+        this.tableData.forEach(e => {
+          for (var key in e) {
+            if (e[key] === "null") {
               delete e[key];
             }
-            e.bargain=String(e.bargain)
+            e.bargain = String(e.bargain)
           }
         })//过滤null
       })
     },
-    searchName(){
+    searchName() {
       this.load();
     },
-    addUser(){
+    addUser() {
       this.addGoodsVisible = true;
-      this.goodsForm={};
-      this.operate="addUser";
-      this.goodsDialogTitle="新增商品"
+      this.goodsForm = {};
+      this.operate = "addUser";
+      this.goodsDialogTitle = "新增商品"
     },
-    editUser(row){
+    editUser(row) {
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
       this.addGoodsVisible = true;
-      this.operate="updateUser"
-      this.goodsDialogTitle="编辑商品"
+      this.operate = "updateUser"
+      this.goodsDialogTitle = "编辑商品"
     },
-    submitUser(){
-      if (this.operate === "addUser"){
+    submitUser() {
+      if (this.operate === "addUser") {
         this.saveUser();
-      }else if (this.operate === "updateUser"){
+      } else if (this.operate === "updateUser") {
         this.updateUser();
       }
     },
-    updateUser(){
-      request.put("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
+    updateUser() {
+      request.put("http://39.105.220.225:8081/shop/goods", this.goodsForm).then(res => {
         // console.log(res)
-        if(res.code === '0'){
+        if (res.code === '0') {
           this.$message({
-            type:"success",
+            type: "success",
             message: "更新成功",
           });
           this.addGoodsVisible = false;
-        }else{
+        } else {
           this.$message({
-            type:"error",
+            type: "error",
             message: res.msg,
           })
         }
         this.load();
       })
     },
-    saveUser(){
-      this.goodsForm.status=3
-      request.post("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
+    saveUser() {
+      this.goodsForm.status = 3
+      request.post("http://39.105.220.225:8081/shop/goods", this.goodsForm).then(res => {
         console.log(res)
         this.addGoodsVisible = false;
         this.load();
       })
     },
-    deleteUser(id){
+    deleteUser(id) {
       console.log(id);
-      request.delete("http://39.105.220.225:8081/shop/goods/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/goods/" + id).then(res => {
 
-        if(res.code === '0'){
+        if (res.code === '0') {
           this.$message({
-            type:"success",
+            type: "success",
             message: "删除成功",
           });
           this.load()
-        }else {
+        } else {
           this.$message({
             type: "error",
             message: res.msg,
@@ -272,22 +297,22 @@ export default {
         }
       })
     },
-    upGoods(row){
+    upGoods(row) {
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
-      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/"+3,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/" + 3, this.goodsForm).then(res => {
         console.log(res)
-        this.goodsForm={}
+        this.goodsForm = {}
         this.addGoodsVisible = false;
         this.load();
       })
     },
-    downGoods(row){//下架商品
+    downGoods(row) {//下架商品
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
-      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/"+4,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/" + 4, this.goodsForm).then(res => {
         console.log(res)
-        this.goodsForm={}
+        this.goodsForm = {}
         this.addGoodsVisible = false;
         this.load();
       })
@@ -297,34 +322,38 @@ export default {
       this.load()
     },
     handleCurrentChange(val) {//改变页码
-      this.currentPage=val
+      this.currentPage = val
       this.load()
     },
   }
 }
 </script>
 <style scoped>
-.GoodsMNG{
+.GoodsMNG {
   padding: 10px;
 }
-.opeBoard{
+
+.opeBoard {
   margin: 10px 0;
 }
-.searchBoard{
+
+.searchBoard {
   margin: 10px 0;
 }
-.fixedOpe{
+
+.fixedOpe {
   width: 120px;
   text-align: center;
 }
 
-.userForm{
+.userForm {
   width: 80%;
   display: block;
   margin: 0 55px;
   /*text-align: center;*/
 }
-.formItem{
+
+.formItem {
   display: inline-flex;
   width: 250px;
 }
