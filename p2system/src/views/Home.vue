@@ -147,7 +147,6 @@ export default {
               if(this.currentPage> this.total){
                 console.log("无更多内容")
                 this.finished = true
-                alert("finish")
               }else{
                 //加载数据
                 this.tempList = res.data.data.records
