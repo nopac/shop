@@ -333,7 +333,7 @@ export default {
         }
         case 3: {
           order.tag_color = "#38E917";
-          order.operate = "删除订单";
+          //order.operate = "删除订单";
           return "交易成功";
         }
         case -1: {
