@@ -138,7 +138,7 @@ export default {
       var a = 0;
       this.multipleSelection = [];
       this.checked.forEach((index)=>{
-        a += this.tableData[index].price;
+        a += this.tableData[index].price * this.tableData[index].number;
       })
       this.checked.forEach((index)=>{
         this.multipleSelection.push(this.tableData[index]);
