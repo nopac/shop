@@ -1,42 +1,58 @@
-<template style="background-color: #f9f9f9">
-<div style="margin-left: 10px;margin-right: 10px;height: 100%">
+<template>
+<div style="margin-top: 46px">
   <div class="cellContainer">
-    <van-cell center  icon="location-o" class="cell">
+
+    <van-cell center  icon="location-o" class="cell" border>
       <div>
-        <p>北京市{{user.address}}</p>
+        <p>{{user.address}}</p>
         <p>{{ user.uname }} {{ user.phone }}</p>
         <p>{{}}</p>
       </div>
     </van-cell>
   </div>
-  <div>
-    <el-card
-        v-for="(value, o, index) in tableData"
-        :key="o"
-        :offset="index > 0 ? tableData.length : 0"
-        style="width: 100%;margin-top: 10px;padding: 0">
-      <div style="display: flex;justify-content: flex-start;">
-        <el-image class="imageArea"
-                  style="flex: 0 0 35%"
-                  :src="value.picture">
-          <template #error>
-            <div class="image-slot" style="text-align: center;">
-              图片未上传
-            </div>
-          </template>
-        </el-image>
-        <div style="flex: 0 0 50%">
-          <span style="font-size: 25px">{{ value.gname }}</span>
+<!--  <div>-->
+<!--    <el-card-->
+<!--        v-for="(value, o, index) in tableData"-->
+<!--        :key="o"-->
+<!--        :offset="index > 0 ? tableData.length : 0"-->
+<!--        style="width: 100%;margin-top: 10px;padding: 0">-->
+<!--      <div style="display: flex;justify-content: flex-start;">-->
+<!--        <el-image class="imageArea"-->
+<!--                  style="flex: 0 0 35%"-->
+<!--                  :src="value.picture">-->
+<!--          <template #error>-->
+<!--            <div class="image-slot" style="text-align: center;">-->
+<!--              图片未上传-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-image>-->
+<!--        <div style="flex: 0 0 50%">-->
+<!--          <span style="font-size: 25px">{{ value.gname }}</span>-->
 
-        </div>
-        <div style="flex: 1">
-          <p style="float: right;">￥{{ value.price }}</p>
-          <p style="float: right;color: #bbb;font-size: 20px;">x{{ value.number }}</p>
+<!--        </div>-->
+<!--        <div style="flex: 1">-->
+<!--          <p style="float: right;">￥{{ value.price }}</p>-->
+<!--          <p style="float: right;color: #bbb;font-size: 20px;">x{{ value.number }}</p>-->
 
-        </div>
-      </div>
+<!--        </div>-->
+<!--      </div>-->
 
-    </el-card>
+<!--    </el-card>-->
+
+<!--  </div>-->
+  <div class="displayBoard">
+
+
+    <van-cell v-for="(item, index) in tableData" :key="item">
+
+      <van-card
+          :num="item.number"
+          :price="item.price"
+          :title="item.gname"
+          :thumb="item.picture">
+      </van-card>
+
+    </van-cell>
 
   </div>
   <div>
@@ -146,4 +162,5 @@ export default {
   /*border: 1px solid black;*/
   display: flex;
 }
+
 </style>

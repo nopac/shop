@@ -4,7 +4,6 @@
       <el-button type="primary" @click="load">刷新</el-button>
     </div>-->
     <div class="searchBoard">
-
       <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
         <el-option label="ID" value="uid"></el-option>
         <el-option label="姓名" value="uname"></el-option>
@@ -20,6 +19,9 @@
           <el-button type="primary" @click="load">刷新</el-button>
         </van-col>
       </van-row>
+      <!--
+      <van-icon name="delete-o" size="32px"/>
+      -->
     </div>
 
 
