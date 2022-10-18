@@ -50,7 +50,7 @@
        <van-swipe-cell>
         <card>
           <div style="display:flex" >
-            <span style="font-size: 35px; color: #FF6600;margin-top: auto;margin-bottom: auto;">{{item.oid}}</span>
+            <span style="font-size: 30px; color: #FF6600;margin-top: auto;margin-bottom: auto;">{{item.oid}}</span>
             <div style="margin-left:10px;flex-direction: column;">
               <div class="auxfont" style="margin-top:15px">
             <b >收支类型: </b>
