@@ -206,6 +206,24 @@
     </div>
 
   </div>
+
+  <van-dialog v-model:show="show" title="商品信息" show-cancel-button>
+    <van-form @submit="updateGoods">
+      <van-cell-group inset>
+        <!-- 输入任意文本 -->
+        <van-field v-model="goodsForm.gname" label="商品名" />
+        <!-- 输入手机号，调起手机号键盘 -->
+        <van-field v-model="goodsForm.storage" type="digit" label="存货量" />
+        <!-- 允许输入正整数，调起纯数字键盘 -->
+        <van-field v-model="goodsForm.price" type="number" label="价格" />
+        <!-- 输入密码 -->
+        <van-field v-model="goodsForm.type" label="商品类型" />
+        <van-field v-model="goodsForm.introduction" label="商品介绍" />
+      </van-cell-group>
+    </van-form>
+
+  </van-dialog>
+
 </template>
 
 <script>
@@ -213,6 +231,7 @@
 import GoodsExpand from "@/components/shop/GoodsExpand";
 import request from "@/util/request";
 import axios from "axios";
+import {ref} from "@vue/reactivity";
 export default {
   name: 'GoodsMNG',
   components: {
@@ -220,6 +239,7 @@ export default {
   },
   data(){
     return {
+      show: ref(false),
       operate: "",
       goodsDialogTitle: "",
       searchText: "",
@@ -329,8 +349,9 @@ export default {
       })
     },
     editGoods(row){
+      this.show = ref(true)
       this.goodsForm = JSON.parse(JSON.stringify(row));
-      this.addGoodsVisible = true;
+      // this.addGoodsVisible = true;
       this.operate="updateUser"
       this.goodsDialogTitle="编辑商品"
       if (this.goodsForm.picture!==null){
@@ -375,7 +396,11 @@ export default {
       console.log("picture:"+this.goodsForm.picture)
       request.put("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         // console.log(res)
-        if(res.code === '0'){
+        this.$message({
+          type:"success",
+          message: "更新成功",
+        });
+        if(res.data.code === '0'){
           this.$message({
             type:"success",
             message: "更新成功",
@@ -384,7 +409,7 @@ export default {
         }else{
           this.$message({
             type:"error",
-            message: res.msg,
+            message: res.data.msg,
           })
         }
         this.load();
