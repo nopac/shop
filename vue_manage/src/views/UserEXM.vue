@@ -20,9 +20,9 @@
           <el-button type="primary" @click="load">刷新</el-button>
         </van-col>
       </van-row>
-
-
     </div>
+
+
     <div class="displayBoard">
       <el-table :data="tableData"
                 border
