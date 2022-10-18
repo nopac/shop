@@ -1,12 +1,39 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import layout_order from "@/layout/layout_order";
 import layout_shop from "@/layout/layout_shop";
+import layout_userPage from "@/layout/layout_userPage";
 import AddGood from "@/components/shop/AddGood";
 import Layout from "@/layout/Layout";
 import OrderNav from "../components/OrderNav";
 
 const routes = [
-
+  {
+    path: '/uP',
+    name: 'layout_userPage',
+    component: layout_userPage,
+    redirect: "/userP",
+    children:[
+      {
+        path: '/infoU',
+        name: 'UserInfo',
+        component:()=>import("@/views/UserInfo"),
+      },
+      {
+        path: '/record',
+        name: 'AmountRecordMNG',
+        component:()=>import("@/views/AmountRecordMNG"),
+      },
+      {
+        path: '/addG',
+        name: 'AddGood',
+        component:()=>import("@/components/shop/AddGood"),
+      },{
+        path: '/mngG',
+        name: 'GoodsMNG',
+        component:()=>import("@/components/shop/GoodsMNG"),
+      }
+    ]
+  },
   {
     path: '/shop',
     name: 'layout_shop',
@@ -26,15 +53,6 @@ const routes = [
         name: 'ShopOrderMNG',
         component:()=>import("@/components/shop/ShopOrderMNG"),
       },
-      {
-        path: '/addG',
-        name: 'AddGood',
-        component:()=>import("@/components/shop/AddGood"),
-      },{
-        path: '/mngG',
-        name: 'GoodsMNG',
-        component:()=>import("@/components/shop/GoodsMNG"),
-      }
     ]
   },
   {
@@ -74,8 +92,11 @@ const routes = [
       {
         path:'/userPage',
         name:'UserPage',
-        component: ()=> import( '@/views/UserPage')
-      }
+        component: ()=> import( '@/views/UserPage'),
+        children: [
+
+        ]
+      },
     ]
 
   },
@@ -111,8 +132,8 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
- // base: "/shopping/",  //打包上线
-  // base: ""          //本地测试
+  // base: "/mobileShop/",  //打包上线
+  // base: "",          //本地测试
   routes
 })
 

@@ -1,62 +1,72 @@
-<template>
-<div style="margin: 10px">
-  <div style="width: 70%;margin: 50px auto;border-radius: 20px;">
-
-    <el-table :data="tableData"
-              highlight-current-row
-              style="width: 100%;background-color: #cccccc" class="tableBox">
-      <el-table-column prop="gname" label="商品名称"  />
-      <el-table-column prop="price" label="单价" />
-      <el-table-column prop="number" label="数量" />
-      <el-table-column prop="sum" label="金额" />
-    </el-table>
+<template style="background-color: #f9f9f9">
+<div style="margin-left: 10px;margin-right: 10px;height: 100%">
+  <div class="cellContainer">
+    <van-cell center  icon="location-o" class="cell">
+      <div>
+        <p>北京市{{user.address}}</p>
+        <p>{{ user.uname }} {{ user.phone }}</p>
+        <p>{{}}</p>
+      </div>
+    </van-cell>
   </div>
-  <div data-halo-id="realPayPC_1" data-halo-type="realPay" style="width: 70%;margin: 0 auto;">
-    <div class="realpay order-payInfo" id="realPayPC_1" style="float:right;">
-      <div class="box">
-        <div class="box__wrapper">
-          <div class="box__shadow">
-            <div>
-              <span>积分{{ user.point }}</span>
-              <span>可抵消{{(this.user.point/100)}}元</span>
+  <div>
+    <el-card
+        v-for="(value, o, index) in tableData"
+        :key="o"
+        :offset="index > 0 ? tableData.length : 0"
+        style="width: 100%;margin-top: 10px;padding: 0">
+      <div style="display: flex;justify-content: flex-start;">
+        <el-image class="imageArea"
+                  style="flex: 0 0 35%"
+                  :src="value.picture">
+          <template #error>
+            <div class="image-slot" style="text-align: center;">
+              图片未上传
             </div>
-            <div>
-              <span class="realpay--title">实付款：</span>
-              <span class="realpay--price-symbol">￥</span>
-              <span class="realpay--price" style="color: rgb(255, 0, 54);">{{ this.sum }}</span>
-            </div>
-            <div class="order-confirmAddr">
-              <div class="confirmAddr-addr">
-                <span class="confirmAddr-title">寄送至：</span>
-                <span class="confirmAddr-addr-bd">{{ user.address }}</span>
-              </div>
-              <div class="confirmAddr-addr-user">
-                <span class="confirmAddr-title">收货人：</span>
-                <span class="confirmAddr-addr-bd">{{ user.uname }} {{ user.phone }}</span>
-              </div>
-            </div>
-            <div class="order-confirm-eticket"></div>
-          </div>
+          </template>
+        </el-image>
+        <div style="flex: 0 0 50%">
+          <span style="font-size: 25px">{{ value.gname }}</span>
+
+        </div>
+        <div style="flex: 1">
+          <p style="float: right;">￥{{ value.price }}</p>
+          <p style="float: right;color: #bbb;font-size: 20px;">x{{ value.number }}</p>
+
         </div>
       </div>
-    </div>
-  </div>
-  <div style="width: 100%;height: 100px;float: right">
-    <el-button type="danger"
-               plain size="large"
-               style="margin-right: 15%;float: right"
-               @click="submitOrder"
-    >确认下单</el-button>
-  </div>
 
+    </el-card>
+
+  </div>
+  <div>
+    <van-action-bar style="background-color: #fafafa">
+      <div style="width: 50%;">
+        <p style="font-size: 15px;float: right">&ensp;合计：￥{{this.sum}}</p>
+        <div style="float: right">
+          <span style="font-size: 15px;">&ensp;积分{{ user.point }}</span>
+          <span style="font-size: 15px;">  可抵消{{(this.user.point/100)}}元</span>
+        </div>
+      </div>
+      <van-action-bar-button type="danger" text="提交订单" @click="submitOrder" safe-area-inset-bottom/>
+    </van-action-bar>
+
+  </div>
 </div>
 </template>
 
 <script>
 import '@/assets/css/Purchase.css'
+import { ActionBar, ActionBarIcon, ActionBarButton } from 'vant';
+
 import axios from "axios";
 export default {
   name: "Purchase",
+  components:{
+    [ActionBar.name]: ActionBar,
+    [ActionBarIcon.name]: ActionBarIcon,
+    [ActionBarButton.name]: ActionBarButton,
+  },
   data(){
     return{
       uid: window.localStorage.getItem("uid"),
@@ -127,3 +137,11 @@ export default {
   }
 }
 </script>
+<style scoped>
+.cellContainer{
+  padding: 0px;
+  height: 150px;
+  /*border: 1px solid black;*/
+  display: flex;
+}
+</style>

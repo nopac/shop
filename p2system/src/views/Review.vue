@@ -1,88 +1,106 @@
 <template>
-  <div style="margin: 10px">
-    <div class="opeBoard">
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
+  <div style="margin: 10px" key="{{key}}">
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入商品名" style="width: 20%" clearable>
-      </el-input>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="search">查询</el-button>
+      <van-cell-group inset>
+        <van-field
+            v-model="searchText"
+            center
+            clearable
+            placeholder="输入商品名">
+          <template #button>
+            <van-button size="small" type="primary" :click="search">查询</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
     </div>
-    <div class="displayBoard">
-      <el-table :data="tableData"
-                border
-                stripe
-                style="width: 100%"
+    <div>
+      <van-card
+          v-for="order in tableData"
+          :num="order.number"
+          :price="order.price"
+          :title="order.gname"
+          :thumb="order.picture"
       >
-        <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props">
-            <deliveryExpand v-bind:order="props.row" />
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="gname"
-            label="商品" />
-        <el-table-column
-            prop="price"
-            label="单价" />
-        <el-table-column
-            prop="number"
-            label="数量" />
-        <el-table-column
-            prop="sum"
-            label="实付款" />
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope">
-            <el-button text type="primary" @click="review(scope.row)">评价</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+        <template #tags >
+          <div style="margin-top: 3%;margin-bottom: 3%">
+            <div>
+              <van-tag plain>{{order.mname}}</van-tag>
+            </div>
+            <div style="color: #ED9B78">
+              <van-tag plain>待评价</van-tag>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div style="width: 72%;margin-left: auto">
+            <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{order.sum}}</div>
+            <van-button size="small" @click="review(order)">立即评价</van-button>
+          </div>
+        </template>
 
-    <el-dialog title="评价" v-model="dialogFormVisible">
+      </van-card>
+    </div>
+    <van-popup v-model:show="dialogFormVisible"
+               round
+               position="bottom"
+               teleport="body"
+               :style="{ height: '50%' }"
+                @close="cancel">
+      <van-form v-model="form">
+        <van-field label="商品评价">
+          <template #input>
+            <van-rate v-model="form.Gvalue"/>
+          </template>
+        </van-field>
+        <van-field label="商家评价">
+          <template #input>
+            <van-rate v-model="form.Mvalue"/>
+          </template>
+        </van-field>
+        <van-field
+            v-model="form.textarea"
+            label="评价描述"
+            type="textarea"
+            placeholder="请输入评价"
+        />
+        <div style="margin: 16px;">
+          <van-button round block type="primary" @click="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
+    </van-popup>
+<!--    <el-dialog title="商品评价" v-model="dialogFormVisible" width="90%">
       <el-form :model="form">
-        <el-form-item label="商品评价" :label-width="formLabelWidth">
+        <el-form-item label="商品评价" style="padding-left: 5%">
           <el-rate
               v-model="form.Gvalue"
               :colors="colors"
-              style="margin-top: 10px">
+              style="padding-top: 3%">
           </el-rate>
         </el-form-item>
-        <el-form-item label="商家评价" :label-width="formLabelWidth">
+        <el-form-item label="商家评价" style="padding-left: 5%">
           <el-rate
               v-model="form.Mvalue"
-              :colors="colors">
+              :colors="colors"
+              style="padding-top: 3%">
           </el-rate>
         </el-form-item>
-        <el-form-item label="评价描述" :label-width="formLabelWidth">
+        <el-form-item label="评价描述" style="padding-left: 5%">
           <el-input
               type="textarea"
               :rows="5"
               placeholder="请输入评价内容"
-              style="margin-right: 50px"
+              style="margin-right: 10px"
               v-model="form.textarea">
           </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="cancel" size="large">取 消</el-button>
+        <el-button type="primary" @click="submit" size="large">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 
 </template>
@@ -92,27 +110,24 @@ import axios from "axios";
 import deliveryExpand from "@/components/DeliveryExpand";
 
 export default {
-  name: "Waiting",
+  name: "Review",
   components: {
     deliveryExpand,
   },
   data(){
     return{
       searchText: "",
-      currentPage: 1,
-      pageSize: 5,
       total: 0,
       tableData : [],
-      dialogFormVisible: false,
-      form:{
+      form: {
         Gvalue: null,
         Mvalue: null,
         textarea: ""
       },
-      formLabelWidth: '120px',
+      dialogFormVisible: false,
       order:{},
-
-      colors: ['#99A9BF', '#F7BA2A', '#FF9900']
+      baseUrl:"http://39.105.220.225:8081/shop/files/download/",
+      key:0
     }
   },
   created() {
@@ -129,24 +144,40 @@ export default {
       }
       axios.get("http://39.105.220.225:8081/shop/orders/user",{
         params: params
-      })
-          .then(res=>{
-            console.log(res);
+      }).then(res=>{
             this.total=res.data.data.total;
             this.tableData = res.data.data.records;
-            console.log(this.tableData)
-          })
+            this.tableData.forEach((item)=>{
+              axios.get("http://39.105.220.225:8081/shop/goods/goodDetails",{
+                params:{
+                  Gid:item.gid,
+                  Uid: window.localStorage.getItem("uid")
+                }
+              }).then(res=>{
+                console.log("aaa",res.data.data.picture);
+                item.picture = this.baseUrl + res.data.data.picture;
+              })
+              axios.get("http://39.105.220.225:8081/shop/user/userone",{
+                params:{uid:item.mid}
+              }).then(res =>{
+                item.mname = res.data.data.uname;
+              })
+            })
+        this.key++;
+      })
     },
     search(){
       this.load();
     },
     review(order){
+
       this.dialogFormVisible = true
       this.order = order;
     },
 
     submit(){
-      if (this.form.Gvalue==0||this.form.Mvalue==0){
+      console.log("aaa","评价提交")
+      if (this.form.Gvalue===0||this.form.Mvalue===0){
         this.$message({
           type:'error',
           message: '请评价'
@@ -182,32 +213,21 @@ export default {
       });
       this.dialogFormVisible=false;
       this.form={};
-    },
-    handleSizeChange(val) {//改变每页的显示条数
-      this.pageSize = val;
       this.load()
     },
-    handleCurrentChange(val) {//改变页码
-      this.currentPage=val
-      this.load()
-    },
-
-
+    cancel(){
+      this.form.Gvalue = 0;
+      this.form.Mvalue = 0;
+      this.form.textarea = ""
+    }
   }
 }
 </script>
 
 <style scoped>
 
-.opeBoard{
-  margin: 10px 0;
-}
 .searchBoard{
   margin: 10px 0;
-}
-.fixedOpe{
-  width: 120px;
-  text-align: center;
 }
 
 </style>

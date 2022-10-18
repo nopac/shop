@@ -138,7 +138,7 @@ export default {
       if(Object.keys(this.userForm).length===0){
         this.userForm.uname=localStorage.getItem("uname")
         console.log("getUser:"+this.userForm.uname)
-        request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+        request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
           if(res.code !== '0'){
             this.$message({
               type: "error",
@@ -156,7 +156,7 @@ export default {
               type: this.searchType
             }
             console.log("uid:"+this.userForm.uid)
-            request.get("/exmO/getOut/"+this.userForm.uid,{
+            request.get("http://39.105.220.225:8081/shop/exmO/getOut/"+this.userForm.uid,{
               params: params
             })
                 .then(res=>{
@@ -186,7 +186,7 @@ export default {
         type: this.searchType
       }
       console.log("uid:"+this.userForm.uid)
-      request.get("/exmO/getOut/"+this.userForm.uid,{
+      request.get("http://39.105.220.225:8081/shop/exmO/getOut/"+this.userForm.uid,{
         params: params
       })
           .then(res=>{
@@ -209,7 +209,7 @@ export default {
       this.fillIDVisible = true;
     },
     outGoods(){
-      request.put("/exmO/out/",this.ordersForm)
+      request.put("http://39.105.220.225:8081/shop/exmO/out/",this.ordersForm)
           .then(res=>{
             if (res.code === '0'){
               console.log(res);
@@ -226,7 +226,7 @@ export default {
           })
     },
     updateDeliderID(){
-      request.put("/orders",this.ordersForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/orders",this.ordersForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({

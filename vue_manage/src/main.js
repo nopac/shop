@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
-import {Button, Form, Field, CellGroup, NavBar} from 'vant'
+import {Button, Form, Field, CellGroup, NavBar,List,Dialog,Tag,Card} from 'vant'
 import 'element-plus/dist/index.css'
 import '@/assets/css/global.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
@@ -35,6 +35,10 @@ createApp(App).use(store)
     .use(DropdownMenu)
     .use(DropdownItem)
     .use(Icon)
+    .use(Tag)
+    .use(List)
+    .use(Card)
+    .use(Dialog)
     .use(ElementPlus, {
       locale: zhCn,
     }).mount('#app')

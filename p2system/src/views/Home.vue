@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="float: top;height: 80px;width: 650px;margin: auto; padding: 20px">
+    <div style="float: top;height: 80px;width: 375px;margin: auto; padding: 20px">
       <!--选择器-->
       <el-select
           v-model="value"
@@ -33,9 +33,9 @@
           style="margin: 10px;flex: 0"
       >
 <!--        <router-link :to="{name:'goodDetailsLayout', query: {gid: value.gid}}">-->
-          <el-card :body-style="{ padding: '0px' }" style="width: 250px; margin: 0 10px;cursor: pointer" @click="gotoDetail(value)">
+          <el-card :body-style="{ padding: '0px' }" style="width: 150px; margin: 0 10px;cursor: pointer" @click="gotoDetail(value)">
             <el-image class="imageArea"
-                      style="width: 250px;height: 250px;"
+                      style="width: 150px;height: 150px;"
                       :src="value.picture">
               <template #error>
                 <div class="image-slot" style="text-align: center;">
@@ -161,7 +161,7 @@ export default {
         gname: value.gname,
       }).then(res => {
         console.log(res)
-        if(res.data.code=='0'){
+        if(res.data.code === '0'){
           this.$message({
             message:'成功加入购物车',
             type:"success"
