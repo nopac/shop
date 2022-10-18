@@ -36,7 +36,7 @@
     </div>
     <div class="cellContainer" v-if="isMerchant===false">
       <van-cell center class="cell"
-                @click="showBeMerchant">成为商家
+                @click="clickBeMct">成为商家
       </van-cell>
     </div>
     <div class="cellContainer" v-if="hasLogin===true">
@@ -52,6 +52,69 @@
         <van-button type="primary" @click="submit" style="margin-right: 1rem">充值</van-button>
       </div>
     </van-popup>
+<!--    <van-popup v-model:show="beMctVisible"-->
+<!--               closeable class="investPopUp">-->
+<!--      <van-popup v-model:show="beMctVisible" position="bottom" :style="{ height: '75%' }" closeable  >-->
+<!--      <span class="invest-Title">商家注册</span>-->
+      <div class="popupBottom">
+          <el-dialog
+              v-model="beMctVisible"
+              title="申请成为商家"
+              :visible.sync="beMctVisible"
+              width="350px"
+              style="margin-left: 20px"
+          >
+            <el-form class="userForm" :inline="true" style="text-align: center">
+              <el-form-item class="el-form-item input-area">
+                <span class="license_label">营业执照:&emsp;</span>
+                <el-upload
+                    :action=licenseUrl
+                    :on-success="licenseUploadSuccess"
+                    :limit="1"
+                >
+                  <el-button type="primary">点击上传营业执照</el-button>
+                </el-upload>
+              </el-form-item>
+              <el-form-item class="el-form-item input-area">
+                <span class="license_label">身份证照片:&emsp;</span>
+                <el-upload
+                    :action=idUrl
+                    :on-success="idUploadSuccess"
+                    :limit="1"
+                >
+                  <el-button type="primary">点击上传身份证照片</el-button>
+                </el-upload>
+              </el-form-item>
+            </el-form>
+            <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancelSubmit">取消</el-button>
+        <el-button type="primary" @click="updateImgPath">提交</el-button>
+      </span>
+            </template>
+          </el-dialog>
+        </div>
+<!--        <van-form @submit="onSubmit">-->
+<!--          <van-cell-group inset>-->
+<!--            <van-field name="uploader" label="文件上传">-->
+<!--              <template #input>-->
+<!--                <van-uploader v-model="licenseUrl" />-->
+<!--              </template>-->
+<!--            </van-field>-->
+<!--            <van-field name="uploader" label="身份证照片上传">-->
+<!--              <template #input>-->
+<!--                <van-uploader v-model="value" :after-read="afterRead" />-->
+<!--              </template>-->
+<!--            </van-field>-->
+<!--          </van-cell-group>-->
+<!--          <div style="margin: 16px;">-->
+<!--            <van-button round block type="primary" native-type="submit">-->
+<!--              提交-->
+<!--            </van-button>-->
+<!--          </div>-->
+<!--        </van-form>-->
+<!--    </van-popup>-->
+
   </div>
 </div>
 </template>
@@ -59,6 +122,7 @@
 <script>
 import {Cell,Image,Icon,Button,Popup,Field,NumberKeyboard} from 'vant'
 import request from "@/util/request";
+import axios from "axios";
 export default {
   name: "UserPage",
   components:{
@@ -142,6 +206,30 @@ export default {
     },
     invest(){
       this.investVisible=true;
+    },
+    updateImgPath(){
+      console.log("license:"+this.userForm.license)
+      this.userForm.isMerchant = 2
+      axios.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
+        console.log(res.data);
+        if(res.data.code === '0'){
+          this.$message({
+            type:"success",
+            message: "申请成功，请等待审核通过",
+          });
+          this.beMctVisible = false;
+        }else{
+          this.$message({
+            type:"error",
+            message: res.msg,
+          })
+        }
+        this.load();
+      })
+      request.put("/user",this.userForm).then(res=>{
+        // console.log(res)
+
+      })
     },
     submit(){
       this.recordForm.type=0
