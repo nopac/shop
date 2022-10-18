@@ -76,10 +76,6 @@
           Login(){
             axios.post("http://39.105.220.225:8081/shop/user/login",this.user).then(res =>{
               if(res.data.code === "0"){
-                this.$message({
-                  type:"success",
-                  message: "登录成功",
-                });
                 let decode = jwtDecode(res.data.token)
                 console.log("decode:"+JSON.stringify(decode))
                 // localStorage.setItem("user",decode.info.data())
