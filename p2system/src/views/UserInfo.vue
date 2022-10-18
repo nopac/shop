@@ -37,7 +37,8 @@
   <!-- 密码-->
   <van-field v-model="userForm.upsw" type="number" label="密码" :disabled="diseditable" />
   <!-- 允许输入正整数，调起纯数字键盘 -->
-  <van-field v-model="userForm.sex" type="text" label="性别" disable />
+<!--  <van-field v-model="userForm.sex" type="text" label="性别" disable >-->
+<!--  </van-field>-->
   <!-- 输入手机号，调起手机号键盘 -->
   <van-field v-model="userForm.phone" type="tel" label="手机号" :disabled="diseditable"  />
   <!-- 输入城市名称 -->
@@ -75,27 +76,6 @@
   :style="{ height: '30%' }"
 />
       </div>
-      <!-- <div class="displayBoard">
-        <el-card class="UserDisplayBoard">
-          <template #header>
-            <div class="card-header">
-              <span>我的账户信息</span>
-              <el-button @click="invest">充值</el-button>
-            </div>
-          </template>
-          <div class="account">
-            <span>余额:</span>{{userForm.account}}
-          </div>
-          <div class="likeRate">
-            <span>积分:</span>{{userForm.point}}
-          </div>
-          <div class="beMct">
-            <el-button @click="clickBeMct">成为商家</el-button>
-          </div>
-        </el-card>
-      </div>
-      <div>
-      </div> -->
     </div>
 
     <!--    充值弹窗-->
@@ -170,7 +150,9 @@ export default {
         }else {
           console.log(res)
           this.userForm = res.data
+
           this.userForm.sex = String(this.userForm.sex)
+
           //账户余额保留两位小数点
           let ac = this.userForm.account
           ac = parseFloat(ac).toFixed(2)

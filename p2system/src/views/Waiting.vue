@@ -1,14 +1,18 @@
 <template>
   <div class="waiting" style="margin: 10px">
 
-    <div class="opeBoard">
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入商品名" style="width: 20%" clearable>
-      </el-input>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="search">查询</el-button>
+      <van-cell-group inset>
+        <van-field
+            v-model="searchText"
+            center
+            clearable
+            placeholder="输入商品名">
+          <template #button>
+            <van-button size="small" type="primary" @click="search">查询</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
     </div>
     <div class="displayBoard">
 
@@ -23,7 +27,7 @@
             <template #footer>
               <el-popconfirm title="确认取消订单吗？" @confirm="deleteGoods(item.oid),load()">
                 <template #reference>
-                  <el-button type="text" size="small">取消订单</el-button>
+                  <van-button size="small">取消订单</van-button>
                 </template>
               </el-popconfirm>
             </template>
