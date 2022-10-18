@@ -58,7 +58,7 @@
                 <div style="margin-left:10px;flex-direction: column;">
                   <div class="auxfont" style="margin-top:15px">
                     <b >收支类型: </b>
-                    <span v-if="item.type === 0" style="color: darkgreen;">收入</span>
+                    <span v-if="item.type === 0" style="color: #07C160;">收入</span>
                     <span v-if="item.type === 1" style="color: red;">支出</span>
 
 
@@ -169,7 +169,6 @@ export default {
                         delete e[key];
                       }
                       e.bargain=String(e.bargain)
-
                     }
                   })//过滤null
                 })
