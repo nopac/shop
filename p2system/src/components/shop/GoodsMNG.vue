@@ -207,8 +207,8 @@
 
   </div>
 
-  <van-dialog v-model:show="show" title="商品信息" show-cancel-button>
-    <van-form @submit="updateGoods">
+  <van-dialog v-model:show="show" title="商品信息" show-cancel-button @confirm="updateGoods">
+    <van-form @submit="onSubmit">
       <van-cell-group inset>
         <!-- 输入任意文本 -->
         <van-field v-model="goodsForm.gname" label="商品名" />
@@ -266,6 +266,7 @@ export default {
   },
   methods: {
     load(){
+      this.tableData=[]
       if(Object.keys(this.userForm).length===0){
         this.userForm.uname=localStorage.getItem("uname")
         console.log("getUser:"+this.userForm.uname)
@@ -309,6 +310,7 @@ export default {
 
     },
     refresh(){
+      // this.tableData = []
       let params={
         pageNumber: this.currentPage,
         pageSize: this.pageSize,
@@ -329,6 +331,7 @@ export default {
                 }
                 e.bargain=String(e.bargain)
               }
+              e.picture = "http://39.105.220.225:8081/shop/files/download/"+e.picture
             })//过滤null
           })
     },
@@ -392,15 +395,14 @@ export default {
         this.updateGoods();
       }
     },
+    onSubmit(){
+      this.updateGoods()
+    },
     updateGoods(){
       console.log("picture:"+this.goodsForm.picture)
+      this.goodsForm.picture = this.goodsForm.picture.slice(47,this.goodsForm.picture.length)
       request.put("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
-        // console.log(res)
-        this.$message({
-          type:"success",
-          message: "更新成功",
-        });
-        if(res.data.code === '0'){
+        if(res.code === '0'){
           this.$message({
             type:"success",
             message: "更新成功",
@@ -409,9 +411,10 @@ export default {
         }else{
           this.$message({
             type:"error",
-            message: res.data.msg,
+            message: res.msg,
           })
         }
+        this.tableData = []
         this.load();
       })
     },
