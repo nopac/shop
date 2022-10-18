@@ -75,7 +75,7 @@
             <el-button text @click="refuseUser(scope.row)" type="danger">拒绝</el-button>
             <el-popconfirm title="确认删除？" @confirm="deleteUser(scope.row.uid)">
               <template #reference>
-                <van-icon name="delete-o" size="32px"/>
+                <van-icon name="delete-o" size="32px" />
                 <!--<el-icon
                     @mouseover="deleteToRed(scope.row)"
                     @mouseout="deleteToGrey(scope.row)"
