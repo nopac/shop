@@ -71,11 +71,8 @@
                   <div class="auxfont">
                     <span><b>时间:</b>  {{ dateFormat(item.time)}} </span>
                   </div>
-
                 </div>
-
               </div>
-
               <van-divider />
             </card>
             <template #right>
