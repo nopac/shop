@@ -2,7 +2,7 @@
 <div class="UserPage" >
   <div class="HeadContainer">
     <van-image class="headImg" :src="require('../assets/img/head.png')"/>
-    <div  v-if="hasLogin===false">
+    <div  v-if="hasLogin===false" style="font-size: 45px">
       <span class="headName" @click="toLogin" style="text-decoration: underline;">{{defaultName}}</span></div>
 
     <span class="headName" v-if="hasLogin===true">{{userForm.uname}}</span>
