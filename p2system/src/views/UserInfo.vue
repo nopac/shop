@@ -8,30 +8,24 @@
         </div> -->
       </div>
 
-    
+
   <div>
-    
+
     <van-cell-group inset class="UserInfo">
      <div style="display:flex">
-    <van-image class="headImg"
-  round
-  :src="require('@/assets/'+headSrc+'.jpg')"
-/>
-<div style="margin-left:5px">   
+       <van-image class="headImg"  width="75"
+                  height="75" :src="require('../assets/img/head.png')"/>
+<div style="margin:5px">
    <div class="card-header">
-              <span> <b style="font-size:35px">我的账户信息</b></span>
+              <span> <b style="font-size:25px">我的账户信息</b></span>
             </div>
             <div >
-            <span style="font-size: 25px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}}
+            <span style="font-size: 20px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}}
           </div>
           <div class="likeRate" >
-            <span style="font-size: 25px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}}
-          
-          <div class="beMct" style="margin:5px;display:flex">
-            <van-button type="primary" size="mini" @click="invest" style="margin-left:5px">充值</van-button>
-            <van-button type="primary" size="mini" @click="clickBeMct">成为商家</van-button>
+            <span style="font-size: 20px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}}
           </div>
-          </div>
+  <VanDivider></VanDivider>
         </div>
 </div> 
 
