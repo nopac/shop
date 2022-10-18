@@ -1,6 +1,6 @@
 <template>
   <div class="GoodsMNG">
-    <div class="opeBoard">
+    <!--<div class="opeBoard">
       <el-button type="primary" @click="addUser">新增</el-button>
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
@@ -9,27 +9,32 @@
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询
       </el-button>
-    </div>
-    <!--<div class="searchBoard">
-      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
-        <el-option label="ID" value="uid"></el-option>
-        <el-option label="姓名" value="uname"></el-option>
-      </el-select>
-      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 70%" clearable>
+    </div>-->
+
+    <div class="searchBoard">
+
+      <el-input v-model="searchText" placeholder="输入关键词" style="width: 100%" clearable>
       </el-input>
       <van-row justify="end">
+
         <van-col span="3">
           <el-button type="primary" style="margin: 0 5px"
-                     @click="search">查询</el-button>
+                     @click="searchName">查询</el-button>
         </van-col>
         <van-col span="3">
           <el-button type="primary" @click="load">刷新</el-button>
         </van-col>
       </van-row>
-      &lt;!&ndash;
+      <van-row justify="end">
+        <van-col span="3">
+          <el-button type="primary"
+                     @click="addUser">新增</el-button>
+        </van-col>
+      </van-row>
+      <!--
       <van-icon name="delete-o" size="32px"/>
-      &ndash;&gt;
-    </div>-->
+      -->
+    </div>
 
     <div>
       <van-card

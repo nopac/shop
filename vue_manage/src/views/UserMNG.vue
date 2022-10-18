@@ -26,7 +26,7 @@
       </van-row>
       <van-row justify="end">
         <van-col span="3">
-          <el-button type="primary" style="margin: 0 5px"
+          <el-button type="primary"
                      @click="addUser">新增</el-button>
         </van-col>
       </van-row>
