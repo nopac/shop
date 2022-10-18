@@ -1,6 +1,6 @@
 <template>
   <div class="GoodsMNG">
-    <div class="opeBoard">
+    <!--<div class="opeBoard">
       <el-button type="primary" @click="addUser">新增</el-button>
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
@@ -9,6 +9,31 @@
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询
       </el-button>
+    </div>-->
+
+    <div class="searchBoard">
+
+      <el-input v-model="searchText" placeholder="输入关键词" style="width: 100%" clearable>
+      </el-input>
+      <van-row justify="end">
+
+        <van-col span="3">
+          <el-button type="primary" style="margin: 0 5px"
+                     @click="searchName">查询</el-button>
+        </van-col>
+        <van-col span="3">
+          <el-button type="primary" @click="load">刷新</el-button>
+        </van-col>
+      </van-row>
+      <van-row justify="end">
+        <van-col span="3">
+          <el-button type="primary"
+                     @click="addUser">新增</el-button>
+        </van-col>
+      </van-row>
+      <!--
+      <van-icon name="delete-o" size="32px"/>
+      -->
     </div>
 
     <div>

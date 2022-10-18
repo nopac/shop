@@ -1,33 +1,30 @@
 <template>
   <div>
-    <div style="float: top;height: 80px;width: 375px;margin: auto; padding: 20px">
-      <!--选择器-->
-      <el-select
-          v-model="value"
-          class="m-2"
-          placeholder="Select"
-          style="float: left; width: 150px" size="large"
-          @change="selectChange"
-      >
-        <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-        />
-      </el-select>
-<!--      <div class="opeBoard">-->
-<!--        <div class="selectBoard">-->
-<!--          <van-dropdown-menu >-->
-<!--            <van-dropdown-item v-model="value" :options="options"/>-->
-<!--          </van-dropdown-menu>-->
-<!--        </div>-->
-<!--      </div>-->
-      <!--    搜索区域-->
-      <div style="margin: 0px;float: right">
-        <el-input v-model="search" placeholder="请输入想要搜索的商品名称"  style="width: 350px" clearable size="large"/>
-        <el-button type="primary" style="margin-left: 5px" @click="loadGoods" size="large">查询</el-button>
-      </div>
+    <div class="topNavBoard"
+         style="float: top;height: 3rem;width: 10rem;margin: auto;padding: 20px">
+
+      <van-row>
+        <van-col offset="12" span="12">
+          <van-dropdown-menu>
+            <van-dropdown-item v-model="value" :options="options"
+                               @change="selectChange"/>
+          </van-dropdown-menu>
+        </van-col>
+      </van-row>
+      <van-row>
+        <van-col offset="12" span="12">
+          <!--          搜索区域-->
+          <van-field
+              v-model="search"
+              center
+              clearable
+              placeholder="请输入想要搜索的商品名称">
+            <template #button>
+              <van-button size="small" type="primary" @click="loadGoods">查询</van-button>
+            </template>
+          </van-field>
+        </van-col>
+      </van-row>
 
     </div>
 
@@ -107,19 +104,19 @@ export default {
       options : [
        {
           value: 0,
-          label: '系统推荐',
+          text: '系统推荐',
         },
         {
           value: 1,
-          label: '好评率',
+          text: '好评率',
         },
         {
           value: 2,
-          label: '价格从高到低',
+          text: '价格从高到低',
         },
         {
           value: 3,
-          label: '价格从低到高',
+          text: '价格从低到高',
         },
       ],
       baseURL:"http://39.105.220.225:8081/shop/files/download/",
@@ -191,7 +188,18 @@ export default {
 </script>
 
 <style scoped>
+.topNavBoard{
+  float: top;
+  height: 3rem;
+  width: 10rem;
+  margin: auto;
+  padding: 20px
+}
 .m-2{
-
+  float: left;
+  /*width: 2rem*/
+}
+.searchBoard {
+  margin: 10px 0;
 }
 </style>

@@ -1,7 +1,7 @@
 <template style="height: 100%">
   <div style="height: 100%">
     <ReturnHeader/>
-    <div style="position: relative;top: 10px;height: 100%;background-color: #f9f9f9">
+    <div style="height: 100%;background-color: #f9f9f9;">
       <router-view/>
     </div>
   </div>
