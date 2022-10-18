@@ -36,55 +36,52 @@
           </el-descriptions-item>
         </el-descriptions>
       </div>
-    
-      <van-list 
-	v-model="loading" 	          
-	:finished="finished" 					
-	finished-text="没有更多了"		
-	@load="onLoad" 								
-	offset="300"									 
-	:error.sync="error" 							 
-	error-text="请求失败，点击重新加载"					 
-	>
-   <div v-for='(item, index) in this.tableData' :key="index"> 
-       <van-swipe-cell>
-        <card>
-          <div style="display:flex" >
-            <span style="font-size: 30px; color: #FF6600;margin-top: auto;margin-bottom: auto;">{{item.oid}}</span>
-            <div style="margin-left:10px;flex-direction: column;">
-              <div class="auxfont" style="margin-top:15px">
-            <b >收支类型: </b>
-            <span v-if="item.type === 0" style="color: darkgreen;">收入</span>
-            <span v-if="item.type === 1" style="color: red;">支出</span>
-          
-           
-          </div>
 
-            <div class="auxfont">
-            <span><b>金额:</b></span>
-            <span>{{item.amount}}元</span>
-            </div>
-          <div class="auxfont">
-            <span><b>余额:</b></span>
-            <span>{{item.account}}元</span>
-          </div>
-          <div class="auxfont">
-            <span><b>时间:</b>  {{ dateFormat(item.time)}} </span>
-          </div>
+      <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          offset="300"
+          :error.sync="error"
+          error-text="请求失败，点击重新加载"
+      >
+        <div v-for='(item, index) in this.tableData' :key="index">
+          <van-swipe-cell>
+            <card>
+              <div style="display:flex" >
+                <span style="font-size: 30px; color: #FF6600;margin-top: auto;margin-bottom: auto;">{{item.oid}}</span>
+                <div style="margin-left:10px;flex-direction: column;">
+                  <div class="auxfont" style="margin-top:15px">
+                    <b >收支类型: </b>
+                    <span v-if="item.type === 0" style="color: darkgreen;">收入</span>
+                    <span v-if="item.type === 1" style="color: red;">支出</span>
 
-          </div>
 
-          </div>
-          
-          <van-divider />
-        </card>
-  <template #right>
-    <van-button square text="删除" type="danger" class="delete-button" />
-  </template>
-</van-swipe-cell>
-   </div>
- </van-list>  
- 
+                  </div>
+
+                  <div class="auxfont">
+                    <span><b>金额:</b></span>
+                    <span>{{item.amount}}元</span>
+                  </div>
+                  <div class="auxfont">
+                    <span><b>余额:</b></span>
+                    <span>{{item.account}}元</span>
+                  </div>
+                  <div class="auxfont">
+                    <span><b>时间:</b>  {{ dateFormat(item.time)}} </span>
+                  </div>
+                </div>
+              </div>
+              <van-divider />
+            </card>
+            <template #right>
+              <van-button square text="删除" type="danger" class="delete-button" />
+            </template>
+          </van-swipe-cell>
+        </div>
+      </van-list>
+
     </div>
     <!--    分页-->
     <div style="margin: 10px">
@@ -100,7 +97,7 @@
     </div>
     <!--    新增商品弹窗-->
 
-  
+
 
 
 
@@ -138,7 +135,7 @@ export default {
         this.userForm.uname=localStorage.getItem("uname")
         console.log("getUser:"+this.userForm.uname)
         //获取用户信息
-        request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+        request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
           if(res.code !== '0'){
             this.$message({
               type: "error",
@@ -155,7 +152,7 @@ export default {
               type: this.searchType
             }
             //获取账户记录
-            request.get("/account/"+this.userForm.uid,{
+            request.get("http://39.105.220.225:8081/shop/account/"+this.userForm.uid,{
               params: params
             })
                 .then(res=>{
@@ -186,7 +183,7 @@ export default {
         type: this.searchType
       }
       //获取账户记录
-      request.get("/account/"+this.userForm.uid,{
+      request.get("http://39.105.220.225:8081/shop/account/"+this.userForm.uid,{
         params: params
       })
           .then(res=>{

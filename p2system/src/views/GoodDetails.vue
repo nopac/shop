@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 20px 40px;position:relative;bottom: 50px">
+  <div style="margin: 46px 40px">
     <div style="width: 100%;">
       <el-image class="imageArea"
                 style=""

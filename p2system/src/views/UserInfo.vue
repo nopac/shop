@@ -121,44 +121,7 @@
       </el-dialog>
     </div>
     <!--    成为商家弹窗-->
-    <div>
-      <el-dialog
-          v-model="beMctVisible"
-          title="申请成为商家"
-          :visible.sync="beMctVisible"
-          width="700px"
-          style="margin-left: 20px"
-      >
-        <el-form class="userForm" :inline="true" style="text-align: center">
-          <el-form-item class="el-form-item input-area">
-            <span class="license_label">营业执照:&emsp;</span>
-            <el-upload
-                :action=licenseUrl
-                :on-success="licenseUploadSuccess"
-                :limit="1"
-            >
-              <el-button type="primary">点击上传营业执照</el-button>
-            </el-upload>
-          </el-form-item>
-          <el-form-item class="el-form-item input-area">
-            <span class="license_label">身份证照片:&emsp;</span>
-            <el-upload
-                :action=idUrl
-                :on-success="idUploadSuccess"
-                :limit="1"
-            >
-              <el-button type="primary">点击上传身份证照片</el-button>
-            </el-upload>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="cancelSubmit">取消</el-button>
-        <el-button type="primary" @click="updateImgPath">提交</el-button>
-      </span>
-        </template>
-      </el-dialog>
-    </div>
+
 
   <!-- </div> -->
 </template>
