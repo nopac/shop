@@ -52,10 +52,7 @@
         <van-button type="primary" @click="submit" style="margin-right: 1rem">充值</van-button>
       </div>
     </van-popup>
-<!--    <van-popup v-model:show="beMctVisible"-->
-<!--               closeable class="investPopUp">-->
-<!--      <van-popup v-model:show="beMctVisible" position="bottom" :style="{ height: '75%' }" closeable  >-->
-<!--      <span class="invest-Title">商家注册</span>-->
+
       <div class="popupBottom">
           <el-dialog
               v-model="beMctVisible"
@@ -94,26 +91,6 @@
             </template>
           </el-dialog>
         </div>
-<!--        <van-form @submit="onSubmit">-->
-<!--          <van-cell-group inset>-->
-<!--            <van-field name="uploader" label="文件上传">-->
-<!--              <template #input>-->
-<!--                <van-uploader v-model="licenseUrl" />-->
-<!--              </template>-->
-<!--            </van-field>-->
-<!--            <van-field name="uploader" label="身份证照片上传">-->
-<!--              <template #input>-->
-<!--                <van-uploader v-model="value" :after-read="afterRead" />-->
-<!--              </template>-->
-<!--            </van-field>-->
-<!--          </van-cell-group>-->
-<!--          <div style="margin: 16px;">-->
-<!--            <van-button round block type="primary" native-type="submit">-->
-<!--              提交-->
-<!--            </van-button>-->
-<!--          </div>-->
-<!--        </van-form>-->
-<!--    </van-popup>-->
 
   </div>
 </div>

@@ -49,8 +49,12 @@
         <div v-for='(item, index) in this.tableData' :key="index">
           <van-swipe-cell>
             <card>
-              <div style="display:flex" >
-                <span style="font-size: 30px; color: #FF6600;margin-top: auto;margin-bottom: auto;">{{item.oid}}</span>
+              <div style="display:flex;flex-direction: row" >
+                <div style="display: flex;flex-direction: column">
+                  <span style="margin-bottom: 5px;margin-top: 10px"></span>
+                  <span style="font-size: 25px;margin-top: 10px"><b>订单号</b></span>
+                <span style="font-size: 30px; color: #FF6600;margin-top: 10px;margin-bottom:auto;margin-left: auto;margin-right: auto">{{item.oid}}</span>
+                </div>
                 <div style="margin-left:10px;flex-direction: column;">
                   <div class="auxfont" style="margin-top:15px">
                     <b >收支类型: </b>
@@ -62,11 +66,11 @@
 
                   <div class="auxfont">
                     <span><b>金额:</b></span>
-                    <span>{{item.amount}}元</span>
+                    <span style="color: #FF6600">{{item.amount}}元</span>
                   </div>
                   <div class="auxfont">
                     <span><b>余额:</b></span>
-                    <span>{{item.account}}元</span>
+                    <span style="color: #FF6600">{{item.account}}元</span>
                   </div>
                   <div class="auxfont">
                     <span><b>时间:</b>  {{ dateFormat(item.time)}} </span>
@@ -165,6 +169,7 @@ export default {
                         delete e[key];
                       }
                       e.bargain=String(e.bargain)
+
                     }
                   })//过滤null
                 })
