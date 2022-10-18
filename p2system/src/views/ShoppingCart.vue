@@ -8,7 +8,6 @@
 
         <van-checkbox :name="index" @click="addprice()">
 
-
             <van-card
                 :num="item.number"
                 :price="item.price"
