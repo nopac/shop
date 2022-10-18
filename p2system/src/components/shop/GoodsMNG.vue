@@ -9,6 +9,10 @@
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询</el-button>
     </div>
+
+
+
+
     <div class="displayBoard">
       <div class="infoCard">
         <el-descriptions border column="3" title="我的店铺信息">
@@ -39,68 +43,94 @@
           </el-descriptions-item>
         </el-descriptions>
       </div>
-      <el-table :data="tableData"
-          border
-          stripe
-          style="width: 100%"
-      >
-        <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props" >
-            <goods-expand v-bind:goods="props.row" >
-              <template v-slot:upButton>
-                <el-button
-                    @click="upGoods(props.row)"
-                    type="primary" plain
-                    class="opeButton"
-                    v-if="props.row.status===4">发布</el-button>
-              </template>
-              <template v-slot:downButton>
-                <el-button
-                    @click="downGoods(props.row)"
-                    type="danger" plain
-                    class="opeButton"
-                    v-if="props.row.status===1">下架</el-button>
-              </template>
 
-            </goods-expand>
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="gname"
-            label="商品名"
-            sortable />
-        <!--     后期添加查看密码功能 -->
-        <el-table-column
-            prop="type"
-            label="商品类型" />
-        <el-table-column
-            prop="price"
-            label="价格" />
-        <el-table-column
-            prop="storage"
-            label="库存" />
-        <el-table-column
-            prop="status"
-            label="状态" >
-          <template #default="scope">
-            <span v-if="scope.row.status === 0" style="color: red;">不通过</span>
-            <span v-if="scope.row.status === 1" style="color: darkgreen;">通过</span>
-            <span v-if="scope.row.status === 3" style="color: dodgerblue;">审核中</span>
-            <span v-if="scope.row.status === 4" style="color: black;">已下架</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope" >
-            <el-button text @click="editGoods(scope.row)" type="primary" plain>编辑</el-button>
-            <el-popconfirm title="确认删除？" @confirm="deleteGoods(scope.row.gid)">
-              <template #reference>
-                <el-button text @click="" type="danger">删除</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
+
+<!--      <el-table :data="tableData"-->
+<!--          border-->
+<!--          stripe-->
+<!--          style="width: 100%"-->
+<!--      >-->
+<!--        <el-table-column type="expand">-->
+<!--          &lt;!&ndash;        修改为自定义组件，显示其他信息&ndash;&gt;-->
+<!--          <template #default="props" >-->
+<!--            <goods-expand v-bind:goods="props.row" >-->
+<!--              <template v-slot:upButton>-->
+<!--                <el-button-->
+<!--                    @click="upGoods(props.row)"-->
+<!--                    type="primary" plain-->
+<!--                    class="opeButton"-->
+<!--                    v-if="props.row.status===4">发布</el-button>-->
+<!--              </template>-->
+<!--              <template v-slot:downButton>-->
+<!--                <el-button-->
+<!--                    @click="downGoods(props.row)"-->
+<!--                    type="danger" plain-->
+<!--                    class="opeButton"-->
+<!--                    v-if="props.row.status===1">下架</el-button>-->
+<!--              </template>-->
+
+<!--            </goods-expand>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--            prop="gname"-->
+<!--            label="商品名"-->
+<!--            sortable />-->
+<!--        &lt;!&ndash;     后期添加查看密码功能 &ndash;&gt;-->
+<!--        <el-table-column-->
+<!--            prop="type"-->
+<!--            label="商品类型" />-->
+<!--        <el-table-column-->
+<!--            prop="price"-->
+<!--            label="价格" />-->
+<!--        <el-table-column-->
+<!--            prop="storage"-->
+<!--            label="库存" />-->
+<!--        <el-table-column-->
+<!--            prop="status"-->
+<!--            label="状态" >-->
+<!--          <template #default="scope">-->
+<!--            <span v-if="scope.row.status === 0" style="color: red;">不通过</span>-->
+<!--            <span v-if="scope.row.status === 1" style="color: darkgreen;">通过</span>-->
+<!--            <span v-if="scope.row.status === 3" style="color: dodgerblue;">审核中</span>-->
+<!--            <span v-if="scope.row.status === 4" style="color: black;">已下架</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">-->
+<!--          <template #default="scope" >-->
+<!--            <el-button text @click="editGoods(scope.row)" type="primary" plain>编辑</el-button>-->
+<!--            <el-popconfirm title="确认删除？" @confirm="deleteGoods(scope.row.gid)">-->
+<!--              <template #reference>-->
+<!--                <el-button text @click="" type="danger">删除</el-button>-->
+<!--              </template>-->
+<!--            </el-popconfirm>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table>-->
+
+      <van-card
+          v-for=" item in tableData"
+          :num="item.storage"
+          :price="item.price"
+          :desc="item.introduction"
+          :title="item.gname"
+          :thumb="item.picture"
+      >
+        <template #footer>
+          <van-button size="small" type="primary" @click="editGoods(item)">编辑</van-button>
+          <van-button size="small" type="danger" @click="deleteGoods(item.gid)">删除</van-button>
+<!--          <div v-if="item.status===1">-->
+<!--            <van-button size="small" type="warning" @click="downGoods(item)">下架</van-button>-->
+<!--          </div>-->
+<!--          <div v-else>-->
+<!--            <van-button size="small" type="success" @click="upGoods(item)">上架</van-button>-->
+<!--          </div>-->
+
+        </template>
+      </van-card>
+
+
+
     </div>
 <!--    分页-->
     <div style="margin: 10px">
@@ -243,12 +273,13 @@ export default {
                   this.total=res.data.total;
                   this.tableData = res.data.records;
                   this.tableData.forEach(e=>{
-                    for( var key in e){
+                    for( let key in e){
                       if(e[key] === "null"){
                         delete e[key];
                       }
                       e.bargain=String(e.bargain)
                     }
+                    e.picture = "http://39.105.220.225:8081/shop/files/download/"+e.picture
                   })//过滤null
                 })
           }

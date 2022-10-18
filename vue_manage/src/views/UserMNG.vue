@@ -1,53 +1,108 @@
 <template>
   <div class="home">
-    <div class="opeBoard">
+    <!--<div class="opeBoard">
       <el-button type="primary" @click="addUser">新增</el-button>
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>
+      <el-input v-model="searchText" placeholder="输入关键字" style="width: 50%" clearable/>
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询</el-button>
+    </div>-->
+
+    <div class="searchBoard">
+
+      <el-input v-model="searchText" placeholder="输入关键词" style="width: 100%" clearable>
+      </el-input>
+      <van-row justify="end">
+
+        <van-col span="3">
+          <el-button type="primary" style="margin: 0 5px"
+                     @click="searchName">查询</el-button>
+        </van-col>
+        <van-col span="3">
+          <el-button type="primary" @click="load">刷新</el-button>
+        </van-col>
+      </van-row>
+      <van-row justify="end">
+        <van-col span="3">
+          <el-button type="primary"
+                     @click="addUser">新增</el-button>
+        </van-col>
+      </van-row>
+      <!--
+      <van-icon name="delete-o" size="32px"/>
+      -->
     </div>
-    <div class="displayBoard">
-      <el-table :data="tableData"
-          border
-          stripe
-          style="width: 100%"
-      >
-        <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props">
-            <user-expand v-bind:user="props.row" />
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="uid"
-            label="ID"
-            sortable/>
-        <el-table-column
-            prop="uname"
-            label="姓名"
-            sortable />
-        <!--     后期添加查看密码功能 -->
-        <el-table-column
-            prop="account"
-            label="账户余额" />
-        <el-table-column
-            prop="bank"
-            label="银行账户" />
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope">
-            <el-button text @click="editUser(scope.row)" type="primary" plain>编辑</el-button>
-            <el-popconfirm title="确认删除？" @confirm="deleteUser(scope.row.uid)">
-              <template #reference>
-                <el-button text @click="" type="danger">删除</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
+
+    <div>
+      <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          :finished-text="end"
+          @load="load">
+
+        <van-cell v-for="item in tableData">
+          <van-row>
+            <van-col span="8">姓名: {{ item.uname }}</van-col>
+            <van-col span="8">ID: {{ item.uid }}</van-col>
+<!--            <van-button plain type="primary" @click="editUser(item)">编辑</van-button>-->
+          </van-row>
+          <van-row>
+            <van-col span="8">账户余额: {{ item.account }}</van-col>
+            <van-col span="8">银行账户: {{ item.bank }}</van-col>
+<!--            <van-button plain type="success"  @click ="goDelete(item)">删除</van-button>-->
+          </van-row>
+          <van-row>
+            <van-col :offset="8" span="8">
+              <van-button plain type="primary" @click="editUser(item)">编辑</van-button>
+            </van-col>
+            <van-col :offset="2" span="6">
+              <van-button plain type="success" @click ="deleteUser(item.uid)">删除</van-button>
+            </van-col>
+          </van-row>
+        </van-cell>
+      </van-list>
     </div>
+<!--    <div class="displayBoard">-->
+<!--      <el-table :data="tableData"-->
+<!--          border-->
+<!--          stripe-->
+<!--          style="width: 100%"-->
+<!--      >-->
+<!--        <el-table-column type="expand">-->
+<!--          &lt;!&ndash;        修改为自定义组件，显示其他信息&ndash;&gt;-->
+<!--          <template #default="props">-->
+<!--            <user-expand v-bind:user="props.row" />-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--            prop="uid"-->
+<!--            label="ID"-->
+<!--            sortable/>-->
+<!--        <el-table-column-->
+<!--            prop="uname"-->
+<!--            label="姓名"-->
+<!--            sortable />-->
+<!--        &lt;!&ndash;     后期添加查看密码功能 &ndash;&gt;-->
+<!--        <el-table-column-->
+<!--            prop="account"-->
+<!--            label="账户余额" />-->
+<!--        <el-table-column-->
+<!--            prop="bank"-->
+<!--            label="银行账户" />-->
+<!--        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">-->
+<!--          <template #default="scope">-->
+<!--            <el-button text @click="editUser(scope.row)" type="primary" plain>编辑</el-button>-->
+<!--            <el-popconfirm title="确认删除？" @confirm="deleteUser(scope.row.uid)">-->
+<!--              <template #reference>-->
+<!--                <el-button text @click="" type="danger">删除</el-button>-->
+<!--              </template>-->
+<!--            </el-popconfirm>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+<!--      </el-table>-->
+<!--    </div>-->
 <!--    分页-->
     <div style="margin: 10px">
       <el-pagination
@@ -66,7 +121,7 @@
           v-model="addUserVisible"
           :title=userDialogTitle
           :visible.sync="addUserVisible"
-          width="800px"
+          width="300px"
       >
         <el-form class="userForm" :model="userForm" :inline="true">
           <el-form-item class="formItem" label="姓名" label-width="100px">
@@ -97,12 +152,13 @@
 
         </el-form>
         <template #footer>
-      <span class="dialog-footer">
+      <span class="dialog-footer" >
         <el-button @click="addUserVisible = false">取消</el-button>
         <el-button type="primary" @click="submitUser">提交</el-button>
       </span>
         </template>
       </el-dialog>
+
     </div>
 
   </div>
@@ -124,12 +180,14 @@ export default {
       userDialogTitle: "",
       searchText: "",
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 10,
       addUserVisible: false,
+      isDelete:false,
       DataList:[],
       tableData : [],
-      userForm:{}
+      userForm:{},
+
     }
   },
   created() {
@@ -139,8 +197,9 @@ export default {
     load(){
       let params={
         pageNumber: this.currentPage,
-        pageSize: this.pageSize,
-        searchText: this.searchText
+        pageSize: 9999,
+        searchText: this.searchText,
+        type: this.searchSelect
       }
       request.get("http://39.105.220.225:8081/shop/user",{
         params: params
@@ -209,7 +268,7 @@ export default {
       })
     },
     deleteUser(id){
-      console.log(id);
+     console.log(id);
       request.delete("http://39.105.220.225:8081/shop/user/"+id).then(res=>{
         if(res.code === '0'){
           this.$message({

@@ -1,13 +1,10 @@
 <template>
   <div class="AmtRecordMNG">
-    <div class="opeBoard">
-      <el-button type="primary" @click="addGoods">新增</el-button>
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>
+      <el-input v-model="searchText" placeholder="输入订单号查询" style="width: 25%" clearable/>
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询</el-button>
+      <el-button type="primary" @click="load">刷新</el-button>
     </div>
     <div class="displayBoard">
       <div class="infoCard" style="display: none">
@@ -39,69 +36,52 @@
           </el-descriptions-item>
         </el-descriptions>
       </div>
-      <el-table :data="tableData"
-                border
-                stripe
-                style="width: 100%"
-      >
-        <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
-          <template #default="props" >
-            <goods-expand v-bind:goods="props.row" >
-              <template v-slot:upButton>
-                <el-button
-                    @click="upGoods(props.row)"
-                    type="primary" plain
-                    class="opeButton"
-                    v-if="props.row.status===4">发布</el-button>
-              </template>
-              <template v-slot:downButton>
-                <el-button
-                    @click="downGoods(props.row)"
-                    type="danger" plain
-                    class="opeButton"
-                    v-if="props.row.status===1">下架</el-button>
-              </template>
 
-            </goods-expand>
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="type"
-            label="收支类型">
-          <template #default="scope">
-            <span v-if="scope.row.type === 0" style="color: darkgreen;">收入</span>
-            <span v-if="scope.row.type === 1" style="color: red;">支出</span>
-          </template>
-        </el-table-column>
-        <!--     后期添加查看密码功能 -->
-        <el-table-column
-            prop="amount"
-            label="金额" sortable />
-        <el-table-column
-            label="时间" >
-          <template #default="scope" >
-            {{ dateFormat(scope.row.time)}}
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="oid"
-            label="订单号" />
-        <el-table-column
-            prop="account"
-            label="账户余额" >
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope" >
-<!--            <el-button text @click="editGoods(scope.row)" type="primary" plain>编辑</el-button>-->
-<!--            <el-popconfirm title="确认删除？" @confirm="deleteRecord(scope.row)">-->
-<!--              <template #reference>-->
-<!--                <el-button text @click="" type="danger">删除</el-button>-->
-<!--              </template>-->
-<!--            </el-popconfirm>-->
-          </template>
-        </el-table-column>
-      </el-table>
+      <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          offset="300"
+          :error.sync="error"
+          error-text="请求失败，点击重新加载"
+      >
+        <div v-for='(item, index) in this.tableData' :key="index">
+          <van-swipe-cell>
+            <card>
+              <div style="display:flex" >
+                <span style="font-size: 30px; color: #FF6600;margin-top: auto;margin-bottom: auto;">{{item.oid}}</span>
+                <div style="margin-left:10px;flex-direction: column;">
+                  <div class="auxfont" style="margin-top:15px">
+                    <b >收支类型: </b>
+                    <span v-if="item.type === 0" style="color: darkgreen;">收入</span>
+                    <span v-if="item.type === 1" style="color: red;">支出</span>
+
+
+                  </div>
+
+                  <div class="auxfont">
+                    <span><b>金额:</b></span>
+                    <span>{{item.amount}}元</span>
+                  </div>
+                  <div class="auxfont">
+                    <span><b>余额:</b></span>
+                    <span>{{item.account}}元</span>
+                  </div>
+                  <div class="auxfont">
+                    <span><b>时间:</b>  {{ dateFormat(item.time)}} </span>
+                  </div>
+                </div>
+              </div>
+              <van-divider />
+            </card>
+            <template #right>
+              <van-button square text="删除" type="danger" class="delete-button" />
+            </template>
+          </van-swipe-cell>
+        </div>
+      </van-list>
+
     </div>
     <!--    分页-->
     <div style="margin: 10px">
@@ -116,73 +96,10 @@
       </el-pagination>
     </div>
     <!--    新增商品弹窗-->
-    <div>
-      <el-dialog
-          v-model="addGoodsVisible"
-          :title=goodsDialogTitle
-          :visible.sync="addGoodsVisible"
-          width="700px"
-          style="margin-left: 20px"
-      >
-        <el-form class="userForm" :model="goodsForm" :inline="true">
-          <el-form-item class="formItem" label="商品名" label-width="100px">
-            <el-input style="width: 120px" v-model="goodsForm.gname" />
-          </el-form-item>
-          <el-form-item class="formItem" label="商品类型" label-width="100px">
-            <el-input style="width: 120px" v-model="goodsForm.type" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="商品价格">
-            <el-input style="width: 120px" v-model="goodsForm.price" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="是否可议价">
-            <el-select v-model="goodsForm.bargain" style="width: 120px">
-              <el-option label="一口价" value="false" />
-              <el-option label="可议价" value="true" />
-            </el-select>
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="库存">
-            <el-input style="width: 200px" v-model="goodsForm.storage" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="新旧程度">
-            <el-input style="width: 200px" v-model="goodsForm.gcondition" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="尺寸">
-            <el-input style="width: 200px" v-model="goodsForm.size" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="商品介绍">
-            <el-input style="width: 120px" v-model="goodsForm.introduction" />
-          </el-form-item>
-          <!--    商品图片上传-->
-          <el-form-item class="formItem" label-width="100px" label="商品图片">
-            <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
-                multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-            >
-              <el-button type="primary">点击上传商品图片</el-button>
-              <template #tip>
-                <div class="el-upload__tip" style="width: 200px">
-                  jpg/png 文件大小需小于 500KB.
-                </div>
-              </template>
-            </el-upload>
-          </el-form-item>
 
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="addGoodsVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitGoods">提交</el-button>
-      </span>
-        </template>
-      </el-dialog>
-    </div>
+
+
+
 
   </div>
 </template>
@@ -334,6 +251,10 @@ export default {
 }
 .opeButton{
   margin: 10px auto 0 ;
+}
+.auxfont{
+  font-size: 25px;
+  margin: 10px;
 }
 .infoCard{
   float: top;

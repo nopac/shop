@@ -1,88 +1,92 @@
 <template>
   <div>
-    <div style="float: top;height: 80px;width: 375px;margin: auto; padding: 20px">
-      <!--选择器-->
-      <el-select
-          v-model="value"
-          class="m-2"
-          placeholder="Select"
-          style="float: left; width: 150px" size="large"
-          @change="selectChange"
-      >
-        <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-        />
-      </el-select>
-      <!--    搜索区域-->
-      <div style="margin: 0px;float: right">
-        <el-input v-model="search" placeholder="请输入想要搜索的商品名称"  style="width: 350px" clearable size="large"/>
-        <el-button type="primary" style="margin-left: 5px" @click="loadGoods" size="large">查询</el-button>
-      </div>
-
+    <div class="topNavBoard"
+         style="float: top;height: 3rem;width: 10rem;margin: auto;padding: 20px">
+      <van-row>
+        <van-col offset="12" span="12">
+          <van-dropdown-menu>
+            <van-dropdown-item v-model="value" :options="options"
+                               @change="selectChange"/>
+          </van-dropdown-menu>
+        </van-col>
+      </van-row>
+      <van-row>
+        <van-col offset="12" span="12">
+          <!--          搜索区域-->
+          <van-field
+              v-model="search"
+              center
+              clearable
+              placeholder="请输入想要搜索的商品名称">
+            <template #button>
+              <van-button size="small" type="primary" @click="loadGoods">查询</van-button>
+            </template>
+          </van-field>
+        </van-col>
+      </van-row>
     </div>
-
-    <el-row>
-      <el-col
-          v-for="(value, o, index) in totalData"
-          :key="o"
-          :span="10"
-          :offset="index > 0 ? total : 0"
-          style="margin: 10px;flex: 0"
+    <div class="listBoard">
+      <van-list
+          v-model = "loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          error-text="加载失败，请重试！"
       >
-<!--        <router-link :to="{name:'goodDetailsLayout', query: {gid: value.gid}}">-->
-          <el-card :body-style="{ padding: '0px' }" style="width: 150px; margin: 0 10px;cursor: pointer" @click="gotoDetail(value)">
-            <el-image class="imageArea"
-                      style="width: 150px;height: 150px;"
-                      :src="value.picture">
-              <template #error>
-                <div class="image-slot" style="text-align: center;">
-                  图片未上传
+        <el-row>
+          <el-col
+              v-for="(value, o, index) in totalData"
+              :key="o"
+              :span="10"
+              :offset="index > 0 ? total : 0"
+              style="margin: 10px;flex: 0"
+          >
+            <!--        <router-link :to="{name:'goodDetailsLayout', query: {gid: value.gid}}">-->
+            <el-card :body-style="{ padding: '0px' }" style="width: 150px; margin: 0 10px;cursor: pointer" @click="gotoDetail(value)">
+              <el-image class="imageArea"
+                        style="width: 150px;height: 150px;"
+                        :src="value.picture">
+                <template #error>
+                  <div class="image-slot" style="text-align: center;">
+                    图片未上传
+                  </div>
+                </template>
+              </el-image>
+              <div style="padding: 14px">
+                <span>{{ value.gname }}</span>
+
+                <span style="float: right;font-size: 20px">￥{{ value.price }}</span>
+
+                <div class="bottom">
+                  <span style="color: gray;font-size: 10px">好评率：{{ value.likeRate }}</span>
+                  <el-button text class="button" style="color: red;padding: 0" @click="addCart(value)">加入购物车</el-button>
                 </div>
-              </template>
-            </el-image>
-            <div style="padding: 14px">
-              <span>{{ value.gname }}</span>
-
-              <span style="float: right;font-size: 20px">￥{{ value.price }}</span>
-
-              <div class="bottom">
-                <span style="color: gray;font-size: 10px">好评率：{{ value.likeRate }}</span>
-                <el-button text class="button" style="color: red;padding: 0" @click="addCart(value)">加入购物车</el-button>
               </div>
-            </div>
-          </el-card>
-<!--        </router-link>-->
+            </el-card>
+            <!--        </router-link>-->
 
-      </el-col>
-    </el-row>
+          </el-col>
+        </el-row>
+      </van-list>
+    </div>
   </div>
-  <el-pagination
-      v-model:currentPage="currentPage"
-      v-model:page-size="pageSize"
-      :page-sizes="[10, 20, 40]"
-      :small="small"
-      :disabled="disabled"
-      :background="background"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      style="float: right;margin-right: 50px"
-  />
 </template>
 
 <script>
 import '@/assets/css/Home.css'
 import { ref } from 'vue'
 import axios from "axios";
+import {NavBar,Icon,Search,DropdownMenu, DropdownItem,List,ContactCard} from 'vant'
 
 export default {
   name: 'Home',
   components: {
-
+    [NavBar.name]: NavBar,
+    [Icon.name]: Icon,
+    [Search.name]: Search,
+    [DropdownMenu.name]: DropdownMenu,
+    [DropdownItem.name]: DropdownItem,
+    [List.name]: List,
   },
   data(){
     return{
@@ -91,65 +95,102 @@ export default {
       pageSize: 10,
       search: "",
       totalData: [],
-      value: '系统推荐',
+      tempList: [],
+      loading: false,
+      finished: false,
+      value: 0,
       options : [
-       {
-          value: '系统推荐',
-          label: '系统推荐',
+        {
+          value: 0,
+          text: '系统推荐',
         },
         {
-          value: '好评率',
-          label: '好评率',
+          value: 1,
+          text: '好评率',
         },
         {
-          value: '价格从高到低',
-          label: '价格从高到低',
+          value: 2,
+          text: '价格从高到低',
         },
         {
-          value: '价格从低到高',
-          label: '价格从低到高',
+          value: 3,
+          text: '价格从低到高',
         },
-        {
-          value: '可议价',
-          label: '可议价',
-        },
-        {
-          value: '新旧度从高到低',
-          label: '新旧度从高到低',
-        },
-        {
-          value: '新旧度从低到高',
-          label: '新旧度从低到高',
-        }
       ],
       baseURL:"http://39.105.220.225:8081/shop/files/download/",
     }
   },
   created() {
-    this.loadGoods();
+    this.onLoad();
   },
   methods:{
-    loadGoods(){
+    refreshPage(){
+      this.currentPage=1
+      this.onLoad();
+    },
+    onLoad(){
+      console.log("get:page"+this.currentPage)
       axios.get("http://39.105.220.225:8081/shop/goods", {
         params:{
           pageNum: this.currentPage,
           pageSize: this.pageSize,
           search: this.search,
           sort: this.value,
-          uid: window.localStorage.getItem("uid")
         }
-      }).then(res => {
-        console.log(res)
-        this.totalData = res.data.data.records
-        this.total = res.data.data.total
-        this.totalData.forEach((item,index)=>{
-          item.picture = this.baseURL+item.picture;
-        })
       })
-    },
+          .then(res => {
+            if(res.data.code === "0"){
+              console.log("res:")
+              console.log(res)
+              this.loading = false
+              // alert(res.data.data.pages)//共几页
+              if(this.currentPage>res.data.data.pages){
+                console.log("无更多内容")
+                this.finished = true
+              }
+              else{
+                this.tempList = res.data.data.records
+                console.log("tempList:")
+                console.log(this.tempList)
+                this.total = res.data.data.total
+                this.tempList.forEach((item,index)=>{
+                  item.picture = this.baseURL+item.picture;
+                  let lR = item.likeRate;
+                  //好评率保留两位小数点
+                  lR = parseFloat(lR).toFixed(2)
+                  item.likeRate = lR
 
+                  this.totalData.push(item)
+                })
+                console.log("totalData:")
+                console.log(this.totalData)
+                // alert(this.tempList[0].gid)
+                this.currentPage = this.currentPage+1
+                console.log("currentPage"+this.currentPage)
+              }
+            }else{
+              this.$message({
+                type:"error",
+                message: res.data.msg,
+              })
+            }
+
+          })
+      // .catch((error)=>{
+      //   if (error.response) {
+      //     console.log(error.response.data);
+      //     console.log(error.response.status);
+      //     console.log(error.response.headers);
+      //   } else if (error.request) {
+      //     console.log(error.request);
+      //   } else {
+      //     console.log('Error', error.message);
+      //   }
+      //   console.log(error.config);
+      // })
+    },
     selectChange(val){
-      this.loadGoods();
+      this.refreshPage()
       console.log(val);
     },
     addCart(value) {
@@ -186,3 +227,20 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.topNavBoard{
+  float: top;
+  height: 3rem;
+  width: 10rem;
+  margin: auto;
+  padding: 20px
+}
+.m-2{
+  float: left;
+  /*width: 2rem*/
+}
+.searchBoard {
+  margin: 10px 0;
+}
+</style>
