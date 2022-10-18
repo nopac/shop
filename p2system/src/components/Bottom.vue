@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-tabbar v-model="active" safe-area-inset-bottom border>
+    <van-tabbar v-model="active" safe-area-inset-bottom>
       <van-tabbar-item name="shop" icon="shop-o" @click="showHome">商城</van-tabbar-item>
       <van-tabbar-item name="cart" icon="cart-o" @click="showCart">购物车</van-tabbar-item>
       <van-tabbar-item name="order" icon="orders-o" @click="showOrders">订单</van-tabbar-item>
