@@ -1,9 +1,9 @@
 <template>
   <div class="GoodsEXM">
-    <div class="opeBoard">
+    <!--<div class="opeBoard">
       <el-button type="primary" @click="load">刷新</el-button>
-    </div>
-    <div class="searchBoard">
+    </div>-->
+    <!--<div class="searchBoard">
       <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
         <el-option label="ID" value="gid"></el-option>
         <el-option label="商品名" value="gname"></el-option>
@@ -12,7 +12,27 @@
       </el-input>
       <el-button type="primary" style="margin: 0 5px"
                  @click="search">查询</el-button>
+    </div>-->
+    <div class="searchBoard">
+
+      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
+        <el-option label="ID" value="gid"></el-option>
+        <el-option label="商品名" value="gname"></el-option>
+      </el-select>
+      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 70%" clearable>
+      </el-input>
+      <van-row justify="end">
+        <van-col span="3">
+          <el-button type="primary" style="margin: 0 5px"
+                     @click="search">查询</el-button>
+        </van-col>
+        <van-col span="3">
+          <el-button type="primary" @click="load">刷新</el-button>
+        </van-col>
+      </van-row>
     </div>
+
+
     <div class="displayBoard">
       <el-table :data="tableData"
                 border
@@ -53,12 +73,13 @@
             <el-button text @click="refuseGoods(scope.row)" type="danger" v-if="scope.row.status !== 4">拒绝</el-button>
             <el-popconfirm title="确认删除？" @confirm="deleteGoods(scope.row.gid)">
               <template #reference>
-                <el-icon
+                <van-icon name="delete-o" size="32px"/>
+                <!--<el-icon
                     @mouseover="deleteToRed(scope.row)"
                     @mouseout="deleteToGrey(scope.row)"
                     :style="{color:scope.row.iconColor}"
                     class="deleteIcon"
-                    slot="suffix"><Delete /></el-icon>
+                    slot="suffix"><Delete /></el-icon>-->
               </template>
             </el-popconfirm>
           </template>
@@ -134,7 +155,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/exmG",{
+      request.get("http://39.105.220.225:8081/shop/exmG",{
         params: params
       })
           .then(res=>{
@@ -158,7 +179,7 @@ export default {
     agreeGoods(row){
       this.goodsForm = row
       console.log(this.goodsForm)
-      request.put("/goods/exmStatus/"+1,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/goods/exmStatus/"+1,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -168,7 +189,7 @@ export default {
     refuseGoods(row){
       this.goodsForm = row
       console.log(this.goodsForm)
-      request.put("/goods/exmStatus/"+0,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/goods/exmStatus/"+0,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -177,7 +198,7 @@ export default {
     },
     deleteGoods(id){
       console.log(id);
-      request.delete("/exmG/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/exmG/"+id).then(res=>{
         if(res.code === '0'){
           this.$message({
             type:"success",

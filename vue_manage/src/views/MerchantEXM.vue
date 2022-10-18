@@ -1,9 +1,30 @@
 <template>
   <div class="MerchantEXM">
-    <div class="opeBoard">
+    <!--<div class="opeBoard">
       <el-button type="primary" @click="load">刷新</el-button>
-    </div>
+    </div>-->
+
     <div class="searchBoard">
+      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
+        <el-option label="ID" value="uid"></el-option>
+        <el-option label="姓名" value="uname"></el-option>
+      </el-select>
+      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 70%" clearable>
+      </el-input>
+      <van-row justify="end">
+        <van-col span="3">
+          <el-button type="primary" style="margin: 0 5px"
+                     @click="search">查询</el-button>
+        </van-col>
+        <van-col span="3">
+          <el-button type="primary" @click="load">刷新</el-button>
+        </van-col>
+      </van-row>
+    </div>
+
+
+
+    <!--<div class="searchBoard">
       <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
         <el-option label="ID" value="uid"></el-option>
         <el-option label="姓名" value="uname"></el-option>
@@ -12,7 +33,9 @@
       </el-input>
       <el-button type="primary" style="margin: 0 5px"
                  @click="search">查询</el-button>
-    </div>
+    </div>-->
+
+
     <div class="displayBoard">
       <el-table :data="tableData"
                 border
@@ -52,12 +75,13 @@
             <el-button text @click="refuseUser(scope.row)" type="danger">拒绝</el-button>
             <el-popconfirm title="确认删除？" @confirm="deleteUser(scope.row.uid)">
               <template #reference>
-                <el-icon
+                <van-icon name="delete-o" size="32px" />
+                <!--<el-icon
                     @mouseover="deleteToRed(scope.row)"
                     @mouseout="deleteToGrey(scope.row)"
                     :style="{color:scope.row.iconColor}"
                     class="deleteIcon"
-                    slot="suffix"><Delete /></el-icon>
+                    slot="suffix"><Delete /></el-icon>-->
               </template>
             </el-popconfirm>
           </template>
@@ -138,7 +162,7 @@ export default {
         searchText: this.searchText,
         type: this.searchSelect
       }
-      request.get("/merchant",{
+      request.get("http://39.105.220.225:8081/shop/merchant",{
         params: params
       })
       .then(res=>{
@@ -161,7 +185,7 @@ export default {
     agreeUser(row){
       this.userForm = row
       console.log(this.userForm)
-      request.put("/merchant/"+1,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/merchant/"+1,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.addUserVisible = false;
@@ -171,7 +195,7 @@ export default {
     refuseUser(row){
       this.userForm = row
       console.log(this.userForm)
-      request.put("/merchant/"+-1,this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/merchant/"+-1,this.userForm).then(res=>{
         console.log(res)
         this.userForm={}
         this.addUserVisible = false;
@@ -181,7 +205,7 @@ export default {
     deleteUser(id){
       //将该用户isMerchant改为0，则不显示
       console.log(id);
-      request.delete("/merchant",{
+      request.delete("http://39.105.220.225:8081/shop/merchant",{
         params: this.userForm
       }).then(res=>{
         if(res.code === '0'){

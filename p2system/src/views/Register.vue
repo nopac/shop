@@ -145,7 +145,7 @@ export default {
         })
         return;
       }
-      request.post("/user",this.userForm).then(res =>{
+      request.post("http://39.105.220.225:8081/shop/user",this.userForm).then(res =>{
         if(res.code === '0'){
           this.$message({
             type:"success",
@@ -173,7 +173,7 @@ export default {
       }
     },
     judgeName(){
-      request.get("/user/judgeName/"+this.userForm.uname).then(res=>{
+      request.get("http://39.105.220.225:8081/shop/user/judgeName/"+this.userForm.uname).then(res=>{
         if(res.code !== '0'){
           this.$message({
             type: "error",

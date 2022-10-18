@@ -219,7 +219,7 @@ export default {
       if(Object.keys(this.userForm).length===0){
         this.userForm.uname=localStorage.getItem("uname")
         console.log("getUser:"+this.userForm.uname)
-        request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+        request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
           if(res.code !== '0'){
             this.$message({
               type: "error",
@@ -235,7 +235,7 @@ export default {
               searchText: this.searchText,
               type: this.searchType
             }
-            request.get("/exmG/findFor/"+this.userForm.uid,{
+            request.get("http://39.105.220.225:8081/shop/exmG/findFor/"+this.userForm.uid,{
               params: params
             })
                 .then(res=>{
@@ -264,7 +264,7 @@ export default {
         searchText: this.searchText,
         type: this.searchType
       }
-      request.get("/exmG/findFor/"+this.userForm.uid,{
+      request.get("http://39.105.220.225:8081/shop/exmG/findFor/"+this.userForm.uid,{
         params: params
       })
           .then(res=>{
@@ -315,7 +315,7 @@ export default {
       this.canUpload = false;
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
-      request.put("/exmG/opeStatus/"+3,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/"+3,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -326,7 +326,7 @@ export default {
       this.canUpload = true;
       this.goodsForm = JSON.parse(JSON.stringify(row));
       console.log(this.goodsForm)
-      request.put("/exmG/opeStatus/"+4,this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/exmG/opeStatus/"+4,this.goodsForm).then(res=>{
         console.log(res)
         this.goodsForm={}
         this.addGoodsVisible = false;
@@ -342,7 +342,7 @@ export default {
     },
     updateGoods(){
       console.log("picture:"+this.goodsForm.picture)
-      request.put("/goods",this.goodsForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({
@@ -362,7 +362,7 @@ export default {
     saveGoods(){//新增商品
       this.goodsForm.status=3;
       this.goodsForm.likeRate=100;
-      request.post("/goods",this.goodsForm).then(res=>{
+      request.post("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         console.log(res)
         this.addGoodsVisible = false;
         this.load();
@@ -370,7 +370,7 @@ export default {
     },
     deleteGoods(id){
       console.log(id);
-      request.delete("/goods/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/goods/"+id).then(res=>{
 
         if(res.code === '0'){
           this.$message({

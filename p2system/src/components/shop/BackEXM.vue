@@ -139,7 +139,7 @@ export default {
         }
         let uid = localStorage.getItem("uid")
         console.log("uid:"+uid)
-        request.get("/exmO/getBack/"+uid,{
+        request.get("http://39.105.220.225:8081/shop/exmO/getBack/"+uid,{
           params: params
         })
             .then(res=>{
@@ -160,7 +160,7 @@ export default {
     },
     agreeMerchant(row){
       this.ordersForm = row
-      request.put("/exmO/agreeBack",this.ordersForm)
+      request.put("http://39.105.220.225:8081/shop/exmO/agreeBack",this.ordersForm)
         .then(res=>{
           if (res.code === '0'){
             console.log(res);
@@ -181,7 +181,7 @@ export default {
     },
     refuse(){
       console.log("reason:"+this.ordersForm.mnote)
-      request.put("/exmO/reject",this.ordersForm)
+      request.put("http://39.105.220.225:8081/shop/exmO/reject",this.ordersForm)
           .then(res=>{
             if (res.code === '0'){
               console.log("reject:"+res);

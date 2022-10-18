@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
-import { Button,Form, Field, CellGroup,NavBar,List,Checkbox,CheckboxGroup,Sidebar,SidebarItem,Cell,Card,Dialog } from 'vant'
+import { Button,Form, Field, CellGroup,NavBar,List,Checkbox,CheckboxGroup,Sidebar,SidebarItem,Cell,Card,Rate,Popup,Divider,Image as VanImage} from 'vant'
 import 'element-plus/dist/index.css'
 import '@/assets/css/global.css'
 import '@element-plus/icons/lib'
@@ -13,6 +13,7 @@ import "amfe-flexible"
 createApp(App).use(store)
     .use(router)
     .use(Button)
+    .use(VanImage)
     .use(Form)
     .use(Field)
     .use(CellGroup)
@@ -24,7 +25,11 @@ createApp(App).use(store)
     .use(SidebarItem)
     .use(Cell)
     .use(Card)
-    .use(Dialog)
+    .use(Card)
+    .use(List)
+    .use(Rate)
+    .use(Divider)
+    .use(Popup)
     .use(ElementPlus,{
         locale: zhCn,
     }).mount('#app')

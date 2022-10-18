@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div>
+  <div class="layout" style="bottom: 50px;padding-top: 50px; position: relative; height: 80%">
+    <div class="content" >
       <router-view/>
     </div>
     <Bottom/>

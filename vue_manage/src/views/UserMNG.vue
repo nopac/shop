@@ -142,7 +142,7 @@ export default {
         pageSize: this.pageSize,
         searchText: this.searchText
       }
-      request.get("/user",{
+      request.get("http://39.105.220.225:8081/shop/user",{
         params: params
       })
           .then(res=>{
@@ -183,7 +183,7 @@ export default {
       }
     },
     updateUser(){
-      request.put("/user",this.userForm).then(res=>{
+      request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
           this.$message({
@@ -202,7 +202,7 @@ export default {
     },
     saveUser(){
       this.userForm.status=3
-      request.post("/user",this.userForm).then(res=>{
+      request.post("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         console.log(res)
         this.addUserVisible = false;
         this.load();
@@ -210,7 +210,7 @@ export default {
     },
     deleteUser(id){
       console.log(id);
-      request.delete("/user/"+id).then(res=>{
+      request.delete("http://39.105.220.225:8081/shop/user/"+id).then(res=>{
         if(res.code === '0'){
           this.$message({
             type:"success",
