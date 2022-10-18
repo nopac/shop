@@ -2,12 +2,10 @@
 
   <div style="margin: 50px auto;border-radius: 20px;">
 
-
-
-
-    <van-checkbox-group v-model="checked">
+    <van-checkbox-group v-model="checked" >
 
       <van-cell v-for="(item, index) in tableData" :key="item">
+
         <van-checkbox :name="index" @click="addprice()">
 
 
@@ -15,7 +13,9 @@
                 :num="item.number"
                 :price="item.price"
                 :title="item.gname"
-                :thumb="item.picture">
+                :thumb="item.picture"
+                style="width: 350px"
+            >
               <template #footer>
                 <el-popconfirm title="确认删除吗？" @confirm="handleDelete(item.cid),load()">
                   <template #reference>
@@ -24,6 +24,7 @@
                 </el-popconfirm>
               </template>
             </van-card>
+
 
         </van-checkbox>
       </van-cell>
