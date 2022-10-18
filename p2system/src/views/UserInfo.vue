@@ -208,6 +208,10 @@ export default {
           console.log(res)
           this.userForm = res.data
           this.userForm.sex = String(this.userForm.sex)
+          //账户余额保留两位小数点
+          let ac = this.userForm.account
+          ac = parseFloat(ac).toFixed(2)
+          this.userForm.account = ac
           
           if (this.userForm.license!==null)
             this.licenseUrl = this.baseURL+this.userForm.license
