@@ -138,7 +138,7 @@ export default {
         this.userForm.uname=localStorage.getItem("uname")
         console.log("getUser:"+this.userForm.uname)
         //获取用户信息
-        request.get("/user/getInfo/"+this.userForm.uname).then(res=>{
+        request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
           if(res.code !== '0'){
             this.$message({
               type: "error",
@@ -155,7 +155,7 @@ export default {
               type: this.searchType
             }
             //获取账户记录
-            request.get("/account/"+this.userForm.uid,{
+            request.get("http://39.105.220.225:8081/shop/account/"+this.userForm.uid,{
               params: params
             })
                 .then(res=>{
