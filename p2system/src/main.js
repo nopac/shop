@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
-import { Button,Form, Field, CellGroup,NavBar,List,Checkbox,CheckboxGroup,Sidebar,SidebarItem,Cell,Card,Rate,Popup } from 'vant'
+import { Button,Form, Field, CellGroup,NavBar,List,Checkbox,CheckboxGroup,Sidebar,SidebarItem,Cell,Card,Rate,Popup,Divider } from 'vant'
 import 'element-plus/dist/index.css'
 import '@/assets/css/global.css'
 import '@element-plus/icons/lib'
@@ -27,6 +27,7 @@ createApp(App).use(store)
     .use(Card)
     .use(List)
     .use(Rate)
+    .use(Divider)
     .use(Popup)
     .use(ElementPlus,{
         locale: zhCn,

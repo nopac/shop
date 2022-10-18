@@ -1,60 +1,87 @@
-<template>
-  <div class="UserInfo">
-    <div class="infoBoard">
-      <div class="headBoard">
-        <el-avatar class="headImg" :size="100" :src="require('@/assets/'+headSrc+'.jpg')" />
-        <div class="headOpt">
-        </div>
-      </div>
-      <el-card class="UInfo">
-        <template #header>
-          <div class="card-header">
-            <span>我的信息</span>
-            <div class="button_head">
-              <el-button v-if="diseditable === true" class="button_head" text @click="editInfo">编辑</el-button>
-              <el-button v-if="diseditable === false" class="button_head" text @click="cancelSave">取消</el-button>
-              <el-button v-if="diseditable === false" class="button_head" text @click="saveInfo">保存</el-button>
-            </div>
-          </div>
-        </template>
-        <el-form class="userForm" :model="userForm" :label-position="labelPosition">
-          <el-form-item class="formItem" label="用户名" :label-width="labelWith">
-            <el-input style="width: 120px" v-model="userForm.uname" :disabled="true"/>
-          </el-form-item>
-          <el-form-item class="formItem" label="密码" :label-width="labelWith">
-            <el-input style="width: 120px" v-model="userForm.upsw"  :disabled="diseditable"/>
-          </el-form-item>
-          <el-form-item class="formItem" label="性别" :label-width="labelWith">
-            <el-select v-model="userForm.sex" style="width: 120px" :disabled="diseditable">
-              <el-option label="男" value='1' :key="1"/>
-              <el-option label="女" value='0' :key="0"/>
-              <el-option label="保密" value='-1' :key="-1"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item class="formItem" label="手机号" :label-width="labelWith">
-            <el-input style="width: 120px" v-model="userForm.phone" :disabled="diseditable"/>
-          </el-form-item>
-          <el-form-item class="formItem" label="城市" :label-width="labelWith">
-            <el-input style="width: 120px" v-model="userForm.city"  :disabled="diseditable"/>
-          </el-form-item>
-          <el-form-item class="formItem" label="邮件" :label-width="labelWith">
-            <el-input style="width: 200px" v-model="userForm.email"  :disabled="diseditable"/>
-          </el-form-item>
-          <!--        身份证号需要额外点击身份认证-->
-          <el-form-item class="formItem" label="身份证号" :label-width="labelWith">
-            <el-input style="width: 200px" v-model="userForm.identityNumber" :disabled="true"/>
-          </el-form-item>
-          <!--        银行账号需要额外点击绑定银行卡-->
-          <el-form-item class="formItem" label="银行账户" :label-width="labelWith">
-            <el-input style="width: 200px" v-model="userForm.bank" :disabled="true"/>
-          </el-form-item>
-          <el-form-item class="formItem" label="收货地址" :label-width="labelWith">
-            <el-input type="textarea" style="width:  200px" v-model="userForm.address"  :disabled="diseditable"/>
-          </el-form-item>
 
-        </el-form>
-      </el-card>
+<template>
+  <div >
+    <div class="infoBoard">
+      <!-- <div class="headBoard"> -->
+        <!-- <el-avatar class="headImg" :size="100" :src="require('@/assets/'+headSrc+'.jpg')" />
+        <div class="headOpt">
+        </div> -->
+      </div>
+
+    
+  <div>
+    
+    <van-cell-group inset class="UserInfo">
+     <div style="display:flex">
+    <van-image class="headImg"
+  round
+  :src="require('@/assets/'+headSrc+'.jpg')"
+/>
+<div style="margin-left:5px">   
+   <div class="card-header">
+              <span> <b style="font-size:35px">我的账户信息</b></span>
+            </div>
+            <div >
+            <span style="font-size: 25px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}}
+          </div>
+          <div class="likeRate" >
+            <span style="font-size: 25px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}}
+          
+          <div class="beMct" style="margin:5px;display:flex">
+            <van-button type="primary" size="mini" @click="invest" style="margin-left:5px">充值</van-button>
+            <van-button type="primary" size="mini" @click="clickBeMct">成为商家</van-button>
+          </div>
+          </div>
+        </div>
+</div> 
+
+
+<div>
+</div>
+  <!-- 输入任意文本 -->
+  <van-field v-model="userForm.uname" label="用户名" readonly />
+  <!-- 密码-->
+  <van-field v-model="userForm.upsw" type="number" label="密码" :disabled="diseditable" />
+  <!-- 允许输入正整数，调起纯数字键盘 -->
+  <van-field v-model="userForm.sex" type="text" label="性别" disable />
+  <!-- 输入手机号，调起手机号键盘 -->
+  <van-field v-model="userForm.phone" type="tel" label="手机号" :disabled="diseditable"  />
+  <!-- 输入城市名称 -->
+  <van-field v-model="userForm.city" type="text" label="城市" :disabled="diseditable" />
+  <!-- 输入邮件 -->
+  <van-field v-model="userForm.email" type="email" label="邮箱" :disabled="diseditable" />
+  <!-- 身份证 -->
+  <van-field
+    v-model="userForm.identityNumber"
+    required
+    label="身份证号"
+    placeholder="请输入身份证号:"
+    :disabled="diseditable" 
+  />
+  <!-- 输入邮件 -->
+  <van-field v-model="userForm.bank" type="email" label="银行账户" :disabled="diseditable" />
+  <!-- 输入邮件 -->
+  <van-field v-model="userForm.address"  type="email" label="收货地址" />
+  <van-button round block type="primary" native-type="submit" @click="editInfo">
+        编辑
+      </van-button>
+      <van-button style="margin-top:5px" round block type="success" native-type="submit" @click="saveInfo" >
+        保存
+      </van-button>
+</van-cell-group>
+</div>
+
+      
+     
       <div class="displayBoard">
+        <van-popup
+  v-model:show="show"
+  round
+  position="bottom"
+  :style="{ height: '30%' }"
+/>
+      </div>
+      <!-- <div class="displayBoard">
         <el-card class="UserDisplayBoard">
           <template #header>
             <div class="card-header">
@@ -74,7 +101,7 @@
         </el-card>
       </div>
       <div>
-      </div>
+      </div> -->
     </div>
 
     <!--    充值弹窗-->
@@ -88,7 +115,7 @@
       >
         <el-form class="userForm" :inline="true" style="text-align: center">
           <el-form-item class="formItem" label="充值金额" label-width="100px">
-            <el-input-number style="width: 120px" v-model="investNum" :step="1" :min="0"/>
+            <el-input-number style="width:auto" v-model="investNum" :step="1" :min="0"/>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -139,7 +166,7 @@
       </el-dialog>
     </div>
 
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -187,6 +214,7 @@ export default {
           console.log(res)
           this.userForm = res.data
           this.userForm.sex = String(this.userForm.sex)
+          
           if (this.userForm.license!==null)
             this.licenseUrl = this.baseURL+this.userForm.license
           else
@@ -309,6 +337,7 @@ export default {
 <style scoped>
 .UserInfo{
   padding: 10px;
+  margin:10px
 }
 .headBoard{
   position: absolute;
@@ -355,4 +384,8 @@ export default {
 .button_head{
   float: right;
 }
+.img-icon {
+    height: 20px;
+  }
+
 </style>
