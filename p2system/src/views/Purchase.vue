@@ -125,7 +125,9 @@ export default {
             message:'购买成功',
             type:"success"
           })
-          this.$router.push({name: 'waiting'});
+          this.$router.push({
+            name: 'layout_order'
+          })
         }else {
           this.$message({
             message:res.data.msg,

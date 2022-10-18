@@ -20,10 +20,10 @@
               <span> <b style="font-size:25px">我的账户信息</b></span>
             </div>
             <div >
-            <span style="font-size: 20px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}}
+            <span style="font-size: 20px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}} 元
           </div>
           <div class="likeRate" >
-            <span style="font-size: 20px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}}
+            <span style="font-size: 20px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}} 分
           </div>
   <VanDivider></VanDivider>
         </div>
@@ -208,6 +208,10 @@ export default {
           console.log(res)
           this.userForm = res.data
           this.userForm.sex = String(this.userForm.sex)
+          //账户余额保留两位小数点
+          let ac = this.userForm.account
+          ac = parseFloat(ac).toFixed(2)
+          this.userForm.account = ac
           
           if (this.userForm.license!==null)
             this.licenseUrl = this.baseURL+this.userForm.license
