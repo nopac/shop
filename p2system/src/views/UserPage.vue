@@ -16,8 +16,7 @@
       <van-cell center icon="balance-o" class="cell" title="我的余额"
                 @click="showInvest">
         <template #title>
-          <span class="accountNum">我的余额：
-            <span style="color: #FF6600"><b>{{userForm.account}} 元</b></span></span>
+          <span class="accountNum">我的余额：{{userForm.account}}</span>
         </template>
         <van-button type="default" @click="showInvest">充值</van-button>
       </van-cell>
@@ -44,13 +43,11 @@
       </van-cell>
     </div>
     <van-popup v-model:show="investVisible"
-               closeable >
-      <span style="margin: 5px; font-size: 15px "><b>充值页面</b></span>
-      <div class="popupBottom" style="margin: 10px">
-        <van-field v-model="investNum" type="number" placeholder="请输入充值金额" label="输入充值金额"/>
-        <div>
-        <van-button type="success"  @click="submit" style="margin: 10px;">充值</van-button>
-        </div>
+               closeable class="investPopUp">
+      <span class="invest-Title">充值</span>
+      <div class="popupBottom">
+        <van-field class="inputInvest" v-model="investNum" type="number" placeholder="请输入充值金额" label="充值金额"/>
+        <van-button type="primary" @click="submit" style="margin-right: 1rem">充值</van-button>
       </div>
     </van-popup>
   </div>
@@ -119,6 +116,10 @@ export default {
           console.log(res)
           this.userForm = res.data
           this.userForm.sex = String(this.userForm.sex)
+          //账户余额保留两位小数点
+          let ac = this.userForm.account
+          ac = parseFloat(ac).toFixed(2)
+          this.userForm.account = ac
           if (this.userForm.isMerchant === 1){
             this.isMerchant = true
           }else{
@@ -246,5 +247,21 @@ export default {
   height: 2rem;
   display: flex;
   margin-top: 1.2rem;
+}
+.investPopUp{
+  width: 8rem;
+  height: 2rem;
+  display: flex;
+
+}
+.invest-Title{
+  width: 2rem;
+  padding-left: 15px;
+}
+.inputInvest{
+  width: 50%;
+  font-size: 0.4rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

@@ -16,6 +16,13 @@
             :value="item.value"
         />
       </el-select>
+<!--      <div class="opeBoard">-->
+<!--        <div class="selectBoard">-->
+<!--          <van-dropdown-menu >-->
+<!--            <van-dropdown-item v-model="value" :options="options"/>-->
+<!--          </van-dropdown-menu>-->
+<!--        </div>-->
+<!--      </div>-->
       <!--    搜索区域-->
       <div style="margin: 0px;float: right">
         <el-input v-model="search" placeholder="请输入想要搜索的商品名称"  style="width: 350px" clearable size="large"/>
@@ -78,11 +85,16 @@
 import '@/assets/css/Home.css'
 import { ref } from 'vue'
 import axios from "axios";
+import {NavBar,Icon,Search,DropdownMenu, DropdownItem} from 'vant'
 
 export default {
   name: 'Home',
   components: {
-
+    [NavBar.name]: NavBar,
+    [Icon.name]: Icon,
+    [Search.name]: Search,
+    [DropdownMenu.name]: DropdownMenu,
+    [DropdownItem.name]: DropdownItem,
   },
   data(){
     return{
@@ -91,36 +103,24 @@ export default {
       pageSize: 10,
       search: "",
       totalData: [],
-      value: '系统推荐',
+      value: 0,
       options : [
        {
-          value: '系统推荐',
+          value: 0,
           label: '系统推荐',
         },
         {
-          value: '好评率',
+          value: 1,
           label: '好评率',
         },
         {
-          value: '价格从高到低',
+          value: 2,
           label: '价格从高到低',
         },
         {
-          value: '价格从低到高',
+          value: 3,
           label: '价格从低到高',
         },
-        {
-          value: '可议价',
-          label: '可议价',
-        },
-        {
-          value: '新旧度从高到低',
-          label: '新旧度从高到低',
-        },
-        {
-          value: '新旧度从低到高',
-          label: '新旧度从低到高',
-        }
       ],
       baseURL:"http://39.105.220.225:8081/shop/files/download/",
     }
@@ -136,7 +136,6 @@ export default {
           pageSize: this.pageSize,
           search: this.search,
           sort: this.value,
-          uid: window.localStorage.getItem("uid")
         }
       }).then(res => {
         console.log(res)
@@ -144,6 +143,10 @@ export default {
         this.total = res.data.data.total
         this.totalData.forEach((item,index)=>{
           item.picture = this.baseURL+item.picture;
+          let lR = item.likeRate;
+          //好评率保留两位小数点
+          lR = parseFloat(lR).toFixed(2)
+          item.likeRate = lR
         })
       })
     },
@@ -186,3 +189,9 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.m-2{
+
+}
+</style>
