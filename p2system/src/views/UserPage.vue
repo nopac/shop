@@ -16,7 +16,8 @@
       <van-cell center icon="balance-o" class="cell" title="我的余额"
                 @click="showInvest">
         <template #title>
-          <span class="accountNum">我的余额：{{userForm.account}}</span>
+          <span class="accountNum">我的余额：
+            <span style="color: #FF6600"><b>{{userForm.account}} 元</b></span></span>
         </template>
         <van-button type="default" @click="showInvest">充值</van-button>
       </van-cell>
@@ -43,11 +44,13 @@
       </van-cell>
     </div>
     <van-popup v-model:show="investVisible"
-               closeable style="display: flex">
-      <span>充值</span>
-      <div class="popupBottom">
+               closeable >
+      <span style="margin: 5px; font-size: 15px "><b>充值页面</b></span>
+      <div class="popupBottom" style="margin: 10px">
         <van-field v-model="investNum" type="number" placeholder="请输入充值金额" label="输入充值金额"/>
-        <van-button type="primary" @click="submit">充值</van-button>
+        <div>
+        <van-button type="success"  @click="submit" style="margin: 10px;">充值</van-button>
+        </div>
       </div>
     </van-popup>
   </div>
