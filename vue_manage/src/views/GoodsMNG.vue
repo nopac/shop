@@ -1,39 +1,32 @@
 <template>
   <div class="GoodsMNG">
-    <!--<div class="opeBoard">
-      <el-button type="primary" @click="addUser">新增</el-button>
-      <el-button type="primary" @click="load">刷新</el-button>
+    <div class="opeBoard">
+      <van-row>
+        <van-col span="11">
+          <van-button type="primary" @click="addUser">新增</van-button>
+        </van-col>
+        <van-col :offset="1">
+          <van-button type="primary" @click="load">刷新</van-button>
+        </van-col>
+      </van-row>
     </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="searchName">查询
-      </el-button>
-    </div>-->
 
-    <div class="searchBoard">
-
-      <el-input v-model="searchText" placeholder="输入关键词" style="width: 100%" clearable>
-      </el-input>
-      <van-row justify="end">
-
-        <van-col span="3">
-          <el-button type="primary" style="margin: 0 5px"
-                     @click="searchName">查询</el-button>
-        </van-col>
-        <van-col span="3">
-          <el-button type="primary" @click="load">刷新</el-button>
-        </van-col>
-      </van-row>
-      <van-row justify="end">
-        <van-col span="3">
-          <el-button type="primary"
-                     @click="addUser">新增</el-button>
-        </van-col>
-      </van-row>
-      <!--
-      <van-icon name="delete-o" size="32px"/>
-      -->
+      <van-search
+          v-model="searchText"
+          show-action
+          label="名称"
+          placeholder="请输入搜索关键词"
+          @search="searchName"
+      >
+        <template #action>
+          <div @click="searchName">搜索</div>
+        </template>
+      </van-search>
+      <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
+      <!--      <el-button type="primary" style="margin: 0 5px"-->
+      <!--                 @click="searchName">查询-->
+      <!--      </el-button>-->
     </div>
 
     <div>
@@ -41,46 +34,45 @@
           v-for="order in tableData"
           :price="order.price"
           :title="order.gname"
-          :thumb="order.picture">
-
+          :thumb="baseUrl+order.picture">
         <template #desc>
           <div>
             <van-row>
-              <van-col span="4">
+              <van-col span="8">
                 <div>ID: {{ order.gid }}</div>
               </van-col>
-              <van-col :offset="1" span="5">
-                <div>库存:{{ order.storage }}</div>
-              </van-col>
-              <van-col :offset="1" span="13">
-                <div>是否可议价:
-                  <span v-show="order.bargain == 'true'">可议价</span>
-                  <span v-show="order.bargain == 'false'">一口价</span>
-                </div>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="8">
-                <div>销量:{{ order.sale }}</div>
-              </van-col>
               <van-col :offset="1" span="7">
-                <div>尺寸:{{ order.size }}</div>
+                <div>库存:{{ order.storage }}</div>
               </van-col>
               <van-col :offset="1" span="7">
                 <div>新旧程度:{{ order.gcondition }}</div>
               </van-col>
             </van-row>
             <van-row>
-              <van-col span="6">
+              <van-col span="8">
                 <div>类别:{{ order.storage }}</div>
               </van-col>
-              <van-col :offset="1">
-                <div>好评率:{{ order.likeRate }}</div>
+              <van-col :offset="1" span="7">
+                <div>好评率:{{ parseFloat(order.likeRate).toFixed(2) }}</div>
+              </van-col>
+              <van-col :offset="1" span="7">
+                <div>尺寸:{{ order.size }}</div>
+              </van-col>
+            </van-row>
+            <van-row>
+              <van-col span="5">
+                <div>销量:{{ order.sale }}</div>
+              </van-col>
+              <van-col :offset="1" span="12">
+                <div>是否可议价:
+                  <span v-show="order.bargain === 'true'">可议价</span>
+                  <span v-show="order.bargain === 'false'">一口价</span>
+                </div>
               </van-col>
             </van-row>
             <van-row>
               <van-col>
-                商品介绍:{{ order.introduction }}
+                商品介绍: {{ order.introduction }}
               </van-col>
             </van-row>
           </div>
@@ -102,7 +94,9 @@
                   <div>商品状态：</div>
                 </van-col>
                 <van-col>
-                  <van-tag type="success">{{ order.status }}</van-tag>
+                  <van-tag type="success" v-show="order.status==4">发布</van-tag>
+                  <van-tag type="warning" v-show="order.status==1">下架</van-tag>
+                  <van-tag type="danger" v-show="order.status==3">审核中</van-tag>
                 </van-col>
               </van-row>
             </div>
@@ -112,13 +106,128 @@
         <template #footer>
           <div style="width: 72%;margin-left: auto">
             <van-button type="primary" size="small" @click="editUser(order)">编 辑</van-button>
-            <van-button type="danger" size="small">删 除</van-button>
+            <van-button type="danger" size="small" @click="isDelete_(order)">删 除</van-button>
           </div>
         </template>
-
       </van-card>
     </div>
 
+    <div>
+
+      <van-dialog v-model:show="addGoodsVisible" :message="goodsDialogTitle" @confirm="submitUser" show-cancel-button>
+        <van-form @submit="saveUser">
+          <van-cell-group inset>
+            <van-field
+                v-model="goodsForm.gname"
+                name="商品名"
+                label="商品名"
+                placeholder="商品名"
+                :rules="[{ required: true, message: '请填写商品名' }]"
+            />
+            <van-field
+                v-model="goodsForm.type"
+                name="商品类型"
+                label="商品类型"
+                placeholder="商品类型"
+                :rules="[{ required: true, message: '请填写商品类型' }]"
+            />
+            <van-field
+                v-model="goodsForm.price"
+                name="商品价格"
+                label="商品价格"
+                placeholder="商品价格"
+                :rules="[{ required: true, message: '请填写商品价格' }]"
+            />
+            <van-field name="switch" label="是否可议价">
+              <template #input>
+                <van-switch v-model="goodsForm.bargain" size="20"/>
+              </template>
+            </van-field>
+            <van-field name="stepper" label="库存">
+              <template #input>
+                <van-stepper v-model="goodsForm.storage"/>
+              </template>
+            </van-field>
+            <van-field
+                v-model="goodsForm.gcondition"
+                name="新旧程度"
+                label="新旧程度"
+                placeholder="新旧程度"
+                :rules="[{ required: true, message: '请填写新旧程度' }]"
+            />
+            <van-field
+                v-model="goodsForm.sale"
+                name="折扣"
+                label="折扣"
+                placeholder="折扣"
+                :rules="[{ required: true, message: '请填写折扣' }]"
+            />
+            <van-field
+                v-model="goodsForm.introduction"
+                name="商品介绍"
+                label="商品介绍"
+                placeholder="商品介绍"
+                :rules="[{ required: true, message: '请填写商品介绍' }]"
+            />
+            <van-field
+                v-model="goodsForm.mid"
+                name="卖家id"
+                label="卖家id"
+                placeholder="卖家id"
+                :rules="[{ required: true, message: '请填写卖家id' }]"
+            />
+
+            <!--            <el-upload-->
+            <!--                class="avatar-uploader"-->
+            <!--                :action="'http://localhost:8081/user/uploadHead'"-->
+            <!--                :show-file-list="false"-->
+            <!--                :on-success="handleAvatarSuccess"-->
+            <!--            >-->
+            <!--              <img v-if="end_url" :src="end_url" class="avatar">-->
+            <!--              <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+            <!--            </el-upload>-->
+
+            <van-uploader
+                v-show="this.operate=='addUser'"
+                v-model="fileList"
+                multiple :max-count="1"
+                :action="'https://jsonplaceholder.typicode.com/posts/'"
+            >
+              <template #tip>
+                <div class="el-upload__tip" style="width: 200px">
+                  jpg/png 文件大小需小于 500KB.
+                </div>
+              </template>
+            </van-uploader>
+
+            <!--            <el-form-item label-width="100px" label="商品图片">-->
+            <!--              <el-upload-->
+            <!--                  class="upload-demo"-->
+            <!--                  action="https://jsonplaceholder.typicode.com/posts/"-->
+            <!--                  :on-preview="handlePreview"-->
+            <!--                  :on-remove="handleRemove"-->
+            <!--                  :before-remove="beforeRemove"-->
+            <!--                  multiple-->
+            <!--                  :limit="3"-->
+            <!--                  :on-exceed="handleExceed"-->
+            <!--                  :file-list="fileList"-->
+            <!--              >-->
+            <!--                <el-button type="primary">点击上传营业执照</el-button>-->
+            <!--                <template #tip>-->
+            <!--                  <div class="el-upload__tip" style="width: 200px">-->
+            <!--                    jpg/png 文件大小需小于 500KB.-->
+            <!--                  </div>-->
+            <!--                </template>-->
+            <!--              </el-upload>-->
+            <!--            </el-form-item>-->
+
+          </van-cell-group>
+        </van-form>
+      </van-dialog>
+
+      <van-dialog v-model:show="isDelete" :message="deleteMessage" @confirm="deleteUser" show-cancel-button>
+      </van-dialog>
+    </div>
     <!--    <div class="displayBoard">-->
     <!--      <el-table :data="tableData"-->
     <!--                border-->
@@ -192,15 +301,6 @@
     <!--      </el-pagination>-->
     <!--    </div>-->
     <!--    新增商品弹窗-->
-    <div>
-      <van-dialog
-      v-model="addGoodsVisible"
-      :title="goodsDialogTitle"
-      >
-
-      </van-dialog>
-    </div>
-
   </div>
 </template>
 
@@ -218,6 +318,7 @@ export default {
   data() {
     return {
       operate: "",
+      isDelete: false,
       goodsDialogTitle: "",
       searchText: "",
       currentPage: 1,
@@ -227,6 +328,9 @@ export default {
       DataList: [],
       tableData: [],
       goodsForm: {},
+      deleteid: "",
+      deleteMessage: "",
+      baseUrl: "http://39.105.220.225:8081/shop/files/download/",
     }
   },
   created() {
@@ -246,7 +350,7 @@ export default {
         this.total = res.data.total;
         this.tableData = res.data.records;
         this.tableData.forEach(e => {
-          e.picture = "http://39.105.220.225:8081/shop/files/download/"+e.picture
+
           for (var key in e) {
             if (e[key] === "null") {
               delete e[key];
@@ -259,6 +363,13 @@ export default {
     searchName() {
       this.load();
     },
+
+    isDelete_(order) {
+      this.isDelete = true
+      this.deleteid = order.gid
+      this.deleteMessage = "是否删除名称为 " + order.gname + " ,ID为:" + order.gid + "的商品"
+    },
+
     addUser() {
       this.addGoodsVisible = true;
       this.goodsForm = {};
@@ -282,7 +393,7 @@ export default {
     updateUser() {
       request.put("http://39.105.220.225:8081/shop/goods", this.goodsForm).then(res => {
         // console.log(res)
-        if (res.data.code === '0') {
+        if (res.code === '0') {
           this.$message({
             type: "success",
             message: "更新成功",
@@ -291,7 +402,7 @@ export default {
         } else {
           this.$message({
             type: "error",
-            message: res.data.msg,
+            message: res.msg,
           })
         }
         this.load();
@@ -305,10 +416,8 @@ export default {
         this.load();
       })
     },
-    deleteUser(id) {
-      console.log(id);
-      request.delete("http://39.105.220.225:8081/shop/goods/" + id).then(res => {
-
+    deleteUser() {
+      request.delete("http://39.105.220.225:8081/shop/goods/" + this.deleteid).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",
