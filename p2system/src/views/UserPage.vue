@@ -16,7 +16,9 @@
       <van-cell center icon="balance-o" class="cell" title="我的余额"
                 @click="showInvest">
         <template #title>
-          <span class="accountNum">我的余额：{{userForm.account}}</span>
+          <span class="accountNum">我的余额：
+            <span style="color: #FF6600">{{userForm.account}}元</span>
+          </span>
         </template>
         <van-button type="default" @click="showInvest">充值</van-button>
       </van-cell>

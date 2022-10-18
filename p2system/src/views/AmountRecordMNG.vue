@@ -102,73 +102,7 @@
 
   
 
-    <div>
-      <el-dialog
-          v-model="addGoodsVisible"
-          :title=goodsDialogTitle
-          :visible.sync="addGoodsVisible"
-          width="700px"
-          style="margin-left: 20px"
-      >
-        <el-form class="userForm" :model="goodsForm" :inline="true">
-          <el-form-item class="formItem" label="商品名" label-width="100px">
-            <el-input style="width: 120px" v-model="goodsForm.gname" />
-          </el-form-item>
-          <el-form-item class="formItem" label="商品类型" label-width="100px">
-            <el-input style="width: 120px" v-model="goodsForm.type" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="商品价格">
-            <el-input style="width: 120px" v-model="goodsForm.price" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="是否可议价">
-            <el-select v-model="goodsForm.bargain" style="width: 120px">
-              <el-option label="一口价" value="false" />
-              <el-option label="可议价" value="true" />
-            </el-select>
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="库存">
-            <el-input style="width: 200px" v-model="goodsForm.storage" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="新旧程度">
-            <el-input style="width: 200px" v-model="goodsForm.gcondition" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="尺寸">
-            <el-input style="width: 200px" v-model="goodsForm.size" />
-          </el-form-item>
-          <el-form-item class="formItem" label-width="100px" label="商品介绍">
-            <el-input style="width: 120px" v-model="goodsForm.introduction" />
-          </el-form-item>
-          <!--    商品图片上传-->
-          <el-form-item class="formItem" label-width="100px" label="商品图片">
-            <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
-                multiple
-                :limit="3"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-            >
-              <el-button type="primary">点击上传商品图片</el-button>
-              <template #tip>
-                <div class="el-upload__tip" style="width: 200px">
-                  jpg/png 文件大小需小于 500KB.
-                </div>
-              </template>
-            </el-upload>
-          </el-form-item>
 
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="addGoodsVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitGoods">提交</el-button>
-      </span>
-        </template>
-      </el-dialog>
-    </div>
 
   </div>
 </template>

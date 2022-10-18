@@ -20,10 +20,10 @@
               <span> <b style="font-size:25px">我的账户信息</b></span>
             </div>
             <div >
-            <span style="font-size: 20px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}}
+            <span style="font-size: 20px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}} 元
           </div>
           <div class="likeRate" >
-            <span style="font-size: 20px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}}
+            <span style="font-size: 20px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}} 分
           </div>
   <VanDivider></VanDivider>
         </div>
