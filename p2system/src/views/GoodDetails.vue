@@ -11,17 +11,29 @@
         </template>
       </el-image>
     </div>
+    <div style="width: 100%;">
+    </div>
     <div style="width: 100%">
       <p style="margin-top: 0;color: #fe4d19">￥{{good.price}}</p>
       <p style="margin-top: 0;">{{good.gname}}</p>
-      <p style="margin-top: 0;">大小：{{good.size}}</p>
-      <p style="margin-top: 0;">是否议价：{{good.bargain}}</p>
-      <p style="margin-top: 0;">详情信息：{{good.introduction}}</p>
-      <p style="margin-top: 0;">库存：{{good.storage}}</p>
-      <p style="margin-top: 0;">成色：{{good.gcondition}}</p>
-      <p style="margin-top: 0;">销量：{{good.sale}}</p>
-      <p style="margin-top: 0;">好评率：{{good.likeRate}}</p>
-      购买数量：<van-stepper v-model="num" integer :min="1" :max="this.good.storage"/>
+      <el-table
+          :data="tableData"
+          stripe
+          :show-header="false"
+      >
+        <el-table-column
+            prop="type"
+            label="类型"
+            min-width="40%"
+            align="center">
+        </el-table-column>
+        <el-table-column
+            prop="information"
+            label="详情"
+            min-width="60%"
+            align="center">
+        </el-table-column>
+      </el-table>
 
     </div>
     <div style="width: 100%">
@@ -43,6 +55,7 @@
   <div>
     <van-action-bar safe-area-inset-bottom style="background-color: #fff">
       <van-action-bar-icon icon="cart-o" text="购物车" @click="showCart"/>
+      <van-stepper v-model="num" integer :min="1" :max="this.good.storage"/>
       <van-action-bar-button type="warning" text="加入购物车" @click="addCart"/>
       <van-action-bar-button type="danger" text="立即购买" @click="gotoPurchase"/>
     </van-action-bar>
@@ -73,6 +86,7 @@ export default {
       good: {},
       reviewData:[],
       baseURL:"http://39.105.220.225:8081/shop/files/download/",
+      tableData:[]
     }
   },
   created() {
@@ -90,6 +104,28 @@ export default {
         console.log(res.data)
         this.good = res.data.data;
         this.good.picture = this.baseURL+this.good.picture;
+        this.tableData=[{
+          type: '大小',
+          information: this.good.size,
+        },{
+          type: '能否议价',
+          information: this.good.bargain==true? '能' : '否',
+        },{
+          type: '库存',
+          information: this.good.storage,
+        },{
+          type: '成色',
+          information: this.good.gcondition,
+        },{
+          type: '销量',
+          information: this.good.sale,
+        },{
+          type: '好评率',
+          information: this.good.likeRate,
+        },{
+          type: '详情信息',
+          information: this.good.introduction,
+        }]
       })
     },
     loadReview(){
