@@ -2,7 +2,7 @@
   <div class="GoodsMNG">
     <div class="opeBoard">
       <van-row>
-        <van-col span="8">
+        <van-col span="11">
           <van-button type="primary" @click="addUser">新增</van-button>
         </van-col>
         <van-col :offset="1">
