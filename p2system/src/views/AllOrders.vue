@@ -1,5 +1,5 @@
 <template>
-  <div class="AllOrder" :key="key">
+  <div class="AllOrder">
     <div class="searchBoard">
       <van-cell-group inset>
         <van-field
@@ -14,40 +14,49 @@
       </van-cell-group>
     </div>
     <div class="displayBoard">
-      <van-card
-          v-for="order in tableData"
-          :num="order.number"
-          :price="order.price"
-          :title="order.gname"
-          :thumb="order.picture"
+      <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="load"
+          loading-text="加载中"
       >
-        <template #tags >
-          <div style="margin-top: 3%;margin-bottom: 3%">
-            <div>
-              <van-tag plain>{{order.mname}}</van-tag>
+        <van-card
+            v-for="order in tableData"
+            :num="order.number"
+            :price="order.price"
+            :title="order.gname"
+            :thumb="order.picture"
+        >
+          <template #tags>
+            <div style="margin-top: 3%;margin-bottom: 3%">
+              <div>
+                <van-tag plain>{{ order.mname }}</van-tag>
+              </div>
+              <div :style="'color:'+order.tag_color">
+                <van-tag plain>{{ tags(order) }}</van-tag>
+              </div>
             </div>
-            <div :style="'color:'+order.tag_color" >
-              <van-tag plain>{{ tags(order) }}</van-tag>
+          </template>
+          <template #footer>
+            <div style="width: 72%;margin-left: auto">
+              <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
+              <van-button size="small" @click="orderOperate(order)"
+                          :style="{'visibility': order.operate===''?'hidden':'visible'}">{{ order.operate }}
+              </van-button>
+              <van-button size="small" v-if="order.status === 2" @click="review(order)">立即评价</van-button>
             </div>
-          </div>
-        </template>
-        <template #footer>
-          <div style="width: 72%;margin-left: auto">
-            <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
-            <van-button size="small" @click="orderOperate(order)"
-                        :style="{'visibility': order.operate===''?'hidden':'visible'}">{{ order.operate }}</van-button>
-            <van-button size="small" v-if="order.status === 2" @click="review(order)">立即评价</van-button>
-          </div>
-        </template>
+          </template>
+        </van-card>
 
-      </van-card>
+      </van-list>
     </div>
     <van-popup v-model:show="dialogFormVisible"
                round
                position="bottom"
                teleport="body"
                :style="{ height: '50%' }"
-                @close="cancle">
+               @close="cancel">
       <van-form v-model="form">
         <van-field label="商品评价">
           <template #input>
@@ -72,37 +81,6 @@
         </div>
       </van-form>
     </van-popup>
-<!--    <el-dialog title="评价" v-model="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="商品评价" :label-width="formLabelWidth">
-          <el-rate
-              v-model="form.Gvalue"
-              :colors="colors"
-              style="margin-top: 10px">
-          </el-rate>
-        </el-form-item>
-        <el-form-item label="商家评价" :label-width="formLabelWidth">
-          <el-rate
-              v-model="form.Mvalue"
-              :colors="colors">
-          </el-rate>
-        </el-form-item>
-        <el-form-item label="评价描述" :label-width="formLabelWidth">
-          <el-input
-              type="textarea"
-              :rows="5"
-              placeholder="请输入评价内容"
-              style="margin-right: 50px"
-              v-model="form.textarea">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
-      </div>
-    </el-dialog>-->
-
   </div>
 </template>
 
@@ -136,15 +114,16 @@ export default {
       formLabelWidth: '120px',
       order: {},
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-      key:0,
-      baseUrl:"http://39.105.220.225:8081/shop/files/download/"
+      baseUrl: "http://39.105.220.225:8081/shop/files/download/",
+      finished: false,
+      loading: false
     }
   },
   created() {
-    this.load()
   },
   methods: {
     load() {
+      this.loading = true
       let params = {
         pageNumber: this.currentPage,
         pageSize: this.pageSize,
@@ -154,33 +133,37 @@ export default {
       }
       axios.get("http://39.105.220.225:8081/shop/orders/user", {
         params: params
-      })
-          .then(res => {
-            console.log(res);
-            this.total = res.data.data.total;
-            this.tableData = res.data.data.records;
-            this.formTable.tableData = this.tableData;
-            this.tableData.forEach((item) => {
-              item.operate = "";
-              axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
-                params: {
-                  Gid: item.gid,
-                  Uid: window.localStorage.getItem("uid")
-                }
-              }).then(res => {
-                item.picture = this.baseUrl + res.data.data.picture;
-              })
-              axios.get("http://39.105.220.225:8081/shop/user/userone",{
-                params:{uid:item.mid}
-              }).then(res =>{
-                item.mname = res.data.data.uname;
-              })
+      }).then(res => {
+        let newDate = res.data.data.records;
+        if(newDate === undefined || newDate.length<=0){
+          this.finished = true;
+          return;
+        }
+        newDate.forEach((item) => {
+          item.operate = "";
+          axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
+            params: {
+              Gid: item.gid,
+              Uid: window.localStorage.getItem("uid")
+            }
+          }).then(res => {
+            item.picture = this.baseUrl + res.data.data.picture;
+            axios.get("http://39.105.220.225:8081/shop/user/userone", {
+              params: {uid: item.mid}
+            }).then(res => {
+              item.mname = res.data.data.uname;
+              this.tableData.push(item);
             })
-            this.key++;
           })
+        })
+      })
+      this.currentPage++;
+      this.loading = false;
     },
     //搜索商品
     search() {
+      this.tableData = [];
+      this.currentPage = 1;
       this.load();
     },
     evaluateTime(order) {
@@ -243,10 +226,10 @@ export default {
     },
 
     //订单操作
-    orderOperate(order){
-      console.log("aaa","订单操作");
+    orderOperate(order) {
+      console.log("aaa", "订单操作");
       //取消订单
-      if(order.operate === "取消订单"){
+      if (order.operate === "取消订单") {
         axios.delete("http://39.105.220.225:8081/shop/orders/" + order.oid).then(res => {
           if (res.data.code === '0') {
             this.$message({
@@ -263,7 +246,7 @@ export default {
         })
       }
       //确认收货
-      else if(order.operate === "确认收货"){
+      else if (order.operate === "确认收货") {
         axios.put("http://39.105.220.225:8081/shop/orders?status=2", order).then(res => {
 
           if (res.data.code === '0') {
@@ -281,7 +264,7 @@ export default {
         })
       }
       //退货
-      else if(order.operate === "退货"){
+      else if (order.operate === "退货") {
         axios.put("http://39.105.220.225:8081/shop/orders?status=-1", order).then(res => {
 
           if (res.data.code === '0') {
@@ -299,7 +282,7 @@ export default {
         })
       }
       //
-      else if(order.operate === "删除订单"){
+      else if (order.operate === "删除订单") {
         this.dialogFormVisible = true;
       }
     },
@@ -354,7 +337,7 @@ export default {
         }
       }
     },
-    cancel(){
+    cancel() {
       this.form.Gvalue = 0;
       this.form.Mvalue = 0;
       this.form.textarea = ""
@@ -367,6 +350,7 @@ export default {
 .AllOrder {
   margin: 10px;
 }
+
 .searchBoard {
   margin: 10px 0;
 }
