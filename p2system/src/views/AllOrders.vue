@@ -236,6 +236,8 @@ export default {
               type: "success",
               message: "取消订单成功",
             });
+            this.tableData=[];
+            this.currentPage = 1;
             this.load()
           } else {
             this.$message({
@@ -254,6 +256,8 @@ export default {
               type: "success",
               message: "收货成功",
             });
+            this.tableData=[];
+            this.currentPage = 1;
             this.load()
           } else {
             this.$message({

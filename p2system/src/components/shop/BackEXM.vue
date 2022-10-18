@@ -9,13 +9,44 @@
                  @click="load">查询</el-button>
     </div>
     <div class="displayBoard">
-      <el-table :data="tableData"
+      <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="load"
+          loading-text="加载中"
+      >
+        <van-card
+            v-for="order in tableData"
+            :num="order.number"
+            :price="order.price"
+            :title="order.gname"
+            :thumb="order.picture"
+        >
+          <template #tags>
+            <div style="margin-top: 3%;margin-bottom: 3%">
+              <div :style="'color:'+order.tag_color">
+                <van-tag plain>{{ tags(order) }}</van-tag>
+              </div>
+            </div>
+          </template>
+          <template #footer>
+            <div style="width: 72%;margin-left: auto">
+              <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
+              <van-button size="small" @click="agreeMerchant(order)">通过</van-button>
+              <van-button size="small" @click="refuseBack(order)">拒绝</van-button>
+            </div>
+          </template>
+        </van-card>
+
+      </van-list>
+<!--      <el-table :data="tableData"
                 border
                 stripe
                 style="width: 100%"
       >
         <el-table-column type="expand">
-          <!--        修改为自定义组件，显示其他信息-->
+          &lt;!&ndash;        修改为自定义组件，显示其他信息&ndash;&gt;
           <template #default="props">
             <el-descriptions border >
               <el-descriptions-item
@@ -33,7 +64,7 @@
             prop="oid"
             label="订单号"
             sortable />
-        <!--     后期添加查看密码功能 -->
+        &lt;!&ndash;     后期添加查看密码功能 &ndash;&gt;
         <el-table-column
             prop="gname"
             label="商品名" />
@@ -61,20 +92,9 @@
             <el-button text @click="refuseBack(scope.row)" type="danger">拒绝</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table>-->
     </div>
     <!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
     <!--    商家填写拒绝退货理由弹窗-->
     <div>
       <el-dialog
@@ -124,6 +144,9 @@ export default {
       ordersForm:{},
       uid:"",
       searchType: "",
+      loading: false,
+      finished: false,
+      baseUrl: "http://39.105.220.225:8081/shop/files/download/",
     }
   },
   created() {
@@ -196,14 +219,42 @@ export default {
             }
           })
     },
-    handleSizeChange(val) {//改变每页的显示条数
-      this.pageSize = val;
-      this.load()
-    },
-    handleCurrentChange(val) {//改变页码
-      this.currentPage=val
-      this.load()
-    },
+    tags(order) {
+      switch (order.status) {
+        case 0: {
+          order.tag_color = "#ED9B78";
+          return "待发货";
+        }
+        case 1: {
+          order.tag_color = "#000000";
+          return "已发货";
+        }
+        case 2: {
+          order.tag_color = "#409EFF";
+          return "已收货";
+        }
+        case 3: {
+          order.tag_color = "#38E917";
+          return "交易成功";
+        }
+        case -1: {
+          order.tag_color = "#ED9B78";
+          return "退货中";
+        }
+        case -2: {
+          order.tag_color = "#38E917";
+          return "退货成功";
+        }
+        case -3: {
+          order.tag_color = "red";
+          return "退货失败";
+        }
+        default: {
+          order.tag_color = "#000000";
+          return "全部";
+        }
+      }
+    }
   }
 }
 </script>
