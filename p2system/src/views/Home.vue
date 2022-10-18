@@ -164,7 +164,7 @@ export default {
                 })
                 console.log("totalData:")
                 console.log(this.totalData)
-                alert(this.tempList[0].gid)
+                // alert(this.tempList[0].gid)
                 this.currentPage = this.currentPage+1
                 console.log("currentPage"+this.currentPage)
               }
