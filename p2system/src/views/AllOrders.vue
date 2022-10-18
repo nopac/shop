@@ -276,6 +276,8 @@ export default {
               type: "success",
               message: "退货成功",
             });
+            this.tableData = [];
+            this.currentPage = 1;
             this.load()
           } else {
             this.$message({

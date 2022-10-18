@@ -213,6 +213,8 @@ export default {
       });
       this.dialogFormVisible=false;
       this.form={};
+      this.tableData = [];
+      this.currentPage = 1;
       this.load()
     },
     cancel(){

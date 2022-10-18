@@ -4,10 +4,17 @@
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入订单号" style="width: 20%" clearable/>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="refresh">查询
-      </el-button>
+      <van-cell-group inset>
+        <van-field
+            v-model="searchText"
+            center
+            clearable
+            placeholder="输入订单号">
+          <template #button>
+            <van-button size="small" type="primary" @click="search">查询</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
     </div>
     <div class="displayBoard">
       <van-list
@@ -26,6 +33,9 @@
         >
           <template #tags>
             <div style="margin-top: 3%;margin-bottom: 3%">
+              <div>
+                <van-tag plain>{{ order.uid }}</van-tag>
+              </div>
               <div :style="'color:'+order.tag_color">
                 <van-tag plain>{{ tags(order) }}</van-tag>
               </div>
@@ -35,7 +45,7 @@
             <div style="width: 72%;margin-left: auto">
               <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
               <van-button size="small" @click="selectOut(order)">发货</van-button>
-<!--              <van-button size="small" @click="deleteGoods(order.gid)">删除</van-button>-->
+              <!--              <van-button size="small" @click="deleteGoods(order.gid)">删除</van-button>-->
             </div>
           </template>
         </van-card>
@@ -233,6 +243,8 @@ export default {
               console.log(res);
               this.ordersForm = {}
               this.fillIDVisible = false;
+              this.tableData = [];
+              this.currentPage = 1;
               this.load()
             } else {
               this.$message({
@@ -296,6 +308,11 @@ export default {
           return "全部";
         }
       }
+    },
+    search() {
+      this.tableData = [];
+      this.currentPage = 1;
+      this.load();
     }
   }
 }

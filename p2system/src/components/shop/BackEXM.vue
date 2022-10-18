@@ -4,9 +4,17 @@
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入订单号" style="width: 20%" clearable/>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="load">查询</el-button>
+      <van-cell-group inset>
+        <van-field
+            v-model="searchText"
+            center
+            clearable
+            placeholder="输入订单号">
+          <template #button>
+            <van-button size="small" type="primary" @click="search">查询</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
     </div>
     <div class="displayBoard">
       <van-list
@@ -25,6 +33,9 @@
         >
           <template #tags>
             <div style="margin-top: 3%;margin-bottom: 3%">
+              <div>
+                <van-tag plain>{{ order.uid }}</van-tag>
+              </div>
               <div :style="'color:'+order.tag_color">
                 <van-tag plain>{{ tags(order) }}</van-tag>
               </div>
@@ -40,59 +51,59 @@
         </van-card>
 
       </van-list>
-<!--      <el-table :data="tableData"
-                border
-                stripe
-                style="width: 100%"
-      >
-        <el-table-column type="expand">
-          &lt;!&ndash;        修改为自定义组件，显示其他信息&ndash;&gt;
-          <template #default="props">
-            <el-descriptions border >
-              <el-descriptions-item
-                  label="地址"
-                  label-align="center"
-                  align="center"
-                  label-class-name="Item"
-                  width="150px">
-                <span>{{ props.row.address }}</span>
-              </el-descriptions-item>
-            </el-descriptions>
-          </template>
-        </el-table-column>
-        <el-table-column
-            prop="oid"
-            label="订单号"
-            sortable />
-        &lt;!&ndash;     后期添加查看密码功能 &ndash;&gt;
-        <el-table-column
-            prop="gname"
-            label="商品名" />
-        <el-table-column
-            prop="uid"
-            label="买家id" />
-        <el-table-column
-            prop="price"
-            label="成交金额" />
-        <el-table-column
-            label="状态" >
-          <template #default="scope">
-            <span v-if="scope.row.status === -1" style="color: red;">退货中</span>
-            <span v-if="scope.row.status === -2" style="color: black;">退货成功</span>
-            <span v-if="scope.row.status === -3" style="color: gray;">退货失败</span>
-            <span v-if="scope.row.status === 0" style="color: red;">待发货</span>
-            <span v-if="scope.row.status === 1" style="color: darkgreen;">已发货</span>
-            <span v-if="scope.row.status === 2" style="color: darkgreen;">已收货</span>
-            <span v-if="scope.row.status === 3" style="color: dodgerblue;">交易成功</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
-          <template #default="scope" >
-            <el-button text @click="agreeMerchant(scope.row)" type="primary">通过</el-button>
-            <el-button text @click="refuseBack(scope.row)" type="danger">拒绝</el-button>
-          </template>
-        </el-table-column>
-      </el-table>-->
+      <!--      <el-table :data="tableData"
+                      border
+                      stripe
+                      style="width: 100%"
+            >
+              <el-table-column type="expand">
+                &lt;!&ndash;        修改为自定义组件，显示其他信息&ndash;&gt;
+                <template #default="props">
+                  <el-descriptions border >
+                    <el-descriptions-item
+                        label="地址"
+                        label-align="center"
+                        align="center"
+                        label-class-name="Item"
+                        width="150px">
+                      <span>{{ props.row.address }}</span>
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </template>
+              </el-table-column>
+              <el-table-column
+                  prop="oid"
+                  label="订单号"
+                  sortable />
+              &lt;!&ndash;     后期添加查看密码功能 &ndash;&gt;
+              <el-table-column
+                  prop="gname"
+                  label="商品名" />
+              <el-table-column
+                  prop="uid"
+                  label="买家id" />
+              <el-table-column
+                  prop="price"
+                  label="成交金额" />
+              <el-table-column
+                  label="状态" >
+                <template #default="scope">
+                  <span v-if="scope.row.status === -1" style="color: red;">退货中</span>
+                  <span v-if="scope.row.status === -2" style="color: black;">退货成功</span>
+                  <span v-if="scope.row.status === -3" style="color: gray;">退货失败</span>
+                  <span v-if="scope.row.status === 0" style="color: red;">待发货</span>
+                  <span v-if="scope.row.status === 1" style="color: darkgreen;">已发货</span>
+                  <span v-if="scope.row.status === 2" style="color: darkgreen;">已收货</span>
+                  <span v-if="scope.row.status === 3" style="color: dodgerblue;">交易成功</span>
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
+                <template #default="scope" >
+                  <el-button text @click="agreeMerchant(scope.row)" type="primary">通过</el-button>
+                  <el-button text @click="refuseBack(scope.row)" type="danger">拒绝</el-button>
+                </template>
+              </el-table-column>
+            </el-table>-->
     </div>
     <!--    分页-->
     <!--    商家填写拒绝退货理由弹窗-->
@@ -124,25 +135,26 @@
 <script>
 import ShopOutExpand from "@/components/shop/ShopOutExpand";
 import request from "@/util/request";
+import axios from "axios";
+
 export default {
   name: "BackEXM",
   components: {
     ShopOutExpand
   },
-  data(){
+  data() {
     return {
       operate: "",
       searchText: "",
-      reasonVisible:false,
+      reasonVisible: false,
       currentPage: 1,
       pageSize: 5,
       total: 10,
-      DataList:[],
-      tableData : [
-      ],
-      userForm:{},
-      ordersForm:{},
-      uid:"",
+      DataList: [],
+      tableData: [],
+      userForm: {},
+      ordersForm: {},
+      uid: "",
       searchType: "",
       loading: false,
       finished: false,
@@ -150,68 +162,77 @@ export default {
     }
   },
   created() {
-    this.load()
+
   },
   methods: {
-    load(){
-        let params={
-          pageNumber: this.currentPage,
-          pageSize: this.pageSize,
-          searchText: this.searchText,
-          type: this.searchType
+    load() {
+      let params = {
+        pageNumber: this.currentPage,
+        pageSize: this.pageSize,
+        searchText: this.searchText,
+        type: this.searchType
+      }
+      let uid = localStorage.getItem("uid")
+      request.get("http://39.105.220.225:8081/shop/exmO/getBack/" + uid, {
+        params: params
+      }).then(res => {
+        console.log(res);
+        this.total = res.data.total;
+        let newDate = res.data.records;
+        if (newDate === undefined || newDate.length <= 0) {
+          this.finished = true;
+          return;
         }
-        let uid = localStorage.getItem("uid")
-        console.log("uid:"+uid)
-        request.get("http://39.105.220.225:8081/shop/exmO/getBack/"+uid,{
-          params: params
+        newDate.forEach((item) => {
+          axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
+            params: {
+              Gid: item.gid,
+              Uid: window.localStorage.getItem("uid")
+            }
+          }).then(res => {
+            item.picture = this.baseUrl + res.data.data.picture;
+            this.tableData.push(item)
+          })
         })
-            .then(res=>{
-              console.log(res);
-              this.total=res.data.total;
-              this.tableData = res.data.records;
-              this.tableData.forEach(e=>{
-                for( var key in e){
-                  if(e[key] === "null"){
-                    delete e[key];
-                  }
-                  e.bargain=String(e.bargain)
-                }
-              })//过滤null
-            })
-
-
+      })
+      this.currentPage++;
+      this.loading=false;
     },
-    agreeMerchant(row){
+    agreeMerchant(row) {
       this.ordersForm = row
-      request.put("http://39.105.220.225:8081/shop/exmO/agreeBack",this.ordersForm)
-        .then(res=>{
-          if (res.code === '0'){
-            console.log(res);
-            this.ordersForm={}
-            this.load()
-          }else{
-            this.$message({
-              type: "error",
-              message: res.msg,
-            })
-          }
+      request.put("http://39.105.220.225:8081/shop/exmO/agreeBack", this.ordersForm)
+          .then(res => {
+            if (res.code === '0') {
+              console.log(res);
+              this.ordersForm = {}
+              this.tableData = [];
+              this.currentPage = 1;
+              this.load()
+            } else {
+              this.$message({
+                type: "error",
+                message: res.msg,
+              })
+            }
 
-        })
+          })
     },
-    refuseBack(row){
+    refuseBack(row) {
       this.reasonVisible = true;
       this.ordersForm = row
     },
-    refuse(){
-      console.log("reason:"+this.ordersForm.mnote)
-      request.put("http://39.105.220.225:8081/shop/exmO/reject",this.ordersForm)
-          .then(res=>{
-            if (res.code === '0'){
-              console.log("reject:"+res);
-              this.ordersForm={}
+    refuse() {
+      console.log("reason:" + this.ordersForm.mnote)
+      request.put("http://39.105.220.225:8081/shop/exmO/reject", this.ordersForm)
+          .then(res => {
+            if (res.code === '0') {
+              console.log("reject:" + res);
+              this.ordersForm = {}
               this.reasonVisible = false;
+              this.tableData = [];
+              this.currentPage = 1;
               this.load()
-            }else{
+            } else {
               this.$message({
                 type: "error",
                 message: res.msg,
@@ -255,7 +276,12 @@ export default {
         }
       }
     }
-  }
+  },
+  search() {
+    this.tableData = [];
+    this.currentPage = 1;
+    this.load();
+  },
 }
 </script>
 

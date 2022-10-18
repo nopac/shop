@@ -4,10 +4,17 @@
       <el-button type="primary" @click="load">刷新</el-button>
     </div>
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入订单号" style="width: 20%" clearable/>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="searchName">查询
-      </el-button>
+      <van-cell-group inset>
+        <van-field
+            v-model="searchText"
+            center
+            clearable
+            placeholder="输入订单号">
+          <template #button>
+            <van-button size="small" type="primary" @click="search">查询</van-button>
+          </template>
+        </van-field>
+      </van-cell-group>
     </div>
     <div class="displayBoard">
       <van-list
@@ -27,7 +34,7 @@
           <template #tags>
             <div style="margin-top: 3%;margin-bottom: 3%">
               <div>
-                <van-tag plain>{{ order.mname }}</van-tag>
+                <van-tag plain>{{ order.uid }}</van-tag>
               </div>
               <div :style="'color:'+order.tag_color">
                 <van-tag plain>{{ tags(order) }}</van-tag>
@@ -244,7 +251,9 @@ export default {
       this.currentPage++;
       this.loading=false;
     },
-    searchName() {
+    search() {
+      this.tableData = [];
+      this.currentPage = 1;
       this.load();
     },
     editOrder(row) {
@@ -260,6 +269,8 @@ export default {
             type: "success",
             message: "删除成功",
           });
+          this.tableData = [];
+          this.currentPage = 1;
           this.load()
         } else {
           this.$message({
@@ -299,14 +310,6 @@ export default {
       });
       this.dialogFormVisible = false;
       this.form = {};
-    },
-    handleSizeChange(val) {//改变每页的显示条数
-      this.pageSize = val;
-      this.load()
-    },
-    handleCurrentChange(val) {//改变页码
-      this.currentPage = val
-      this.load()
     },
     tags(order) {
       switch (order.status) {
