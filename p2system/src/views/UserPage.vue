@@ -264,4 +264,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
+.searchBoard {
+  margin: 10px 0;
+}
 </style>
