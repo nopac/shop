@@ -1,15 +1,15 @@
 <template>
   <div class="OutMNG">
-    <div class="opeBoard">
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
+    <!--    <div class="opeBoard">
+          <van-button type="primary" @click="refresh_bt">刷新</van-button>
+        </div>-->
     <div class="searchBoard">
       <van-cell-group inset>
         <van-field
             v-model="searchText"
             center
             clearable
-            placeholder="输入订单号">
+            placeholder="输入商品名">
           <template #button>
             <van-button size="small" type="primary" @click="search">查询</van-button>
           </template>
@@ -17,47 +17,54 @@
       </van-cell-group>
     </div>
     <div class="displayBoard">
-      <van-list
-          v-model:loading="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="load"
-          loading-text="加载中"
-      >
-        <van-card
-            v-for="order in tableData"
-            :num="order.number"
-            :price="order.price"
-            :title="order.gname"
-            :thumb="order.picture"
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="load"
+            loading-text="加载中"
         >
-          <template #tags>
-            <div style="margin-top: 3%;margin-bottom: 3%">
-              <div>
-                <van-tag plain>{{ order.uid }}</van-tag>
+          <van-card
+              v-for="order in tableData"
+              :num="order.number"
+              :price="order.price"
+              :title="order.gname"
+              :thumb="order.picture"
+          >
+            <template #tags>
+              <div style="margin-top: 3%;margin-bottom: 3%">
+                <div>
+                  <van-tag plain>{{ order.uid }}</van-tag>
+                </div>
+                <div :style="'color:'+order.tag_color">
+                  <van-tag plain>{{ tags(order) }}</van-tag>
+                </div>
               </div>
-              <div :style="'color:'+order.tag_color">
-                <van-tag plain>{{ tags(order) }}</van-tag>
+            </template>
+            <template #footer>
+              <div style="width: 72%;margin-left: auto">
+                <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
+                <van-button size="small" @click="selectOut(order)">发货</van-button>
+                <!--              <van-button size="small" @click="deleteGoods(order.gid)">删除</van-button>-->
               </div>
-            </div>
-          </template>
-          <template #footer>
-            <div style="width: 72%;margin-left: auto">
-              <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
-              <van-button size="small" @click="selectOut(order)">发货</van-button>
-              <!--              <van-button size="small" @click="deleteGoods(order.gid)">删除</van-button>-->
-            </div>
-          </template>
-        </van-card>
+            </template>
+          </van-card>
 
-      </van-list>
+        </van-list>
+      </van-pull-refresh>
       <van-dialog
-          title="请填写快递单号"
+          title="请填写商品快递单号"
           v-model:show="fillIDVisible"
           :before-close="outGoods"
           teleport="body"
       >
-        <van-field v-model="ordersForm.deliverID" placeholder="填写订单号" size="large"/>
+        <van-field v-model="ordersForm.deliverID" placeholder="填写快递单号" size="large"/>
       </van-dialog>
       <!--      <el-table :data="tableData"
                       border
@@ -182,6 +189,7 @@ export default {
       loading: false,
       finished: false,
       baseUrl: "http://39.105.220.225:8081/shop/files/download/",
+      refreshLoading:false
     }
   },
   created() {
@@ -248,26 +256,29 @@ export default {
     //发货
     outGoods(action) {
       if (action === "confirm") {
-        request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm, {status:1})
-            .then(res => {
-              if (res.code === '0') {
-                console.log(res);
-                this.ordersForm = {}
-                this.tableData = [];
-                this.currentPage = 1;
-                this.finished = false;
-                this.load()
-              } else {
-                this.$message({
-                  type: "error",
-                  message: res.msg,
-                })
-              }
-
+        request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm, {
+          params: {status: 1}
+        }).then(res => {
+          if (res.code === '0') {
+            this.$message({
+              type: "success",
+              message: "发货成功！",
+            });
+            this.pullRefresh();
+            this.fillIDVisible = false
+            this.load()
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg,
             })
+          }
+        })
+      }else{
+        this.ordersForm = {}
       }
     },
-    updateDeliderID() {
+    /*updateDeliderID() {
       request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm).then(res => {
         // console.log(res)
         if (res.code === '0') {
@@ -284,7 +295,7 @@ export default {
         }
         this.load();
       })
-    },
+    },*/
     tags(order) {
       switch (order.status) {
         case 0: {
@@ -324,8 +335,25 @@ export default {
     search() {
       this.tableData = [];
       this.currentPage = 1;
+      this.finished = false;
       this.load();
-    }
+    },
+    /*refresh_bt() {
+      this.searchText = ""
+      this.currentPage = 1;
+      this.finished = false;
+      this.tableData = [];
+      this.load();
+    },*/
+    //下拉刷新
+    pullRefresh() {
+      this.searchText = ""
+      this.currentPage = 1;
+      this.finished = false;
+      this.tableData = [];
+      this.load();
+      this.refreshLoading = false;
+    },
   }
 }
 </script>

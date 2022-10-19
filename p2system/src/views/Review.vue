@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 10px" key="{{key}}">
+  <div style="margin: 10px">
     <div class="searchBoard">
       <van-cell-group inset>
         <van-field
@@ -14,38 +14,53 @@
       </van-cell-group>
     </div>
     <div>
-      <van-card
-          v-for="order in tableData"
-          :num="order.number"
-          :price="order.price"
-          :title="order.gname"
-          :thumb="order.picture"
-      >
-        <template #tags >
-          <div style="margin-top: 3%;margin-bottom: 3%">
-            <div>
-              <van-tag plain>{{order.mname}}</van-tag>
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="load"
+            loading-text="加载中"
+        >
+        <van-card
+            v-for="order in tableData"
+            :num="order.number"
+            :price="order.price"
+            :title="order.gname"
+            :thumb="order.picture"
+        >
+          <template #tags>
+            <div style="margin-top: 3%;margin-bottom: 3%">
+              <div>
+                <van-tag plain>{{ order.mname }}</van-tag>
+              </div>
+              <div style="color: #ED9B78">
+                <van-tag plain>待评价</van-tag>
+              </div>
             </div>
-            <div style="color: #ED9B78">
-              <van-tag plain>待评价</van-tag>
+          </template>
+          <template #footer>
+            <div style="width: 72%;margin-left: auto">
+              <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
+              <van-button size="small" @click="review(order)">立即评价</van-button>
             </div>
-          </div>
-        </template>
-        <template #footer>
-          <div style="width: 72%;margin-left: auto">
-            <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{order.sum}}</div>
-            <van-button size="small" @click="review(order)">立即评价</van-button>
-          </div>
-        </template>
+          </template>
 
-      </van-card>
+        </van-card>
+        </van-list>
+      </van-pull-refresh>
     </div>
     <van-popup v-model:show="dialogFormVisible"
                round
                position="bottom"
                teleport="body"
                :style="{ height: '50%' }"
-                @close="cancel">
+               @close="cancel">
       <van-form v-model="form">
         <van-field label="商品评价">
           <template #input>
@@ -70,37 +85,37 @@
         </div>
       </van-form>
     </van-popup>
-<!--    <el-dialog title="商品评价" v-model="dialogFormVisible" width="90%">
-      <el-form :model="form">
-        <el-form-item label="商品评价" style="padding-left: 5%">
-          <el-rate
-              v-model="form.Gvalue"
-              :colors="colors"
-              style="padding-top: 3%">
-          </el-rate>
-        </el-form-item>
-        <el-form-item label="商家评价" style="padding-left: 5%">
-          <el-rate
-              v-model="form.Mvalue"
-              :colors="colors"
-              style="padding-top: 3%">
-          </el-rate>
-        </el-form-item>
-        <el-form-item label="评价描述" style="padding-left: 5%">
-          <el-input
-              type="textarea"
-              :rows="5"
-              placeholder="请输入评价内容"
-              style="margin-right: 10px"
-              v-model="form.textarea">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel" size="large">取 消</el-button>
-        <el-button type="primary" @click="submit" size="large">确 定</el-button>
-      </div>
-    </el-dialog>-->
+    <!--    <el-dialog title="商品评价" v-model="dialogFormVisible" width="90%">
+          <el-form :model="form">
+            <el-form-item label="商品评价" style="padding-left: 5%">
+              <el-rate
+                  v-model="form.Gvalue"
+                  :colors="colors"
+                  style="padding-top: 3%">
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="商家评价" style="padding-left: 5%">
+              <el-rate
+                  v-model="form.Mvalue"
+                  :colors="colors"
+                  style="padding-top: 3%">
+              </el-rate>
+            </el-form-item>
+            <el-form-item label="评价描述" style="padding-left: 5%">
+              <el-input
+                  type="textarea"
+                  :rows="5"
+                  placeholder="请输入评价内容"
+                  style="margin-right: 10px"
+                  v-model="form.textarea">
+              </el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="cancel" size="large">取 消</el-button>
+            <el-button type="primary" @click="submit" size="large">确 定</el-button>
+          </div>
+        </el-dialog>-->
   </div>
 
 </template>
@@ -114,113 +129,128 @@ export default {
   components: {
     deliveryExpand,
   },
-  data(){
-    return{
+  data() {
+    return {
       searchText: "",
       total: 0,
-      tableData : [],
+      tableData: [],
       form: {
         Gvalue: null,
         Mvalue: null,
         textarea: ""
       },
       dialogFormVisible: false,
-      order:{},
-      baseUrl:"http://39.105.220.225:8081/shop/files/download/",
-      key:0
+      order: {},
+      baseUrl: "http://39.105.220.225:8081/shop/files/download/",
+      refreshLoading: false,
+      finished: false,
+      loading: false,
     }
   },
   created() {
-    this.load()
   },
-  methods:{
-    load(){
-      let params={
+  methods: {
+    load() {
+      let params = {
         pageNumber: this.currentPage,
         pageSize: this.pageSize,
         searchText: this.searchText,
-        uid:window.localStorage.getItem("uid"),
+        uid: window.localStorage.getItem("uid"),
         status: 2,
       }
-      axios.get("http://39.105.220.225:8081/shop/orders/user",{
+      axios.get("http://39.105.220.225:8081/shop/orders/user", {
         params: params
-      }).then(res=>{
-            this.total=res.data.data.total;
-            this.tableData = res.data.data.records;
-            this.tableData.forEach((item)=>{
-              axios.get("http://39.105.220.225:8081/shop/goods/goodDetails",{
-                params:{
-                  Gid:item.gid,
-                  Uid: window.localStorage.getItem("uid")
-                }
-              }).then(res=>{
-                console.log("aaa",res.data.data.picture);
-                item.picture = this.baseUrl + res.data.data.picture;
-              })
-              axios.get("http://39.105.220.225:8081/shop/user/userone",{
-                params:{uid:item.mid}
-              }).then(res =>{
-                item.mname = res.data.data.uname;
-              })
+      }).then(res => {
+        this.total = res.data.data.total;
+        let newDate = res.data.data.records;
+        if(newDate === undefined || newDate.length <= 0){
+          this.finished = true;
+          return
+        }
+        newDate.forEach((item) => {
+          axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
+            params: {
+              Gid: item.gid,
+              Uid: window.localStorage.getItem("uid")
+            }
+          }).then(res => {
+            item.picture = this.baseUrl + res.data.data.picture;
+            axios.get("http://39.105.220.225:8081/shop/user/userone", {
+              params: {uid: item.mid}
+            }).then(res => {
+              item.mname = res.data.data.uname;
+              this.tableData.push(item)
             })
-        this.key++;
+          })
+        })
       })
+      this.currentPage++;
+      this.loading = false;
     },
-    search(){
+    search() {
+      this.tableData = [];
+      this.currentPage = 1;
+      this.finished = false;
       this.load();
     },
-    review(order){
-
+    review(order) {
       this.dialogFormVisible = true
       this.order = order;
     },
 
-    submit(){
-      console.log("aaa","评价提交")
-      if (this.form.Gvalue===0||this.form.Mvalue===0){
+    submit() {
+      console.log("aaa", "评价提交")
+      if (this.form.Gvalue === 0 || this.form.Mvalue === 0) {
         this.$message({
-          type:'error',
+          type: 'error',
           message: '请评价'
         })
         return;
       }
-      let params1={
+      let params1 = {
         star: this.form.Gvalue,
         remark: this.form.textarea,
-        fromid:this.order.uid,
-        toid:this.order.gid,
-        type:2,
-        oid:this.order.oid
+        fromid: this.order.uid,
+        toid: this.order.gid,
+        type: 2,
+        oid: this.order.oid
       };
-      axios.post("http://39.105.220.225:8081/shop/review",params1).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review", params1).then(res => {
         console.log(res.data);
       })
 
 
-      let params2={
+      let params2 = {
         star: this.form.Mvalue,
-        fromid:this.order.uid,
-        toid:this.order.mid,
-        type:1,
-        oid:this.order.oid
+        fromid: this.order.uid,
+        toid: this.order.mid,
+        type: 1,
+        oid: this.order.oid
       };
-      axios.post("http://39.105.220.225:8081/shop/review",params2).then(res=>{
+      axios.post("http://39.105.220.225:8081/shop/review", params2).then(res => {
         console.log(res.data);
       })
       this.$message({
-        type:"success",
+        type: "success",
         message: "评价成功",
       });
-      this.dialogFormVisible=false;
-      this.form={};
-      this.tableData = [];
-      this.currentPage = 1;
-      this.load()
+      this.pullRefresh();
+      this.dialogFormVisible = false
     },
-    cancel(){
+    cancel() {
       this.form.Gvalue = 0;
       this.form.Mvalue = 0;
       this.form.textarea = ""
+    },
+    //下拉刷新
+    pullRefresh() {
+      this.tableData = [];
+      this.currentPage = 1;
+      this.form = {}
+      this.searchText = "";
+      this.finished = false;
+      this.refreshLoading = false;
+      this.load();
     }
   }
 }
@@ -228,7 +258,7 @@ export default {
 
 <style scoped>
 
-.searchBoard{
+.searchBoard {
   margin: 10px 0;
 }
 

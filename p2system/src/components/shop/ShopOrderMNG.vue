@@ -1,15 +1,15 @@
 <template>
   <div class="ShopOrderMNG Contain">
-    <div class="opeBoard">
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
+    <!--    <div class="opeBoard">
+          <van-button type="primary" @click="refresh_bt">刷新</van-button>
+        </div>-->
     <div class="searchBoard">
       <van-cell-group inset>
         <van-field
             v-model="searchText"
             center
             clearable
-            placeholder="输入订单号">
+            placeholder="输入商品名">
           <template #button>
             <van-button size="small" type="primary" @click="search">查询</van-button>
           </template>
@@ -17,40 +17,47 @@
       </van-cell-group>
     </div>
     <div class="displayBoard">
-      <van-list
-          v-model:loading="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="load"
-          loading-text="加载中"
-      >
-        <van-card
-            v-for="order in tableData"
-            :num="order.number"
-            :price="order.price"
-            :title="order.gname"
-            :thumb="order.picture"
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="load"
+            loading-text="加载中"
         >
-          <template #tags>
-            <div style="margin-top: 3%;margin-bottom: 3%">
-              <div>
-                <van-tag plain>{{ order.uid }}</van-tag>
+          <van-card
+              v-for="order in tableData"
+              :num="order.number"
+              :price="order.price"
+              :title="order.gname"
+              :thumb="order.picture"
+          >
+            <template #tags>
+              <div style="margin-top: 3%;margin-bottom: 3%">
+                <div>
+                  <van-tag plain>{{ order.uid }}</van-tag>
+                </div>
+                <div :style="'color:'+order.tag_color">
+                  <van-tag plain>{{ tags(order) }}</van-tag>
+                </div>
               </div>
-              <div :style="'color:'+order.tag_color">
-                <van-tag plain>{{ tags(order) }}</van-tag>
+            </template>
+            <template #footer>
+              <div style="width: 72%;margin-left: auto">
+                <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
+                <van-button size="small" v-if="order.status === 2" @click="review(order)">立即评价</van-button>
+                <van-button size="small" @click="isDelete(order)">删除</van-button>
               </div>
-            </div>
-          </template>
-          <template #footer>
-            <div style="width: 72%;margin-left: auto">
-              <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
-              <van-button size="small" v-if="order.status === 2" @click="review(order)">立即评价</van-button>
-              <van-button size="small" @click="isDelete(order)">删除</van-button>
-            </div>
-          </template>
-        </van-card>
+            </template>
+          </van-card>
 
-      </van-list>
+        </van-list>
+      </van-pull-refresh>
       <!--      <el-table :data="tableData"
                       border
                       stripe
@@ -173,6 +180,7 @@ export default {
       loading: false,
       finished: false,
       baseUrl: "http://39.105.220.225:8081/shop/files/download/",
+      refreshLoading: false
     }
   },
   created() {
@@ -208,7 +216,7 @@ export default {
         mid: window.localStorage.getItem("uid"),
         status: 5
       }
-      request.get("http://39.105.220.225:8081/shop/orders/merchant" , {
+      request.get("http://39.105.220.225:8081/shop/orders/merchant", {
         params: params
       }).then(res => {
         this.total = res.data.total;
@@ -230,7 +238,7 @@ export default {
         })
       })
       this.currentPage++;
-      this.loading=false;
+      this.loading = false;
     },
     search() {
       this.tableData = [];
@@ -243,20 +251,18 @@ export default {
       console.log(this.ordersForm)
       this.addGoodsVisible = true;
     },
-    isDelete(order){
-      console.log("order",order);
+    isDelete(order) {
+      console.log("order", order);
       Dialog.confirm({
-        message:"确认删除？"
-      }).then(()=>{
+        message: "确认删除？"
+      }).then(() => {
         request.delete("http://39.105.220.225:8081/shop/orders/" + order.oid).then(res => {
           if (res.code === '0') {
             this.$message({
               type: "success",
               message: "删除成功",
             });
-            this.tableData = [];
-            this.currentPage = 1;
-            this.finished = false;
+            this.pullRefresh()
           } else {
             this.$message({
               type: "error",
@@ -264,7 +270,7 @@ export default {
             })
           }
         })
-      }).catch()
+      }).catch(()=>{})
     },
     review(order) {
       this.dialogFormVisible = true
@@ -299,7 +305,7 @@ export default {
       this.form = {};
     },
     //取消评价
-    cancel(){
+    cancel() {
       this.form.Uvalue = null;
       this.form.textarea = ""
     },
@@ -338,7 +344,24 @@ export default {
           return "全部";
         }
       }
-    }
+    },
+    /*
+    refresh_bt() {
+      this.searchText = ""
+      this.currentPage = 1;
+      this.finished = false;
+      this.tableData = [];
+      this.load();
+    },*/
+    //下拉刷新
+    pullRefresh() {
+      this.searchText = ""
+      this.currentPage = 1;
+      this.finished = false;
+      this.tableData = [];
+      this.load();
+      this.refreshLoading = false;
+    },
   }
 }
 </script>

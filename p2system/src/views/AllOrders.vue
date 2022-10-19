@@ -14,6 +14,12 @@
       </van-cell-group>
     </div>
     <div class="displayBoard">
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
       <van-list
           v-model:loading="loading"
           :finished="finished"
@@ -50,6 +56,7 @@
         </van-card>
 
       </van-list>
+      </van-pull-refresh>
     </div>
     <van-popup v-model:show="dialogFormVisible"
                round
@@ -116,7 +123,8 @@ export default {
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       baseUrl: "http://39.105.220.225:8081/shop/files/download/",
       finished: false,
-      loading: false
+      loading: false,
+      refreshLoading:false
     }
   },
   created() {
@@ -164,6 +172,7 @@ export default {
     search() {
       this.tableData = [];
       this.currentPage = 1;
+      this.finished = false;
       this.load();
     },
     evaluateTime(order) {
@@ -236,9 +245,7 @@ export default {
               type: "success",
               message: "取消订单成功",
             });
-            this.tableData=[];
-            this.currentPage = 1;
-            this.load()
+            this.pullRefresh()
           } else {
             this.$message({
               type: "error",
@@ -256,9 +263,7 @@ export default {
               type: "success",
               message: "收货成功",
             });
-            this.tableData=[];
-            this.currentPage = 1;
-            this.load()
+            this.pullRefresh()
           } else {
             this.$message({
               type: "error",
@@ -276,9 +281,7 @@ export default {
               type: "success",
               message: "退货成功",
             });
-            this.tableData = [];
-            this.currentPage = 1;
-            this.load()
+            this.pullRefresh()
           } else {
             this.$message({
               type: "error",
@@ -347,6 +350,16 @@ export default {
       this.form.Gvalue = 0;
       this.form.Mvalue = 0;
       this.form.textarea = ""
+    },
+    //下拉刷新
+    pullRefresh(){
+      this.tableData=[];
+      this.currentPage = 1;
+      this.form = {};
+      this.searchText = "";
+      this.finished = false;
+      this.refreshLoading = false;
+      this.load();
     }
   }
 }

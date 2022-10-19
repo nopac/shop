@@ -1,56 +1,71 @@
 <template>
-  <div class="Contain">
-    <div class="opeBoard">
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
-    <div class="searchBoard">
+  <div><!--class="Contain"-->
+<!--        <div class="opeBoard">
+          <van-button type="primary" @click="refresh_bt">刷新</van-button>
+        </div>-->
+    <div><!--class="searchBoard"-->
       <van-cell-group inset>
         <van-field
             v-model="searchText"
             center
             clearable
-            placeholder="输入订单号">
+            placeholder="输入商品名">
           <template #button>
             <van-button size="small" type="primary" @click="search">查询</van-button>
           </template>
         </van-field>
       </van-cell-group>
     </div>
-    <div class="displayBoard">
-      <van-list
-          v-model:loading="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="load"
-          loading-text="加载中"
-      >
-        <van-card
-            v-for="order in tableData"
-            :num="order.number"
-            :price="order.price"
-            :title="order.gname"
-            :thumb="order.picture"
+    <div ><!--class="displayBoard"-->
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="load"
+            loading-text="加载中"
         >
-          <template #tags>
-            <div style="margin-top: 3%;margin-bottom: 3%">
-              <div>
-                <van-tag plain>{{ order.uid }}</van-tag>
+          <van-card
+              v-for="order in tableData"
+              :num="order.number"
+              :price="order.price"
+              :title="order.gname"
+              :thumb="order.picture"
+          >
+            <template #tags>
+              <div style="margin-top: 3%;margin-bottom: 3%">
+                <div>
+                  <van-tag plain>{{ order.uid }}</van-tag>
+                </div>
+                <div :style="'color:'+order.tag_color">
+                  <van-tag plain>{{ tags(order) }}</van-tag>
+                </div>
               </div>
-              <div :style="'color:'+order.tag_color">
-                <van-tag plain>{{ tags(order) }}</van-tag>
+            </template>
+            <template #footer>
+              <div style="width: 72%;margin-left: auto">
+                <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
+                <van-button size="small" @click="agreeMerchant(order)">通过</van-button>
+                <van-button size="small" @click="refuseBack(order)">拒绝</van-button>
               </div>
-            </div>
-          </template>
-          <template #footer>
-            <div style="width: 72%;margin-left: auto">
-              <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
-              <van-button size="small" @click="agreeMerchant(order)">通过</van-button>
-              <van-button size="small" @click="refuseBack(order)">拒绝</van-button>
-            </div>
-          </template>
-        </van-card>
+            </template>
+          </van-card>
 
-      </van-list>
+        </van-list>
+      </van-pull-refresh>
+      <van-dialog
+          title="请填写拒绝退货原因"
+          v-model:show="reasonVisible"
+          :before-close="refuse"
+          teleport="body"
+      >
+        <van-field v-model="ordersForm.mnote" placeholder="填写拒绝退货原因" size="large"/>
+      </van-dialog>
       <!--      <el-table :data="tableData"
                       border
                       stripe
@@ -107,35 +122,36 @@
     </div>
     <!--    分页-->
     <!--    商家填写拒绝退货理由弹窗-->
-    <div>
-      <el-dialog
-          v-model="reasonVisible"
-          title="拒绝理由"
-          :visible.sync="reasonVisible"
-          width="700px"
-          style="margin-left: 20px"
-      >
-        <el-form class="userForm demo-form-inline" :model="ordersForm" :inline="true">
-          <el-form-item label="拒绝理由为:" label-width="100px">
-            <el-input type="textarea" style="width: 400px" v-model="ordersForm.mnote"/>
-          </el-form-item>
+    <!--    <div>
+          <el-dialog
+              v-model="reasonVisible"
+              title="拒绝理由"
+              :visible.sync="reasonVisible"
+              width="700px"
+              style="margin-left: 20px"
+          >
+            <el-form class="userForm demo-form-inline" :model="ordersForm" :inline="true">
+              <el-form-item label="拒绝理由为:" label-width="100px">
+                <el-input type="textarea" style="width: 400px" v-model="ordersForm.mnote"/>
+              </el-form-item>
 
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="reasonVisible = false">取消</el-button>
-        <el-button type="primary" @click="refuse">提交</el-button>
-      </span>
-        </template>
-      </el-dialog>
-    </div>
+            </el-form>
+            <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="reasonVisible = false">取消</el-button>
+            <el-button type="primary" @click="refuse">提交</el-button>
+          </span>
+            </template>
+          </el-dialog>
+        </div>-->
   </div>
 </template>
 
 <script>
 import ShopOutExpand from "@/components/shop/ShopOutExpand";
-import request from "@/util/request";
 import axios from "axios";
+import {Dialog} from "vant";
+import request from "@/util/request";
 
 export default {
   name: "BackEXM",
@@ -159,6 +175,7 @@ export default {
       loading: false,
       finished: false,
       baseUrl: "http://39.105.220.225:8081/shop/files/download/",
+      refreshLoading:false
     }
   },
   created() {
@@ -174,7 +191,7 @@ export default {
         status: -1
       }
       let uid = localStorage.getItem("uid")
-      request.get("http://39.105.220.225:8081/shop/orders/merchant" , {
+      request.get("http://39.105.220.225:8081/shop/orders/merchant", {
         params: params
       }).then(res => {
         console.log(res);
@@ -197,49 +214,63 @@ export default {
         })
       })
       this.currentPage++;
-      this.loading=false;
+      this.loading = false;
     },
-    agreeMerchant(row) {
-      this.ordersForm = row
-      request.put("http://39.105.220.225:8081/shop/exmO/agreeBack", this.ordersForm)
-          .then(res => {
-            if (res.code === '0') {
-              console.log(res);
-              this.ordersForm = {}
-              this.tableData = [];
-              this.currentPage = 1;
-              this.load()
-            } else {
-              this.$message({
-                type: "error",
-                message: res.msg,
-              })
-            }
-
-          })
+    //下拉刷新
+    pullRefresh() {
+      this.searchText = ""
+      this.currentPage = 1;
+      this.finished = false;
+      this.tableData = [];
+      this.refreshLoading = false;
+      this.load();
     },
-    refuseBack(row) {
+    agreeMerchant(order) {
+      Dialog.confirm({
+        message: "确认同意退货？"
+      }).then(() => {
+        request.put("http://39.105.220.225:8081/shop/orders", JSON.parse(JSON.stringify(order)), {
+          params: {status: -2}
+        }).then(res => {
+          if (res.code === '0') {
+            this.$message({
+              type: "success",
+              message: "同意退货成功！",
+            });
+            this.pullRefresh()
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg,
+            })
+          }
+        })
+      }).catch(()=>{})
+    },
+    refuseBack(order) {
       this.reasonVisible = true;
-      this.ordersForm = row
+      this.ordersForm = order;
     },
     refuse() {
-      console.log("reason:" + this.ordersForm.mnote)
-      request.put("http://39.105.220.225:8081/shop/exmO/reject", this.ordersForm)
-          .then(res => {
-            if (res.code === '0') {
-              console.log("reject:" + res);
-              this.ordersForm = {}
-              this.reasonVisible = false;
-              this.tableData = [];
-              this.currentPage = 1;
-              this.load()
-            } else {
-              this.$message({
-                type: "error",
-                message: res.msg,
-              })
-            }
+      this.ordersForm = JSON.parse(JSON.stringify(this.ordersForm));
+      request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm, {
+        params: {status: -3}
+      }).then(res => {
+        if (res.code === '0') {
+          //console.log("reject:" + res);
+          this.$message({
+            type: "success",
+            message: "已拒绝退货！",
+          });
+          this.pullRefresh();
+          this.reasonVisible = false
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg,
           })
+        }
+      })
     },
     tags(order) {
       switch (order.status) {
@@ -276,13 +307,14 @@ export default {
           return "全部";
         }
       }
+    },
+    search() {
+      this.tableData = [];
+      this.currentPage = 1;
+      this.finished = false;
+      this.load();
     }
-  },
-  search() {
-    this.tableData = [];
-    this.currentPage = 1;
-    this.load();
-  },
+  }
 }
 </script>
 
