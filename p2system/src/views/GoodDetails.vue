@@ -82,6 +82,7 @@ export default {
   data(){
     return {
       gid: this.$route.query.gid,
+      uid: -1,
       num: 1,
       good: {},
       reviewData:[],
@@ -95,10 +96,11 @@ export default {
   },
   methods: {
     searchGood(){
+      // this.uid = window.localStorage.getItem("uid")
       axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
         params:{
           Gid: this.gid,
-          Uid: window.localStorage.getItem("uid")
+          Uid: this.uid
         }
       }).then(res => {
         console.log(res.data)
