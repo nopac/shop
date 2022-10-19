@@ -53,13 +53,10 @@
                 </template>
               </el-image>
               <div style="padding: 14px">
-                <span>{{ value.gname }}</span>
-
-                <span style="float: right;font-size: 20px">￥{{ value.price }}</span>
-
+                <span class="goodsName" style="font-size: 20px;">{{ value.gname }}</span>
                 <div class="bottom">
-                  <span style="color: gray;font-size: 10px">好评率：{{ value.likeRate }}</span>
-                  <el-button text class="button" style="color: red;padding: 0" @click="addCart(value)">加入购物车</el-button>
+                  <span style="float: left;font-size: 15px;color: #fe4d19">￥{{ value.price }}</span>
+                  <span style="float: right;color: gray;font-size: 10px">好评率：{{ value.likeRate }}</span>
                 </div>
               </div>
             </el-card>
@@ -287,6 +284,13 @@ export default {
   width: 10rem;
   margin: auto;
   padding: 20px
+}
+.goodsName{
+  white-space: nowrap;  /*强制span不换行*/
+  display: inline-block;  /*将span当做块级元素对待*/
+  width: 3.5rem;  /*限制宽度*/
+  overflow: hidden;  /*超出宽度部分隐藏*/
+  text-overflow: ellipsis;  /*超出部分以点号代替*/
 }
 .m-2{
   float: left;
