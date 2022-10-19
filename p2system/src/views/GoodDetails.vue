@@ -96,7 +96,10 @@ export default {
   },
   methods: {
     searchGood(){
-      // this.uid = window.localStorage.getItem("uid")
+      let u = window.localStorage.getItem("uid")
+      if(u !== null) {
+        this.uid = u
+      }
       axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
         params:{
           Gid: this.gid,
