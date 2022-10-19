@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div id="MerchantExpand">
     <el-descriptions border>
       <el-descriptions-item

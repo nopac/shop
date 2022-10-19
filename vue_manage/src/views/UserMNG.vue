@@ -103,18 +103,18 @@
 <!--        </el-table-column>-->
 <!--      </el-table>-->
 <!--    </div>-->
-<!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+<!--&lt;!&ndash;    分页&ndash;&gt;-->
+<!--    <div style="margin: 10px">-->
+<!--      <el-pagination-->
+<!--          @size-change="handleSizeChange"-->
+<!--          @current-change="handleCurrentChange"-->
+<!--          :current-page="currentPage"-->
+<!--          :page-sizes="[5, 10, 20]"-->
+<!--          :page-size="pageSize"-->
+<!--          layout="total, sizes, prev, pager, next, jumper"-->
+<!--          :total="total">-->
+<!--      </el-pagination>-->
+<!--    </div>-->
 <!--    新增用户弹窗-->
     <div>
       <el-dialog
@@ -186,6 +186,12 @@ export default {
       isDelete:false,
       DataList:[],
       tableData : [],
+      loading: false,
+      finished: false,
+      options:[
+        { text: 'ID ', value: "uid" },
+        { text: '姓名', value: "uname" },
+      ],
       userForm:{},
 
     }
@@ -216,6 +222,8 @@ export default {
             e.sex = String(e.sex)
           }
         })//过滤null
+            this.finished = true
+            this.end = "共" + this.tableData.length + "条数据，已加载完毕"
       })
     },
     searchName(){
