@@ -138,11 +138,19 @@
                 placeholder="商品价格"
                 :rules="[{ required: true, message: '请填写商品价格' }]"
             />
-            <van-field name="switch" label="是否可议价">
-              <template #input>
-                <van-switch v-model="goodsForm.bargain" size="20"/>
+
+<!--            <van-field name="switch" label="是否可议价">-->
+<!--              <template #input>-->
+<!--                <van-switch v-model="buttomClose" size="20"/>-->
+<!--              </template>-->
+<!--            </van-field>-->
+
+            <van-cell center title="是否可议价">
+              <template #right-icon>
+                <van-switch v-model="this.buttomClose" size="24" />
               </template>
-            </van-field>
+            </van-cell>
+
             <van-field name="stepper" label="库存">
               <template #input>
                 <van-stepper v-model="goodsForm.storage"/>
@@ -328,6 +336,7 @@ export default {
       DataList: [],
       tableData: [],
       goodsForm: {},
+      buttomClose: true,
       deleteid: "",
       deleteMessage: "",
       baseUrl: "http://39.105.220.225:8081/shop/files/download/",
@@ -377,8 +386,9 @@ export default {
       this.goodsDialogTitle = "新增商品"
     },
     editUser(row) {
+      this.buttomClose = row.bargain
       this.goodsForm = JSON.parse(JSON.stringify(row));
-      console.log(this.goodsForm)
+      console.log("buttom测试结果"+ this.buttomClose)
       this.addGoodsVisible = true;
       this.operate = "updateUser"
       this.goodsDialogTitle = "编辑商品"
@@ -391,6 +401,9 @@ export default {
       }
     },
     updateUser() {
+      this.goodsForm.bargain = this.buttomClose
+      this.buttomClose = false
+      console.log("修改测试"+this.goodsForm.bargain)
       request.put("http://39.105.220.225:8081/shop/goods", this.goodsForm).then(res => {
         // console.log(res)
         if (res.code === '0') {
@@ -409,6 +422,9 @@ export default {
       })
     },
     saveUser() {
+      this.goodsForm.bargain = this.buttomClose
+      this.buttomClose = false
+      console.log("添加测试"+this.goodsForm.bargain)
       this.goodsForm.status = 3
       request.post("http://39.105.220.225:8081/shop/goods", this.goodsForm).then(res => {
         console.log(res)

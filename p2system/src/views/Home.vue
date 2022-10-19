@@ -27,8 +27,8 @@
     </div>
     <div class="listBoard">
       <van-list
-          v-model = "loading"
-          :finished="finished"
+          v-model:loading= "this.loading"
+          v-model:finished="finished"
           finished-text="没有更多了"
           @load="onLoad"
           error-text="加载失败，请重试！"
@@ -90,9 +90,9 @@ export default {
   },
   data(){
     return{
-      total: 0,
+      total: 1,
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 5,
       search: "",
       totalData: [],
       tempList: [],
@@ -121,15 +121,16 @@ export default {
     }
   },
   created() {
-    this.onLoad();
+    this.createList();
   },
   methods:{
     refreshPage(){
       this.currentPage=1
+      this.finished=false
       this.onLoad();
     },
     onLoad(){
-      console.log("get:page"+this.currentPage)
+      this.currentPage = this.currentPage+1
       axios.get("http://39.105.220.225:8081/shop/goods", {
         params:{
           pageNum: this.currentPage,
@@ -142,17 +143,16 @@ export default {
             if(res.data.code === "0"){
               console.log("res:")
               console.log(res)
-              this.loading = false
-              // alert(res.data.data.pages)//共几页
-              if(this.currentPage>res.data.data.pages){
+
+              if(this.currentPage> this.total){
                 console.log("无更多内容")
                 this.finished = true
-              }
-              else{
+              }else{
+                //加载数据
                 this.tempList = res.data.data.records
                 console.log("tempList:")
                 console.log(this.tempList)
-                this.total = res.data.data.total
+                this.total = res.data.data.pages
                 this.tempList.forEach((item,index)=>{
                   item.picture = this.baseURL+item.picture;
                   let lR = item.likeRate;
@@ -164,17 +164,72 @@ export default {
                 })
                 console.log("totalData:")
                 console.log(this.totalData)
-                // alert(this.tempList[0].gid)
-                this.currentPage = this.currentPage+1
-                console.log("currentPage"+this.currentPage)
+
               }
+
             }else{
               this.$message({
                 type:"error",
                 message: res.data.msg,
               })
             }
+        })
+        .finally(()=>{
+          this.loading = false
+        })
+      // .catch((error)=>{
+      //   if (error.response) {
+      //     console.log(error.response.data);
+      //     console.log(error.response.status);
+      //     console.log(error.response.headers);
+      //   } else if (error.request) {
+      //     console.log(error.request);
+      //   } else {
+      //     console.log('Error', error.message);
+      //   }
+      //   console.log(error.config);
+      // })
 
+    },
+    createList(){
+      console.log("createList"+this.currentPage)
+      axios.get("http://39.105.220.225:8081/shop/goods", {
+        params:{
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          search: this.search,
+          sort: this.value,
+        }
+      })
+      .then(res => {
+      if(res.data.code === "0"){
+        console.log("res:")
+        console.log(res)
+        this.tempList = res.data.data.records
+        console.log("tempList:")
+        console.log(this.tempList)
+        this.total = res.data.data.pages
+        this.tempList.forEach((item,index)=>{
+          item.picture = this.baseURL+item.picture;
+          let lR = item.likeRate;
+          //好评率保留两位小数点
+          lR = parseFloat(lR).toFixed(2)
+          item.likeRate = lR
+          this.totalData.push(item)
+        })
+        console.log("totalData:")
+        console.log(this.totalData)
+
+        }else{
+          this.$message({
+            type:"error",
+            message: res.data.msg,
+          })
+        }
+
+      })
+      .finally(()=>{
+            console.log("create finish")
           })
       // .catch((error)=>{
       //   if (error.response) {
@@ -188,6 +243,7 @@ export default {
       //   }
       //   console.log(error.config);
       // })
+
     },
     selectChange(val){
       this.refreshPage()
@@ -220,10 +276,6 @@ export default {
       this.$router.push({name:'goodDetailsLayout', query: {gid: value.gid}});
     }
   },
-
-  computed:{
-
-  }
 }
 
 </script>

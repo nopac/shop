@@ -53,23 +53,23 @@
             <van-col span="6">
               <div>身份证:</div>
             </van-col>
-            <van-col>
-              <van-image
-                  style="width: 200px;height: 200px"
-                  :src="this.baseUrl+item.identity">
-                <!--                :src="this.baseURL+item.identity"-->
-              </van-image>
-            </van-col>
+<!--            <van-col>-->
+<!--              <van-image-->
+<!--                  style="width: 200px;height: 200px"-->
+<!--                  :src="item.identity">-->
+<!--                &lt;!&ndash;                :src="this.baseURL+item.identity"&ndash;&gt;-->
+<!--              </van-image>-->
+<!--            </van-col>-->
           </van-row>
           <van-row>
             <van-col span="6">营业执照:</van-col>
-            <van-col>
-              <van-image
-                  style="width: 200px;height: 200px"
-                  :src="this.baseUrl+item.license">
-                <!--                :src="this.baseURL+item.identity"-->
-              </van-image>
-            </van-col>
+<!--            <van-col>-->
+<!--              <van-image-->
+<!--                  style="width: 200px;height: 200px"-->
+<!--                  :src="item.license">-->
+<!--                &lt;!&ndash;                :src="this.baseURL+item.identity"&ndash;&gt;-->
+<!--              </van-image>-->
+<!--            </van-col>-->
           </van-row>
           <van-row>
             <van-col :offset="8" span="8">
@@ -291,6 +291,7 @@ export default {
                 }
               }//过滤null
               e.iconColor = 'grey'
+              e.license = "http://39.105.220.225:8081/shop/files/download/" + e.license
             })
             this.finished = true
             this.end = "共" + this.tableData.length + "条数据，已加载完毕"

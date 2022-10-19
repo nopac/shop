@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
-import {Button, Form, Field, CellGroup, NavBar,List,Dialog,Tag,Card} from 'vant'
+import {Button, Form, Field, CellGroup, NavBar,List,Dialog,Tag,Card,Image as VanImage,Search,Switch,Stepper,Uploader  } from 'vant'
 import 'element-plus/dist/index.css'
 import '@/assets/css/global.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
@@ -15,7 +15,6 @@ import {Col, Row} from 'vant';
 import {ActionSheet} from 'vant';
 import {Tabbar, TabbarItem} from 'vant';
 import { Popover } from 'vant';
-
 
 createApp(App).use(store)
     .use(Col)
@@ -32,13 +31,18 @@ createApp(App).use(store)
     .use(Field)
     .use(CellGroup)
     .use(NavBar)
+    .use(Stepper)
+    .use(Uploader)
     .use(DropdownMenu)
     .use(DropdownItem)
     .use(Icon)
+    .use(Search)
     .use(Tag)
     .use(List)
     .use(Card)
+    .use(Switch)
     .use(Dialog)
+    .use(VanImage)
     .use(ElementPlus, {
-      locale: zhCn,
+        locale: zhCn,
     }).mount('#app')
