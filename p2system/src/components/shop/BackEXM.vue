@@ -170,10 +170,11 @@ export default {
         pageNumber: this.currentPage,
         pageSize: this.pageSize,
         searchText: this.searchText,
-        type: this.searchType
+        mid: window.localStorage.getItem("uid"),
+        status: -1
       }
       let uid = localStorage.getItem("uid")
-      request.get("http://39.105.220.225:8081/shop/exmO/getBack/" + uid, {
+      request.get("http://39.105.220.225:8081/shop/orders/merchant" , {
         params: params
       }).then(res => {
         console.log(res);

@@ -45,7 +45,7 @@
             <div style="width: 72%;margin-left: auto">
               <div style="font-size: larger;float: left;padding: 5px">实付款 ￥{{ order.sum }}</div>
               <van-button size="small" v-if="order.status === 2" @click="review(order)">立即评价</van-button>
-              <van-button size="small" @click="deleteGoods(order.gid)">删除</van-button>
+              <van-button size="small" @click="isDelete(order)">删除</van-button>
             </div>
           </template>
         </van-card>
@@ -109,43 +109,32 @@
               </el-table-column>
             </el-table>
           </div>-->
-      <!--    分页-->
-      <!--    <div style="margin: 10px">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[5, 10, 20]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-            </el-pagination>
-          </div>-->
-
-      <!--    <el-dialog title="评价" v-model="dialogFormVisible">
-            <el-form :model="form">
-              <el-form-item label="用户评价" :label-width="formLabelWidth">
-                <el-rate
-                    v-model="form.Uvalue"
-                    :colors="colors">
-                </el-rate>
-              </el-form-item>
-              <el-form-item label="评价描述" :label-width="formLabelWidth">
-                <el-input
-                    type="textarea"
-                    :rows="5"
-                    placeholder="请输入评价内容"
-                    style="margin-right: 50px"
-                    v-model="form.textarea">
-                </el-input>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="submit">确 定</el-button>
-            </div>
-          </el-dialog>-->
     </div>
+    <van-popup v-model:show="dialogFormVisible"
+               round
+               position="bottom"
+               teleport="body"
+               :style="{ height: '50%' }"
+               @close="cancel">
+      <van-form v-model="form">
+        <van-field label="用户评价">
+          <template #input>
+            <van-rate v-model="form.Uvalue"/>
+          </template>
+        </van-field>
+        <van-field
+            v-model="form.textarea"
+            label="评价描述"
+            type="textarea"
+            placeholder="请输入评价"
+        />
+        <div style="margin: 16px;">
+          <van-button round block type="primary" @click="submit">
+            提交
+          </van-button>
+        </div>
+      </van-form>
+    </van-popup>
   </div>
 </template>
 
@@ -153,6 +142,7 @@
 import ShopOutExpand from "@/components/shop/ShopOutExpand";
 import request from "@/util/request";
 import axios from "axios";
+import {Dialog} from "vant";
 
 export default {
   name: "ShopOrderMNG",
@@ -215,15 +205,14 @@ export default {
         pageNumber: this.currentPage,
         pageSize: this.pageSize,
         searchText: this.searchText,
-        type: this.searchType
+        mid: window.localStorage.getItem("uid"),
+        status: 5
       }
-      request.get("http://39.105.220.225:8081/shop/exmG/findFor/" + this.userForm.uid, {
+      request.get("http://39.105.220.225:8081/shop/orders/merchant" , {
         params: params
       }).then(res => {
-        console.log(res);
         this.total = res.data.total;
         let newDate = res.data.records;
-        console.log("第" + this.currentPage + "次获得数据", res);
         if (newDate === undefined || newDate.length <= 0) {
           this.finished = true;
           return;
@@ -239,14 +228,6 @@ export default {
             this.tableData.push(item)
           })
         })
-        /*newDate.forEach(e => {
-          for (var key in e) {
-            if (e[key] === "null") {
-              delete e[key];
-            }
-            e.bargain = String(e.bargain)
-          }
-        })//过滤null*/
       })
       this.currentPage++;
       this.loading=false;
@@ -254,6 +235,7 @@ export default {
     search() {
       this.tableData = [];
       this.currentPage = 1;
+      this.finished = false;
       this.load();
     },
     editOrder(row) {
@@ -261,30 +243,35 @@ export default {
       console.log(this.ordersForm)
       this.addGoodsVisible = true;
     },
-    deleteGoods(id) {
-      request.delete("http://39.105.220.225:8081/shop/goods/" + id).then(res => {
-
-        if (res.code === '0') {
-          this.$message({
-            type: "success",
-            message: "删除成功",
-          });
-          this.tableData = [];
-          this.currentPage = 1;
-          this.load()
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
-        }
-      })
+    isDelete(order){
+      console.log("order",order);
+      Dialog.confirm({
+        message:"确认删除？"
+      }).then(()=>{
+        request.delete("http://39.105.220.225:8081/shop/orders/" + order.oid).then(res => {
+          if (res.code === '0') {
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            });
+            this.tableData = [];
+            this.currentPage = 1;
+            this.finished = false;
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg,
+            })
+          }
+        })
+      }).catch()
     },
     review(order) {
       this.dialogFormVisible = true
       this.order = order;
     },
 
+    //提交评价
     submit() {
       if (this.form.Gvalue === 0 || this.form.Mvalue === 0) {
         this.$message({
@@ -310,6 +297,11 @@ export default {
       });
       this.dialogFormVisible = false;
       this.form = {};
+    },
+    //取消评价
+    cancel(){
+      this.form.Uvalue = null;
+      this.form.textarea = ""
     },
     tags(order) {
       switch (order.status) {

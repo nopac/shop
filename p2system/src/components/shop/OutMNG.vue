@@ -51,6 +51,14 @@
         </van-card>
 
       </van-list>
+      <van-dialog
+          title="请填写快递单号"
+          v-model:show="fillIDVisible"
+          :before-close="outGoods"
+          teleport="body"
+      >
+        <van-field v-model="ordersForm.deliverID" placeholder="填写订单号" size="large"/>
+      </van-dialog>
       <!--      <el-table :data="tableData"
                       border
                       stripe
@@ -122,28 +130,27 @@
           </el-pagination>
         </div>-->
     <!--    填写快递单号弹窗-->
-    <div>
-      <el-dialog
-          v-model="fillIDVisible"
-          title="请填写发货商品快递单号"
-          :visible.sync="addGoodsVisible"
-          width="700px"
-          style="margin-left: 20px"
-      >
-        <el-form class="userForm" :model="ordersForm">
-          <el-form-item class="formItem" label="订单号" label-width="100px">
-            <el-input style="width: 120px" v-model="ordersForm.deliverID"/>
-          </el-form-item>
+    <!--    <div>
+          <el-dialog
+              v-model="fillIDVisible"
+              title="请填写发货商品快递单号"
+              width="700px"
+              style="margin-left: 20px"
+          >
+            <el-form class="userForm" :model="ordersForm">
+              <el-form-item class="formItem" label="订单号" label-width="100px">
+                <el-input style="width: 120px" v-model="ordersForm.deliverID"/>
+              </el-form-item>
 
-        </el-form>
-        <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="fillIDVisible = false">取消</el-button>
-        <el-button type="primary" @click="outGoods">提交</el-button>
-      </span>
-        </template>
-      </el-dialog>
-    </div>
+            </el-form>
+            <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="fillIDVisible = false">取消</el-button>
+            <el-button type="primary" @click="outGoods">提交</el-button>
+          </span>
+            </template>
+          </el-dialog>
+        </div>-->
   </div>
 </template>
 
@@ -151,6 +158,7 @@
 import ShopOutExpand from "@/components/shop/ShopOutExpand";
 import request from "@/util/request";
 import axios from "axios";
+import {Dialog} from "vant";
 
 export default {
   name: 'OutMNG',
@@ -204,9 +212,10 @@ export default {
         pageNumber: this.currentPage,
         pageSize: this.pageSize,
         searchText: this.searchText,
-        type: this.searchType
+        mid: window.localStorage.getItem("uid"),
+        status: 0
       }
-      request.get("http://39.105.220.225:8081/shop/exmO/getOut/" + this.userForm.uid, {
+      request.get("http://39.105.220.225:8081/shop/orders/merchant", {
         params: params
       }).then(res => {
         console.log(res);
@@ -231,29 +240,32 @@ export default {
       this.currentPage++;
       this.loading = false;
     },
-    selectOut(row) {
-      this.ordersForm = JSON.parse(JSON.stringify(row));
-      console.log(this.ordersForm)
+    selectOut(order) {
+      this.ordersForm = JSON.parse(JSON.stringify(order));
+      //console.log(this.ordersForm)
       this.fillIDVisible = true;
     },
-    outGoods() {
-      request.put("http://39.105.220.225:8081/shop/exmO/out/", this.ordersForm)
-          .then(res => {
-            if (res.code === '0') {
-              console.log(res);
-              this.ordersForm = {}
-              this.fillIDVisible = false;
-              this.tableData = [];
-              this.currentPage = 1;
-              this.load()
-            } else {
-              this.$message({
-                type: "error",
-                message: res.msg,
-              })
-            }
+    //发货
+    outGoods(action) {
+      if (action === "confirm") {
+        request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm, {status:1})
+            .then(res => {
+              if (res.code === '0') {
+                console.log(res);
+                this.ordersForm = {}
+                this.tableData = [];
+                this.currentPage = 1;
+                this.finished = false;
+                this.load()
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.msg,
+                })
+              }
 
-          })
+            })
+      }
     },
     updateDeliderID() {
       request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm).then(res => {
