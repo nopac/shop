@@ -403,16 +403,10 @@ export default {
       this.goodsForm.picture = this.goodsForm.picture.slice(47,this.goodsForm.picture.length)
       request.put("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "更新成功",
-          });
+          Toast.success("更新成功")
           this.addGoodsVisible = false;
         }else{
-          this.$message({
-            type:"error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
         this.tableData = []
         this.load();
@@ -432,16 +426,10 @@ export default {
       request.delete("http://39.105.220.225:8081/shop/goods/"+id).then(res=>{
 
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "删除成功",
-          });
+          Toast.success("删除成功")
           this.load()
         }else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },

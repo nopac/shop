@@ -105,6 +105,7 @@
 <script>
 import request from "@/util/request";
 import {toRaw} from "@vue/reactivity";
+import {Toast} from "vant";
 export default {
   name: "UserInfo",
   components:{
@@ -139,10 +140,7 @@ export default {
       console.log("getUser"+this.userForm.uname)
       request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
         if(res.code !== '0'){
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }else {
           console.log(res)
           this.userForm = res.data
@@ -177,10 +175,7 @@ export default {
       this.recordForm.account = this.userForm.account
       request.post("http://39.105.220.225:8081/shop/account",this.recordForm).then(res=>{
         if(res.code !== '0'){
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }else {
           console.log(res)
           this.investVisible=false;
@@ -207,16 +202,10 @@ export default {
       request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "更新成功",
-          });
+          Toast.success("更新成功")
           this.addUserVisible = false;
         }else{
-          this.$message({
-            type:"error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
         this.load();
       })
@@ -255,16 +244,10 @@ export default {
       request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "申请成功，请等待审核通过",
-          });
+          Toast.success("申请成功，请等待审核通过")
           this.beMctVisible = false;
         }else{
-          this.$message({
-            type:"error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
         this.load();
       })

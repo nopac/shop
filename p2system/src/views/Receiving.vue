@@ -113,16 +113,10 @@ export default {
       axios.put("http://39.105.220.225:8081/shop/orders?status=2",order).then(res=>{
 
         if(res.data.code === '0'){
-          this.$message({
-            type:"success",
-            message: "收货成功",
-          });
+          Toast.success("收货成功")
           this.load()
         }else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },

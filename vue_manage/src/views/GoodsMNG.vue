@@ -413,10 +413,7 @@ export default {
           });
           this.addGoodsVisible = false;
         } else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
         this.load();
       })
@@ -441,10 +438,7 @@ export default {
           });
           this.load()
         } else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },

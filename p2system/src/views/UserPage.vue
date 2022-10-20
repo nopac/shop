@@ -53,51 +53,58 @@
       </div>
     </van-popup>
 
-      <div class="popupBottom">
-          <el-dialog
-              v-model="beMctVisible"
-              title="申请成为商家"
-              :visible.sync="beMctVisible"
-              width="350px"
-              style="margin-left: 20px"
-          >
-            <el-form class="userForm" :inline="true" style="text-align: center">
-              <el-form-item class="el-form-item input-area">
-                <span class="license_label">营业执照:&emsp;</span>
+    <div class="popupBoard">
+      <van-popup v-model:show="beMctVisible"
+         closeable style="width: 9rem;"
+         class="dialogBoard">
+        <van-form @submit="updateImgPath">
+          <van-cell-group inset style="margin-top: 0.2rem;" title="申请成为商家">
+            <van-field name="uploader" label="上传营业执照">
+              <template #input>
                 <el-upload
                     :action=licenseUrl
                     :on-success="licenseUploadSuccess"
                     :limit="1"
                 >
-                  <el-button type="primary">点击上传营业执照</el-button>
+                  <van-button type="primary" plain>
+                      点击上传营业执照
+                  </van-button>
                 </el-upload>
-              </el-form-item>
-              <el-form-item class="el-form-item input-area">
-                <span class="license_label">身份证照片:&emsp;</span>
+              </template>
+            </van-field>
+            <van-field name="uploader" label="上传身份证">
+              <template #input>
                 <el-upload
                     :action=idUrl
                     :on-success="idUploadSuccess"
                     :limit="1"
                 >
-                  <el-button type="primary">点击上传身份证照片</el-button>
+                  <van-button type="primary" plain>
+                    点击上传身份证照片
+                  </van-button>
                 </el-upload>
-              </el-form-item>
-            </el-form>
-            <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="cancelSubmit">取消</el-button>
-        <el-button type="primary" @click="updateImgPath">提交</el-button>
-      </span>
-            </template>
-          </el-dialog>
-        </div>
+              </template>
+            </van-field>
+          </van-cell-group>
+
+          <div class="opeBoard">
+            <van-button
+                round block type="success"
+                class="opeButton"
+                style="width: 3rem"
+                native-type="submit">提交
+            </van-button>
+          </div>
+        </van-form>
+      </van-popup>
+    </div>
 
   </div>
 </div>
 </template>
 
 <script>
-import {Cell,Image,Icon,Button,Popup,Field,NumberKeyboard} from 'vant'
+import {Cell, Image, Icon, Button, Popup, Field, NumberKeyboard, Uploader, Toast} from 'vant'
 import request from "@/util/request";
 import axios from "axios";
 export default {
@@ -110,6 +117,7 @@ export default {
     [Popup.name] : Popup,
     [Field.name] : Field,
     [NumberKeyboard.name] : NumberKeyboard,
+    [Uploader.name] : Uploader,
   },
   data(){
     return{
@@ -151,10 +159,7 @@ export default {
     load(){
       request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
         if(res.code !== '0'){
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }else {
           console.log(res)
           this.userForm = res.data
@@ -190,22 +195,12 @@ export default {
       axios.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         console.log(res.data);
         if(res.data.code === '0'){
-          this.$message({
-            type:"success",
-            message: "申请成功，请等待审核通过",
-          });
+          Toast.success("申请成功，请等待审核通过")
           this.beMctVisible = false;
         }else{
-          this.$message({
-            type:"error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
         this.load();
-      })
-      request.put("/user",this.userForm).then(res=>{
-        // console.log(res)
-
       })
     },
     submit(){
@@ -215,10 +210,7 @@ export default {
       this.recordForm.account = this.userForm.account
       request.post("http://39.105.220.225:8081/shop/account",this.recordForm).then(res=>{
         if(res.code !== '0'){
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast(res.msg)
         }else {
           console.log(res)
           this.investVisible=false;
@@ -234,10 +226,7 @@ export default {
       request.get("http://39.105.220.225:8081/shop/merchant/isMerchant/"+this.userForm.uid).then(res=>{
         console.log("code="+res.code)
         if(res.code === '0'){
-          this.$message({
-            type: "error",
-            message: "此用户已经是商家了"
-          })
+          Toast.fail("此用户已经是商家了")
         }else {
           this.load()
           this.beMctVisible = true
@@ -253,15 +242,21 @@ export default {
     showInvest(){
       if (this.hasLogin)
         this.investVisible = true
-    },showRecords(){
+    },
+    showRecords(){
       if (this.hasLogin)
         this.$router.push("/record")
-    },showGoods(){
+    },
+    showGoods(){
+      if (this.hasLogin)
       this.$router.push("/mngG")
 
-    },showBeMerchant(){
-      this.beMctVisible = true
-    },outLogin(){
+    },
+    showBeMerchant(){
+      if (this.hasLogin)
+        this.beMctVisible = true
+    },
+    outLogin(){
       this.hasLogin=false
       this.user=[]
       localStorage.clear();
@@ -336,5 +331,19 @@ export default {
 }
 .searchBoard {
   margin: 10px 0;
+}
+.dialogBoard{
+  width: 9rem;
+}
+.opeBoard{
+
+}
+.opeButton{
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.2rem;
+}
+.popupBoard{
+  width: 9rem;
 }
 </style>

@@ -209,16 +209,10 @@ export default {
       request.delete("http://39.105.220.225:8081/shop/exmU/"+id).then(res=>{
 
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "删除成功",
-          });
+          Toast.success("删除成功")
           this.load()
         }else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },

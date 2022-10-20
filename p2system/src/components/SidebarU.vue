@@ -114,10 +114,7 @@ export default {
       console.log("getUser"+this.userForm.uname)
       request.get("http://39.105.220.225:8081/shop/user/getInfo/"+this.userForm.uname).then(res=>{
         if(res.code !== '0'){
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }else {
           console.log(res)
           this.userForm = res.data

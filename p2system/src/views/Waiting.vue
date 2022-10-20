@@ -58,6 +58,7 @@
 import axios from "axios";
 import deliveryExpand from "@/components/DeliveryExpand";
 import {Delete} from "@element-plus/icons-vue";
+import {Toast} from "vant";
 
 export default {
   name: "Waiting",
@@ -123,16 +124,10 @@ export default {
       axios.delete("http://39.105.220.225:8081/shop/orders/"+id).then(res=>{
 
         if(res.data.code === '0'){
-          this.$message({
-            type:"success",
-            message: "取消订单成功",
-          });
+          Toast.success("取消订单成功")
           this.load()
         }else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },

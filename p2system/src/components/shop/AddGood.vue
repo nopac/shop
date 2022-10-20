@@ -131,6 +131,7 @@
 <script>
 import { ShoppingCart,Picture } from '@element-plus/icons-vue'
 import request from "@/util/request";
+import {Toast} from "vant";
 export default {
   name: "AddGood",
   components: {
@@ -183,16 +184,10 @@ export default {
       request.put("http://39.105.220.225:8081/shop/user",this.userForm).then(res=>{
         // console.log(res)
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "申请成功，请等待审核通过",
-          });
+          Toast.success("申请成功，请等待审核通过")
           this.beMctVisible = false;
         }else{
-          this.$message({
-            type:"error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
         this.load();
       })

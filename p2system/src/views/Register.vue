@@ -111,7 +111,7 @@
 import ConfirmCode from "@/components/ConfirmCode";
 import {View,CircleCloseFilled} from "@element-plus/icons-vue";
 import request from "@/util/request";
-import {NavBar,Icon} from 'vant'
+import {NavBar, Icon, Toast} from 'vant'
 export default {
   name: "Register",
   components:{
@@ -191,20 +191,14 @@ export default {
       }
       request.post("http://localhost:8081/shop/user",this.userForm).then(res =>{
         if(res.code === '0'){
-          this.$message({
-            type:"success",
-            message: "注册成功",
-          });
+          Toast.success("注册成功")
           this.$router.push("/login")
         }else if(res.code === '-2'){
           this.unameUnique=false
           this.uname_message="此用户名已存在"
         }
         else{
-          this.$message({
-            type:"error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
       //判断邮箱格式

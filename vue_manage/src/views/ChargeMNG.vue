@@ -316,10 +316,7 @@ export default {
           });
           this.load()
         } else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },

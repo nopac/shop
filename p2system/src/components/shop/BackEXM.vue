@@ -265,10 +265,7 @@ export default {
           this.pullRefresh();
           this.reasonVisible = false
         } else {
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
+          Toast.fail(res.msg)
         }
       })
     },
