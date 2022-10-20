@@ -87,6 +87,7 @@ export default {
   },
   data(){
     return{
+      isSelectChange: false,
       total: 1,
       currentPage: 1,
       pageSize: 5,
@@ -122,7 +123,7 @@ export default {
   },
   methods:{
     refreshPage(){
-      this.currentPage=1
+      this.currentPage=0
       this.finished=false
       this.onLoad();
     },
@@ -156,7 +157,10 @@ export default {
                   //好评率保留两位小数点
                   lR = parseFloat(lR).toFixed(2)
                   item.likeRate = lR
-
+                  if(this.isSelectChange) {
+                    this.totalData = []
+                    this.isSelectChange = false
+                  }
                   this.totalData.push(item)
                 })
                 console.log("totalData:")
@@ -243,6 +247,7 @@ export default {
 
     },
     selectChange(val){
+      this.isSelectChange = true
       this.refreshPage()
       console.log(val);
     },
