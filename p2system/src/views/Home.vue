@@ -19,7 +19,7 @@
               clearable
               placeholder="请输入想要搜索的商品名称">
             <template #button>
-              <van-button size="small" type="primary" @click="loadGoods">查询</van-button>
+              <van-button size="small" type="primary" @click="refreshPage">查询</van-button>
             </template>
           </van-field>
         </van-col>
@@ -124,10 +124,13 @@ export default {
     refreshPage(){
       this.currentPage=1
       this.finished=false
-      this.onLoad();
+      this.totalData = []
+      this.tempList = []
+      this.createList();
     },
     onLoad(){
       this.currentPage = this.currentPage+1
+      alert()
       axios.get("http://39.105.220.225:8081/shop/goods", {
         params:{
           pageNum: this.currentPage,
@@ -135,8 +138,7 @@ export default {
           search: this.search,
           sort: this.value,
         }
-      })
-          .then(res => {
+      }).then(res => {
             if(res.data.code === "0"){
               console.log("res:")
               console.log(res)
@@ -161,9 +163,7 @@ export default {
                 })
                 console.log("totalData:")
                 console.log(this.totalData)
-
               }
-
             }else{
               this.$message({
                 type:"error",
@@ -174,19 +174,6 @@ export default {
         .finally(()=>{
           this.loading = false
         })
-      // .catch((error)=>{
-      //   if (error.response) {
-      //     console.log(error.response.data);
-      //     console.log(error.response.status);
-      //     console.log(error.response.headers);
-      //   } else if (error.request) {
-      //     console.log(error.request);
-      //   } else {
-      //     console.log('Error', error.message);
-      //   }
-      //   console.log(error.config);
-      // })
-
     },
     createList(){
       console.log("createList"+this.currentPage)
@@ -228,18 +215,6 @@ export default {
       .finally(()=>{
             console.log("create finish")
           })
-      // .catch((error)=>{
-      //   if (error.response) {
-      //     console.log(error.response.data);
-      //     console.log(error.response.status);
-      //     console.log(error.response.headers);
-      //   } else if (error.request) {
-      //     console.log(error.request);
-      //   } else {
-      //     console.log('Error', error.message);
-      //   }
-      //   console.log(error.config);
-      // })
 
     },
     selectChange(val){
