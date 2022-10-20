@@ -4,16 +4,15 @@
     <van-image class="headImg" :src="require('../assets/img/head.png')"/>
     <div  v-if="hasLogin===false" style="font-size: 45px">
       <span class="headName" @click="toLogin" style="text-decoration: underline;">{{defaultName}}</span></div>
-
     <span class="headName" v-if="hasLogin===true">{{userForm.uname}}</span>
   </div>
   <div class="contentContainer">
-    <div class="cellContainer" disabled="hasLogin">
-      <van-cell center  icon="home-o" class="cell" is-link
+    <div class="cellContainer" :disabled="hasLogin === false">
+      <van-cell center  icon="home-o" class="cell" is-link :clickable="hasLogin"
                 @click="showMyInfo">我的信息</van-cell>
     </div>
     <div class="cellContainer">
-      <van-cell center icon="balance-o" class="cell" title="我的余额"
+      <van-cell center icon="balance-o" class="cell" title="我的余额"  :clickable="hasLogin"
                 @click="showInvest">
         <template #title>
           <span class="accountNum">我的余额：
@@ -24,17 +23,18 @@
       </van-cell>
     </div>
     <div class="cellContainer">
-      <van-cell center icon="balance-list-o" class="cell" is-link
+      <van-cell center icon="balance-list-o" class="cell" is-link  :clickable="hasLogin" :disabled="!hasLogin"
                 @click="showRecords">收支记录
       </van-cell>
     </div>
-    <div class="cellContainer" v-if="isMerchant===true">
+    <div class="cellContainer" v-if="isMerchant===true && hasLogin === true">
       <van-cell center disabled="{{isMerchant}}"
                 icon="send-gift-o" class="cell" is-link
                 @click="showGoods" >商品管理
       </van-cell>
     </div>
-    <div class="cellContainer" v-if="isMerchant===false">
+    <div class="cellContainer"
+         v-if="isMerchant===false&&hasLogin === true">
       <van-cell center class="cell"
                 @click="clickBeMct">成为商家
       </van-cell>
@@ -247,12 +247,15 @@ export default {
 
     },
     showMyInfo(){
-      this.$router.push("/infoU")
+      if (this.hasLogin)
+        this.$router.push("/infoU")
     },
     showInvest(){
-      this.investVisible = true
+      if (this.hasLogin)
+        this.investVisible = true
     },showRecords(){
-      this.$router.push("/record")
+      if (this.hasLogin)
+        this.$router.push("/record")
     },showGoods(){
       this.$router.push("/mngG")
 
