@@ -131,7 +131,7 @@ export default {
     },
     onLoad(){
       this.currentPage = this.currentPage+1
-      alert()
+      // alert()
       axios.get("http://39.105.220.225:8081/shop/goods", {
         params:{
           pageNum: this.currentPage,

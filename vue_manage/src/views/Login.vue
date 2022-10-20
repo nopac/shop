@@ -23,7 +23,7 @@
       <van-button round block type="primary" native-type="submit" @click="Login">
         提交
       </van-button>
-      <van-button round block native-type="submit" @click="toRegister">
+      <van-button round block @click="toRegister">
         注册
       </van-button>
     </div>
@@ -60,6 +60,7 @@
   import jwtDecode from "jwt-decode"
   import request from "@/util/request";
   import axios from "axios";
+  import {Notify} from "vant";
 
   export default {
         name: 'Login',
@@ -92,7 +93,8 @@
             })
           },
           toRegister(){
-            this.$router.push("/register")
+            // this.$router.push("/register")
+            Notify({ type: 'primary', message: '请联系管理员!' });
           },
         }
     }
