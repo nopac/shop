@@ -10,39 +10,8 @@
       </div>
     </van-cell>
   </div>
-<!--  <div>-->
-<!--    <el-card-->
-<!--        v-for="(value, o, index) in tableData"-->
-<!--        :key="o"-->
-<!--        :offset="index > 0 ? tableData.length : 0"-->
-<!--        style="width: 100%;margin-top: 10px;padding: 0">-->
-<!--      <div style="display: flex;justify-content: flex-start;">-->
-<!--        <el-image class="imageArea"-->
-<!--                  style="flex: 0 0 35%"-->
-<!--                  :src="value.picture">-->
-<!--          <template #error>-->
-<!--            <div class="image-slot" style="text-align: center;">-->
-<!--              图片未上传-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-image>-->
-<!--        <div style="flex: 0 0 50%">-->
-<!--          <span style="font-size: 25px">{{ value.gname }}</span>-->
 
-<!--        </div>-->
-<!--        <div style="flex: 1">-->
-<!--          <p style="float: right;">￥{{ value.price }}</p>-->
-<!--          <p style="float: right;color: #bbb;font-size: 20px;">x{{ value.number }}</p>-->
-
-<!--        </div>-->
-<!--      </div>-->
-
-<!--    </el-card>-->
-
-<!--  </div>-->
-  <div class="displayBoard">
-
-
+  <div>
     <van-cell v-for="(item, index) in tableData" :key="item">
 
       <van-card
@@ -73,7 +42,7 @@
 
 <script>
 import '@/assets/css/Purchase.css'
-import { ActionBar, ActionBarIcon, ActionBarButton } from 'vant';
+import { ActionBar, ActionBarIcon, ActionBarButton,ContactCard } from 'vant';
 
 import axios from "axios";
 export default {
@@ -82,6 +51,7 @@ export default {
     [ActionBar.name]: ActionBar,
     [ActionBarIcon.name]: ActionBarIcon,
     [ActionBarButton.name]: ActionBarButton,
+    [ContactCard.name]: ContactCard,
   },
   data(){
     return{
