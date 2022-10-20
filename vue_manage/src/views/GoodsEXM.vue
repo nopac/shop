@@ -13,22 +13,59 @@
       <el-button type="primary" style="margin: 0 5px"
                  @click="search">查询</el-button>
     </div>-->
-    <div class="searchBoard">
+<!--    <div class="searchBoard">-->
 
-      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">
-        <el-option label="ID" value="gid"></el-option>
-        <el-option label="商品名" value="gname"></el-option>
-      </el-select>
-      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 70%" clearable>
-      </el-input>
-      <van-row justify="end">
-        <van-col span="3">
-          <el-button type="primary" style="margin: 0 5px"
-                     @click="search">查询</el-button>
+<!--      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">-->
+<!--        <el-option label="ID" value="gid"></el-option>-->
+<!--        <el-option label="商品名" value="gname"></el-option>-->
+<!--      </el-select>-->
+<!--      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 70%" clearable>-->
+<!--      </el-input>-->
+<!--      <van-row justify="end">-->
+<!--        <van-col span="3">-->
+<!--          <el-button type="primary" style="margin: 0 5px"-->
+<!--                     @click="search">查询</el-button>-->
+<!--        </van-col>-->
+<!--        <van-col span="3">-->
+<!--          <el-button type="primary" @click="load">刷新</el-button>-->
+<!--        </van-col>-->
+<!--      </van-row>-->
+<!--    </div>-->
+
+    <div class="opeBoard">
+      <van-row>
+        <van-col offset="0" span="13">
+          <div class="searchBoard">
+
+            <van-search
+                v-model="searchText"
+                show-action
+                label="名称"
+                placeholder="请输入搜索关键词"
+                @search="search"
+            >
+              <template #action>
+
+              </template>
+            </van-search>
+            <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
+            <!--      <el-button type="primary" style="margin: 0 5px"-->
+            <!--                 @click="searchName">查询-->
+            <!--      </el-button>-->
+          </div>
+        </van-col>
+        <van-col span="5">
+          <van-dropdown-menu>
+            <van-dropdown-item v-model="searchSelect" :options="options"></van-dropdown-item>
+          </van-dropdown-menu>
         </van-col>
         <van-col span="3">
-          <el-button type="primary" @click="load">刷新</el-button>
+          <van-button type="primary" size="mini" @click="search">搜索</van-button>
         </van-col>
+        <van-col :offset="0">
+          <van-button type="primary" size="mini" @click="load">刷新</van-button>
+        </van-col>
+
       </van-row>
     </div>
 
@@ -67,21 +104,25 @@
             <span v-if="scope.row.status === 4" style="color: darkred;">已下架</span>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" class="fixedOpe" width="180px">
+        <el-table-column fixed="right" label="操作" class="fixedOpe" width="130px">
           <template #default="scope" >
-            <el-button text @click="agreeGoods(scope.row)" type="primary" plain v-if="scope.row.status !== 4">通过</el-button>
-            <el-button text @click="refuseGoods(scope.row)" type="danger" v-if="scope.row.status !== 4">拒绝</el-button>
-            <el-popconfirm title="确认删除？" @confirm="deleteGoods(scope.row.gid)">
-              <template #reference>
-                <van-icon name="delete-o" size="32px"/>
-                <!--<el-icon
-                    @mouseover="deleteToRed(scope.row)"
-                    @mouseout="deleteToGrey(scope.row)"
-                    :style="{color:scope.row.iconColor}"
-                    class="deleteIcon"
-                    slot="suffix"><Delete /></el-icon>-->
-              </template>
-            </el-popconfirm>
+            <van-button @click="agreeGoods(scope.row)" size="mini" type="primary">通过</van-button>
+            <van-button @click="refuseGoods(scope.row)" size="mini" type="warning">拒绝</van-button>
+            <van-button @click="goDelete(scope.row)" size="mini" type="danger">删除</van-button>
+
+<!--            <el-button text @click="agreeGoods(scope.row)" type="primary" plain v-if="scope.row.status !== 4">通过</el-button>-->
+<!--            <el-button text @click="refuseGoods(scope.row)" type="danger" v-if="scope.row.status !== 4">拒绝</el-button>-->
+<!--            <el-popconfirm title="确认删除？" @confirm="deleteGoods(scope.row.gid)">-->
+<!--              <template #reference>-->
+<!--                <van-icon name="delete-o" size="32px"/>-->
+<!--                &lt;!&ndash;<el-icon-->
+<!--                    @mouseover="deleteToRed(scope.row)"-->
+<!--                    @mouseout="deleteToGrey(scope.row)"-->
+<!--                    :style="{color:scope.row.iconColor}"-->
+<!--                    class="deleteIcon"-->
+<!--                    slot="suffix"><Delete /></el-icon>&ndash;&gt;-->
+<!--              </template>-->
+<!--            </el-popconfirm>-->
           </template>
         </el-table-column>
       </el-table>
@@ -100,6 +141,8 @@
     </div>
 
   </div>
+  <van-dialog v-model:show="isDelete" :message="deleteMessage" @confirm="deleteGoods" show-cancel-button>
+  </van-dialog>
 </template>
 
 <script>
@@ -117,11 +160,17 @@ export default {
   },
   data(){
     return {
+      options:[
+        { text: 'ID ', value: "gid" },
+        { text: '商品名', value: "gname" },
+      ],
+      isDelete: false,
       statusSelect: "",
       searchText: "",
+      deleteMessage: "",
       searchSelect: "gname",
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 10,
       DataList:[],
       tableData : [      ],
@@ -196,9 +245,14 @@ export default {
         this.load();
       })
     },
-    deleteGoods(id){
-      console.log(id);
-      request.delete("http://39.105.220.225:8081/shop/exmG/"+id).then(res=>{
+    goDelete(row) {
+      this.isDelete = true
+      this.goodsForm = row
+      this.deleteMessage = "是否删除ID为:" + row.gid + "的" + row.gname +"?"
+    },
+    deleteGoods(){
+      // console.log(id);
+      request.delete("http://39.105.220.225:8081/shop/exmG/"+this.goodsForm.gid).then(res=>{
         if(res.code === '0'){
           Toast.success("删除成功")
           this.load()
@@ -206,6 +260,7 @@ export default {
           Toast.fail(res.msg)
         }
       })
+      this.isDelete = true
     },
     handleSizeChange(val) {//改变每页的显示条数
       this.pageSize = val;
