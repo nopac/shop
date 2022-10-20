@@ -2,32 +2,40 @@
   <div class="GoodsMNG">
     <div class="opeBoard">
       <van-row>
-        <van-col span="11">
-          <van-button type="primary" @click="addUser">新增</van-button>
+        <van-col offset="0" span="15">
+          <div class="searchBoard">
+
+            <van-search
+                v-model="searchText"
+                show-action
+                label="名称"
+                placeholder="请输入搜索关键词"
+                @search="searchName"
+            >
+              <template #action>
+<!--                <div @click="searchName">搜索</div>-->
+<!--                <van-button type="primary" size="small" @click="searchName">搜索</van-button>-->
+              </template>
+            </van-search>
+            <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
+            <!--      <el-button type="primary" style="margin: 0 5px"-->
+            <!--                 @click="searchName">查询-->
+            <!--      </el-button>-->
+          </div>
         </van-col>
-        <van-col :offset="1">
-          <van-button type="primary" @click="load">刷新</van-button>
+        <van-col span="3">
+          <van-button type="primary" size="mini" @click="searchName">搜索</van-button>
         </van-col>
+        <van-col span="3">
+          <van-button type="primary" size="mini" @click="addUser" lay>新增</van-button>
+        </van-col>
+        <van-col :offset="0">
+          <van-button type="primary" size="mini" @click="load">刷新</van-button>
+        </van-col>
+
       </van-row>
     </div>
-    <div class="searchBoard">
 
-      <van-search
-          v-model="searchText"
-          show-action
-          label="名称"
-          placeholder="请输入搜索关键词"
-          @search="searchName"
-      >
-        <template #action>
-          <div @click="searchName">搜索</div>
-        </template>
-      </van-search>
-      <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
-      <!--      <el-button type="primary" style="margin: 0 5px"-->
-      <!--                 @click="searchName">查询-->
-      <!--      </el-button>-->
-    </div>
 
     <div>
       <van-card
@@ -94,8 +102,8 @@
                   <div>商品状态：</div>
                 </van-col>
                 <van-col>
-                  <van-tag type="success" v-show="order.status==4">发布</van-tag>
-                  <van-tag type="warning" v-show="order.status==1">下架</van-tag>
+                  <van-tag type="success" v-show="order.status==1">在售</van-tag>
+                  <van-tag type="warning" v-show="order.status==4">下架</van-tag>
                   <van-tag type="danger" v-show="order.status==3">审核中</van-tag>
                 </van-col>
               </van-row>
