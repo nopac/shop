@@ -1,71 +1,59 @@
 <template>
   <div class="MerchantMNG">
 
-<!--    <div class="searchBoard">-->
-<!--      <van-search-->
-<!--          v-model="searchText"-->
-<!--          show-action-->
-<!--          placeholder="请输入搜索关键词"-->
-<!--          @search="search"-->
-<!--      >-->
-<!--        <template #left>-->
-<!--          <van-dropdown-menu>-->
-<!--            <van-dropdown-item v-model="searchSelect" :options="options"></van-dropdown-item>-->
-<!--          </van-dropdown-menu>-->
-<!--        </template>-->
-<!--        <template #action>-->
-<!--          <div @click="search">搜索</div>-->
-<!--          <van-button type="primary" size="mini" @click="load">刷新</van-button>-->
-<!--&lt;!&ndash;          <div class="opeBoard">&ndash;&gt;-->
-<!--&lt;!&ndash;            &ndash;&gt;-->
-<!--&lt;!&ndash;          </div>&ndash;&gt;-->
-<!--        </template>-->
-<!--      </van-search>-->
-<!--      &lt;!&ndash;      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">&ndash;&gt;-->
-<!--      &lt;!&ndash;        <el-option label="ID" value="uid"></el-option>&ndash;&gt;-->
-<!--      &lt;!&ndash;        <el-option label="姓名" value="uname"></el-option>&ndash;&gt;-->
-<!--      &lt;!&ndash;      </el-select>&ndash;&gt;-->
-<!--      &lt;!&ndash;      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 20%" clearable>&ndash;&gt;-->
-<!--      &lt;!&ndash;      </el-input>&ndash;&gt;-->
-<!--      &lt;!&ndash;      <el-button type="primary" style="margin: 0 5px"&ndash;&gt;-->
-<!--      &lt;!&ndash;                 @click="search">查询&ndash;&gt;-->
-<!--      &lt;!&ndash;      </el-button>&ndash;&gt;-->
-<!--    </div>-->
+    <!--    <div class="searchBoard">-->
+    <!--      <van-search-->
+    <!--          v-model="searchText"-->
+    <!--          show-action-->
+    <!--          placeholder="请输入搜索关键词"-->
+    <!--          @search="search"-->
+    <!--      >-->
+    <!--        <template #left>-->
+    <!--          <van-dropdown-menu>-->
+    <!--            <van-dropdown-item v-model="searchSelect" :options="options"></van-dropdown-item>-->
+    <!--          </van-dropdown-menu>-->
+    <!--        </template>-->
+    <!--        <template #action>-->
+    <!--          <div @click="search">搜索</div>-->
+    <!--          <van-button type="primary" size="mini" @click="load">刷新</van-button>-->
+    <!--&lt;!&ndash;          <div class="opeBoard">&ndash;&gt;-->
+    <!--&lt;!&ndash;            &ndash;&gt;-->
+    <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+    <!--        </template>-->
+    <!--      </van-search>-->
+    <!--      &lt;!&ndash;      <el-select v-model="searchSelect" slot="prepend" placeholder="请选择搜索对象" style="width: 100px">&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <el-option label="ID" value="uid"></el-option>&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <el-option label="姓名" value="uname"></el-option>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      </el-select>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      <el-input v-model="searchText" placeholder="输入搜索内容" style="width: 20%" clearable>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      </el-input>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      <el-button type="primary" style="margin: 0 5px"&ndash;&gt;-->
+    <!--      &lt;!&ndash;                 @click="search">查询&ndash;&gt;-->
+    <!--      &lt;!&ndash;      </el-button>&ndash;&gt;-->
+    <!--    </div>-->
 
-    <div class="opeBoard">
+    <div>
       <van-row>
-        <van-col offset="0" span="14">
-          <div class="searchBoard">
-
-            <van-search
-                v-model="searchText"
-                show-action
-                label="名称"
-                placeholder="请输入搜索关键词"
-                @search="search"
-            >
-              <template #action>
-
-              </template>
-            </van-search>
-            <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
-            <!--      <el-button type="primary" style="margin: 0 5px"-->
-            <!--                 @click="searchName">查询-->
-            <!--      </el-button>-->
-          </div>
+        <van-col span="18">
+          <van-search
+              v-model="searchText"
+              show-action
+              placeholder="请输入搜索关键词"
+              @search="search"
+          >
+            <template #left>
+              <van-dropdown-menu>
+                <van-dropdown-item v-model="searchSelect" :options="options"></van-dropdown-item>
+              </van-dropdown-menu>
+            </template>
+            <template #action>
+              <div @click="search">搜索</div>
+            </template>
+          </van-search>
         </van-col>
-        <van-col span="4">
-          <van-dropdown-menu>
-            <van-dropdown-item v-model="searchSelect" :options="options"></van-dropdown-item>
-          </van-dropdown-menu>
+        <van-col offset="1">
+          <van-button type="primary" @click="load">刷新</van-button>
         </van-col>
-        <van-col span="3">
-          <van-button type="primary" size="mini" @click="search">搜索</van-button>
-        </van-col>
-        <van-col :offset="0">
-          <van-button type="primary" size="mini" @click="load">刷新</van-button>
-        </van-col>
-
       </van-row>
     </div>
 
@@ -86,33 +74,33 @@
             <van-col span="8">商家等级: {{ item.grade }}</van-col>
             <van-col span="8">好评率: {{ item.mlikeRate }}</van-col>
           </van-row>
-<!--          <van-row>-->
-<!--            <van-col span="6">-->
-<!--              <div>身份证:</div>-->
-<!--            </van-col>-->
-<!--            <van-col>-->
-<!--              <van-image-->
-<!--                  style="width: 100px;height: 100px"-->
-<!--                  :src="item.identity">-->
-<!--                &lt;!&ndash;                :src="this.baseURL+item.identity"&ndash;&gt;-->
-<!--              </van-image>-->
-<!--            </van-col>-->
-<!--          </van-row>-->
-<!--          <van-row>-->
-<!--            <van-col span="6">营业执照:</van-col>-->
-<!--            <van-col>-->
-<!--              <van-image-->
-<!--                  style="width: 100px;height: 100px"-->
-<!--                  :src="item.license">-->
-<!--                &lt;!&ndash;                :src="this.baseURL+item.identity"&ndash;&gt;-->
-<!--              </van-image>-->
-<!--            </van-col>-->
-<!--          </van-row>-->
+          <!--          <van-row>-->
+          <!--            <van-col span="6">-->
+          <!--              <div>身份证:</div>-->
+          <!--            </van-col>-->
+          <!--            <van-col>-->
+          <!--              <van-image-->
+          <!--                  style="width: 100px;height: 100px"-->
+          <!--                  :src="item.identity">-->
+          <!--                &lt;!&ndash;                :src="this.baseURL+item.identity"&ndash;&gt;-->
+          <!--              </van-image>-->
+          <!--            </van-col>-->
+          <!--          </van-row>-->
+          <!--          <van-row>-->
+          <!--            <van-col span="6">营业执照:</van-col>-->
+          <!--            <van-col>-->
+          <!--              <van-image-->
+          <!--                  style="width: 100px;height: 100px"-->
+          <!--                  :src="item.license">-->
+          <!--                &lt;!&ndash;                :src="this.baseURL+item.identity"&ndash;&gt;-->
+          <!--              </van-image>-->
+          <!--            </van-col>-->
+          <!--          </van-row>-->
           <van-row>
-            <van-col :offset="15" span="5">
+            <van-col :offset="12" span="6">
               <van-button type="primary" size="small" @click="changeGrade(item)">调整等级</van-button>
             </van-col>
-            <van-col :offset="0" span="4">
+            <van-col :offset="1" span="4">
               <van-button type="danger" size="small" @click="goDelete(item)">删除</van-button>
             </van-col>
           </van-row>
@@ -271,9 +259,9 @@ export default {
       isDelete: false,
       DataList: [],
       tableData: [],
-      options:[
-        { text: 'ID ', value: "uid" },
-        { text: '姓名', value: "uname" },
+      options: [
+        {text: 'ID ', value: "uid"},
+        {text: '姓名', value: "uname"},
       ],
       gradeMes: "",
       baseUrl: "http://39.105.220.225:8081/shop/files/download/",
