@@ -2,32 +2,40 @@
   <div class="GoodsMNG">
     <div class="opeBoard">
       <van-row>
-        <van-col span="11">
-          <van-button type="primary" @click="addUser">新增</van-button>
+        <van-col offset="0" span="15">
+          <div class="searchBoard">
+
+            <van-search
+                v-model="searchText"
+                show-action
+                label="名称"
+                placeholder="请输入搜索关键词"
+                @search="searchName"
+            >
+              <template #action>
+<!--                <div @click="searchName">搜索</div>-->
+<!--                <van-button type="primary" size="small" @click="searchName">搜索</van-button>-->
+              </template>
+            </van-search>
+            <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
+            <!--      <el-button type="primary" style="margin: 0 5px"-->
+            <!--                 @click="searchName">查询-->
+            <!--      </el-button>-->
+          </div>
         </van-col>
-        <van-col :offset="1">
-          <van-button type="primary" @click="load">刷新</van-button>
+        <van-col span="3">
+          <van-button type="primary" size="mini" @click="searchName">搜索</van-button>
         </van-col>
+        <van-col span="3">
+          <van-button type="primary" size="mini" @click="addUser" lay>新增</van-button>
+        </van-col>
+        <van-col :offset="0">
+          <van-button type="primary" size="mini" @click="load">刷新</van-button>
+        </van-col>
+
       </van-row>
     </div>
-    <div class="searchBoard">
 
-      <van-search
-          v-model="searchText"
-          show-action
-          label="名称"
-          placeholder="请输入搜索关键词"
-          @search="searchName"
-      >
-        <template #action>
-          <div @click="searchName">搜索</div>
-        </template>
-      </van-search>
-      <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
-      <!--      <el-button type="primary" style="margin: 0 5px"-->
-      <!--                 @click="searchName">查询-->
-      <!--      </el-button>-->
-    </div>
 
     <div>
       <van-card
@@ -94,8 +102,8 @@
                   <div>商品状态：</div>
                 </van-col>
                 <van-col>
-                  <van-tag type="success" v-show="order.status==4">发布</van-tag>
-                  <van-tag type="warning" v-show="order.status==1">下架</van-tag>
+                  <van-tag type="success" v-show="order.status==1">在售</van-tag>
+                  <van-tag type="warning" v-show="order.status==4">下架</van-tag>
                   <van-tag type="danger" v-show="order.status==3">审核中</van-tag>
                 </van-col>
               </van-row>
@@ -139,11 +147,11 @@
                 :rules="[{ required: true, message: '请填写商品价格' }]"
             />
 
-<!--            <van-field name="switch" label="是否可议价">-->
-<!--              <template #input>-->
-<!--                <van-switch v-model="buttomClose" size="20"/>-->
-<!--              </template>-->
-<!--            </van-field>-->
+            <!--            <van-field name="switch" label="是否可议价">-->
+            <!--              <template #input>-->
+            <!--                <van-switch v-model="buttomClose" size="20"/>-->
+            <!--              </template>-->
+            <!--            </van-field>-->
 
             <van-cell center title="是否可议价">
               <template #right-icon>
@@ -195,18 +203,26 @@
             <!--              <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
             <!--            </el-upload>-->
 
-            <van-uploader
-                v-show="this.operate=='addUser'"
-                v-model="fileList"
-                multiple :max-count="1"
-                :action="'https://jsonplaceholder.typicode.com/posts/'"
-            >
-              <template #tip>
-                <div class="el-upload__tip" style="width: 200px">
-                  jpg/png 文件大小需小于 500KB.
-                </div>
-              </template>
-            </van-uploader>
+            <el-form-item label-width="100px" label="商品图片">
+              <el-upload
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="3"
+                  :on-exceed="handleExceed"
+                  :file-list="fileList"
+              >
+                <el-button type="primary">点击上传商品图片</el-button>
+                <template #tip>
+                  <div class="el-upload__tip" style="width: 200px">
+                    jpg/png 文件大小需小于 500KB.
+                  </div>
+                </template>
+              </el-upload>
+            </el-form-item>
 
             <!--            <el-form-item label-width="100px" label="商品图片">-->
             <!--              <el-upload-->

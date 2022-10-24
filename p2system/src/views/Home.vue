@@ -19,7 +19,7 @@
               clearable
               placeholder="请输入想要搜索的商品名称">
             <template #button>
-              <van-button size="small" type="primary" @click="loadGoods">查询</van-button>
+              <van-button size="small" type="primary" @click="refreshPage">查询</van-button>
             </template>
           </van-field>
         </van-col>
@@ -53,13 +53,10 @@
                 </template>
               </el-image>
               <div style="padding: 14px">
-                <span>{{ value.gname }}</span>
-
-                <span style="float: right;font-size: 20px">￥{{ value.price }}</span>
-
+                <span class="goodsName" style="font-size: 20px;">{{ value.gname }}</span>
                 <div class="bottom">
-                  <span style="color: gray;font-size: 10px">好评率：{{ value.likeRate }}</span>
-                  <el-button text class="button" style="color: red;padding: 0" @click="addCart(value)">加入购物车</el-button>
+                  <span style="float: left;font-size: 15px;color: #fe4d19">￥{{ value.price }}</span>
+                  <span style="float: right;color: gray;font-size: 10px">好评率：{{ value.likeRate }}</span>
                 </div>
               </div>
             </el-card>
@@ -90,6 +87,7 @@ export default {
   },
   data(){
     return{
+      isSelectChange: false,
       total: 1,
       currentPage: 1,
       pageSize: 5,
@@ -125,12 +123,15 @@ export default {
   },
   methods:{
     refreshPage(){
-      this.currentPage=1
+      this.currentPage=0
       this.finished=false
-      this.onLoad();
+      this.totalData = []
+      this.tempList = []
+      this.createList();
     },
     onLoad(){
       this.currentPage = this.currentPage+1
+      // alert()
       axios.get("http://39.105.220.225:8081/shop/goods", {
         params:{
           pageNum: this.currentPage,
@@ -138,8 +139,7 @@ export default {
           search: this.search,
           sort: this.value,
         }
-      })
-          .then(res => {
+      }).then(res => {
             if(res.data.code === "0"){
               console.log("res:")
               console.log(res)
@@ -159,14 +159,15 @@ export default {
                   //好评率保留两位小数点
                   lR = parseFloat(lR).toFixed(2)
                   item.likeRate = lR
-
+                  if(this.isSelectChange) {
+                    this.totalData = []
+                    this.isSelectChange = false
+                  }
                   this.totalData.push(item)
                 })
                 console.log("totalData:")
                 console.log(this.totalData)
-
               }
-
             }else{
               this.$message({
                 type:"error",
@@ -177,19 +178,6 @@ export default {
         .finally(()=>{
           this.loading = false
         })
-      // .catch((error)=>{
-      //   if (error.response) {
-      //     console.log(error.response.data);
-      //     console.log(error.response.status);
-      //     console.log(error.response.headers);
-      //   } else if (error.request) {
-      //     console.log(error.request);
-      //   } else {
-      //     console.log('Error', error.message);
-      //   }
-      //   console.log(error.config);
-      // })
-
     },
     createList(){
       console.log("createList"+this.currentPage)
@@ -231,21 +219,10 @@ export default {
       .finally(()=>{
             console.log("create finish")
           })
-      // .catch((error)=>{
-      //   if (error.response) {
-      //     console.log(error.response.data);
-      //     console.log(error.response.status);
-      //     console.log(error.response.headers);
-      //   } else if (error.request) {
-      //     console.log(error.request);
-      //   } else {
-      //     console.log('Error', error.message);
-      //   }
-      //   console.log(error.config);
-      // })
 
     },
     selectChange(val){
+      this.isSelectChange = true
       this.refreshPage()
       console.log(val);
     },
@@ -287,6 +264,13 @@ export default {
   width: 10rem;
   margin: auto;
   padding: 20px
+}
+.goodsName{
+  white-space: nowrap;  /*强制span不换行*/
+  display: inline-block;  /*将span当做块级元素对待*/
+  width: 3.5rem;  /*限制宽度*/
+  overflow: hidden;  /*超出宽度部分隐藏*/
+  text-overflow: ellipsis;  /*超出部分以点号代替*/
 }
 .m-2{
   float: left;

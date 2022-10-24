@@ -1,79 +1,107 @@
 <template>
   <div class="Register">
-    <img class="main-bkgImg" src="../assets/bkg-4.jpg" />
-    <div class="main-2"></div>
-    <div class="register-bkg"></div>
     <div class="register-area">
-      <div class="register-title">注册</div>
-      <div id="message"></div>
-      <el-form class="userForm" :model="userForm">
-        <el-form-item class="el-form-item input-area">
-          <span class="">姓&emsp;&emsp;名:&emsp;</span>
-          <el-input class="input-cont" v-model="userForm.uname" @blur="judgeName"/>
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">密&emsp;&emsp;码:&emsp;</span>
-          <el-input class="input-cont" type="password" v-model="userForm.upsw" show-password placeholder=""/>
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">确认密码:&emsp;</span>
-          <el-input class="input-cont" type="password" v-model="userForm.confirm" placeholder="请再次输入密码以确认" show-password @blur="judgeConfirm"/>
-          <span style="margin-left: 10px;" :class="confirmVisible"><el-icon :size="20"><CircleCloseFilled style="color: red" /></el-icon></span>
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">年&emsp;&emsp;龄:&emsp;</span><el-input class="input-cont" v-model="userForm.age" />
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">性&emsp;&emsp;别:&emsp;</span>
-          <el-select v-model="userForm.sex" style="width: 120px">
-            <el-option label="男" value="1" />
-            <el-option label="女" value="0" />
-            <el-option label="保密" value="-1"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">手机号码:&emsp;</span>
-          <el-input class="input-cont" v-model="userForm.phone" />
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">邮&emsp;&emsp;箱:&emsp;</span>
-          <el-input class="input-cont" v-model="userForm.email" />
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">所在城市:&emsp;</span>
-          <el-input class="input-cont" v-model="userForm.city" />
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">银行账户:&emsp;</span>
-          <el-input class="input-cont" v-model="userForm.account" />
-        </el-form-item>
-        <el-form-item class="el-form-item input-area">
-          <span class="">身份证号:&emsp;</span>
-          <el-input class="input-cont" v-model="userForm.phone" />
-        </el-form-item>
-        <el-form-item class="el-form-item codeArea">
-          <span class="code_label">验证码 :&emsp;</span>
-          <el-form :inline="true">
-            <el-form-item style="margin-right: 10px">
-              <el-input class="input-code" v-model="inputCode" />
-            </el-form-item>
-            <el-form-item style="margin-right: 10px">
+      <van-nav-bar title="注册" />
+      <van-form @submit="register">
+        <van-cell-group inset class="UserInfo">
+          <!-- 输入任意文本 -->
+          <van-field v-model.trim="userForm.uname" label="用户名"
+                     @blur="judgeName"
+                     @focus="clearError"
+                     :error="uname_error"
+                     :error-message="uname_message"
+                     required >
+            <template #right-icon>
+              <van-icon name="success" v-if="uname_right===true"
+                        color="#07C160"/>
+            </template>
+          </van-field>
+          <!-- 密码-->
+          <van-field v-model="userForm.upsw"
+                     type="password" label="密码"
+                     :rules="[{ required: true, message: '请输入密码' }]"
+                     :error="upsw_error"
+                     :error-message="upsw_message"
+                     required />
+          <!-- 确认密码-->
+          <van-field v-model="userForm.confirm"
+                     type="password" label="确认密码"
+                     :error-message="confirm_message"
+                     @blur="judgeConfirm"
+                     @focus="clearError"
+                     :error="confirm_error"
+                     :rules="[{ required: true, message: '请输入密码' }]"
+                     required >
+            <template #right-icon>
+              <van-icon name="success" v-if="confirm_right===true"
+                        color="#07C160"/>
+            </template>
+          </van-field>
+          <!-- 性别-单选框 -->
+          <van-field name="radio" type="text" label="性别" >
+            <template #input>
+              <van-radio-group v-model="userForm.sex" direction="horizontal">
+                <van-radio name="0">女</van-radio>
+                <van-radio name="1">男</van-radio>
+              </van-radio-group>
+            </template>
+          </van-field>
+          <!-- 身份证 -->
+          <van-field
+              v-model="userForm.identityNumber"
+              required
+              label="身份证号"
+              placeholder="请输入身份证号"
+              :error="identityNumber_error"
+              :error-message="identityNumber_message"
+              :rules="[{ required: true, message: '请输入身份证号' }]"
+          />
+          <!-- 输入银行账户 -->
+          <van-field v-model="userForm.bank" type="email" label="银行账户"  />
+          <!-- 输入收货地址 -->
+          <van-field v-model="userForm.address"  type="email" label="收货地址"
+                     :error="address_error"
+                     :error-message="address_message"
+                     placeholder="请输入收货地址"
+                     :rules="[{ required: true, message: '请输入收货地址' }]"
+                     required/>
+          <!-- 输入验证码 -->
+            <div class="confirmCard">
+              <van-field  class="input-code" v-model="inputCode"
+                          label="验证码 :"
+                          :error="code_error"
+                          :error-message="code_message"
+                          @blur="confirmCode"
+                          @focus="clearError"
+                          placeholder="请输入验证码"
+                          :rules="[{ required: true, message: '请输入验证码' }]"
+                          required>
+                <template #right-icon>
+                  <van-icon name="success"
+                            v-if="code_right===true"
+                            color="#07C160" />
+                </template>
+              </van-field>
               <ConfirmCode class="confirmImg" :changeCode.sync='identifyCode' v-on:changeCode="changeCode"></ConfirmCode>
-            </el-form-item>
-            <el-form-item >
-              <el-button @click="confirmCode" type="text">验证</el-button>
-            </el-form-item>
-          </el-form>
-        </el-form-item>
-      </el-form>
+
+            </div>
+        </van-cell-group>
+
+      </van-form>
       <div class="codeArea">
-
-
-
       </div>
       <div class="opeBoard">
-        <el-button type="primary" @click="register">注册</el-button>
-        <el-button @click="backToLogin">返回登录界面</el-button>
+        <van-button
+            round block type="primary"
+            class="opeButton"
+            @click="register">注册
+        </van-button>
+        <van-button
+            class="opeButton"
+            style="margin-top:5px"
+            round block plain type="primary"
+            @click="backToLogin" >返回登录界面
+        </van-button>
       </div>
     </div>
   </div>
@@ -83,12 +111,15 @@
 import ConfirmCode from "@/components/ConfirmCode";
 import {View,CircleCloseFilled} from "@element-plus/icons-vue";
 import request from "@/util/request";
+import {NavBar,Icon} from 'vant'
 export default {
   name: "Register",
   components:{
     View,
     CircleCloseFilled,
-    ConfirmCode
+    ConfirmCode,
+    [NavBar.name]: NavBar,
+    [Icon.name]: Icon,
   },
   data(){
     return{
@@ -114,7 +145,22 @@ export default {
         likeRate:"",
         MLikeRate:"",
       },
-      confirmVisible: 'confirmError'
+      confirmVisible: 'confirmError',
+      uname_message: '',
+      confirm_message: '',
+      upsw_message: '',
+      identityNumber_message:'',
+      address_message:'',
+      code_message:'',
+      uname_error: false,
+      confirm_error:false,
+      upsw_error: false,
+      identityNumber_error:false,
+      address_error:false,
+      code_error: false,
+      code_right:false,
+      confirm_right:false,
+      uname_right:false,
     }
   },
   computed: {
@@ -124,35 +170,37 @@ export default {
     register(){
       //判断用户名密码非空
       if (this.userForm.uname===""||this.userForm.upsw===""){
-        this.$message({
-          type:"error",
-          message: '用户名和密码不能为空',
-        })
+        this.uname_error=true
+        this.uname_message="用户名不能为空"
+        this.upsw_error=true
+        this.upsw_message="密码不能为空"
         return;
       }
       //二次确认密码与密码一致
       if (this.userForm.upsw !== this.userForm.confirm){
-        this.$message({
-          type:"error",
-          message: '确认密码不一致',
-        })
+        console.log("二次确认不一致")
+        this.confirm_error = true
+        this.confirm_message = "确认密码不一致!"
         return;
       }
       if(this.inputCode !== this.rightCode){
-        this.$message({
-          type:"error",
-          message: '验证码错误',
-        })
+        console.log("验证码错误")
+        this.code_error = true
+        this.code_message = "验证码错误!"
         return;
       }
-      request.post("http://39.105.220.225:8081/shop/user",this.userForm).then(res =>{
+      request.post("http://localhost:8081/shop/user",this.userForm).then(res =>{
         if(res.code === '0'){
           this.$message({
             type:"success",
             message: "注册成功",
           });
           this.$router.push("/login")
-        }else{
+        }else if(res.code === '-2'){
+          this.unameUnique=false
+          this.uname_message="此用户名已存在"
+        }
+        else{
           this.$message({
             type:"error",
             message: res.msg,
@@ -167,93 +215,98 @@ export default {
     },
     judgeConfirm(){
       if (this.userForm.upsw !== this.userForm.confirm){
-        this.confirmVisible='confirmError'
+        console.log("二次确认不一致")
+        this.confirm_right=false
+        this.confirm_message = "确认密码不一致!"
+        return false
       }else{
-        this.confirmVisible='confirmRight'
+        console.log("二次确认一致")
+        this.confirm_right=true
+        this.confirm_message = ''
+        return true
       }
     },
     judgeName(){
-      request.get("http://39.105.220.225:8081/shop/user/judgeName/"+this.userForm.uname).then(res=>{
-        if(res.code !== '0'){
-          this.$message({
-            type: "error",
-            message: res.msg,
-          })
-        }else {
-        }
-      })
+      if (this.userForm.uname){
+        console.log("judge "+this.userForm.uname)
+        request.get("http://39.105.220.225:8081/shop/user/judgeName/"+this.userForm.uname).then(res=>{
+          if(res.code === '-2'){//此用户名已存在、
+            // this.unameUnique=false
+            this.uname_message="此用户名已存在"
+            this.confirm_right=false
+            console.log("此用户名已存在")
+            return false
+          }else {
+            this.uname_right=true
+            console.log(res.code)
+            this.uname_message = ''
+            return true
+          }
+        })
+
+      }else{
+        this.uname_message="请输入用户名"
+        this.confirm_right=false
+        return false
+      }
     },
     confirmCode(){
       if(this.inputCode !== this.rightCode){
-        this.$message({
-          type:"error",
-          message: '验证码错误',
-        })
-        return;
+        console.log("验证码错误")
+        this.code_error = true
+        this.code_right = false
+        this.code_message = "验证码错误!"
+        return false;
       }else{
-        this.$message({
-          type:"success",
-          message: '验证码正确',
-        })
+        console.log("验证码正确")
+        this.code_right = true
+        this.code_error = false
+        return true
       }
     },
     changeCode(val){
       this.rightCode = val;
       console.log("rightCode="+val)
+    },
+    clearError(){
+      this.uname_error= false
+      this.confirm_error=false
+      this.upsw_error= false
+      this.identityNumber_error=false
+      this.address_error=false
+      this.code_error= false
+      this.code_right= false
+      this.confirm_right= false
+      this.uname_right= false
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
-@import "../assets/css/Register-css.css";
-.input-cont{
-  width: 350px;
-  height: 25px;
-}
-.userForm{
-  width: 500px;
-  height: 500px;
-  margin-left: 150px;
-  margin-top: 50px;
-}
 
-.input-area{
-  width: 500px;
-  height: 25px;
-  font-size: 20px;
-  left: 140px;
+.UserInfo{
+  padding: 10px;
+  margin:10px
 }
-.codeArea{
-  width: 500px;
-  height: 25px;
-  font-size: 20px;
-  left: 140px;
-  margin-top: 40px;
+.UserDisplayBoard .MerchantDisplayBoard{
+
 }
-.confirmImg{
-  float: right;
-  /*margin-right: 40px;*/
-}
-.opeBoard{
-  width: 500px;
-  margin-left: 150px;
-  text-align: center;
-  margin-top: 20px;
-}
-.license_label{
-  margin-top: -40px;
-}
-.code_label{
-  margin-top: 0px;
+.confirmCard{
+  display: flex;
 }
 .input-code{
-  width: 100px;
+  width: 6rem;
 }
-.confirmError{
-  visibility: hidden;
+.confirmImg{
+  padding-top: 0.1rem;
+  padding-left: 0.1rem;
 }
-.confirmRight{
-  visibility: hidden;
+.opeBoard{
+}
+.opeButton{
+  width: 8rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

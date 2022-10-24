@@ -9,31 +9,67 @@
       <el-button type="primary" style="margin: 0 5px"
                  @click="searchName">查询</el-button>
     </div>-->
+    <div class="opeBoard">
+      <van-row>
+        <van-col offset="0" span="15">
+          <div class="searchBoard">
 
-    <div class="searchBoard">
-
-      <el-input v-model="searchText" placeholder="输入关键词" style="width: 100%" clearable>
-      </el-input>
-      <van-row justify="end">
-
-        <van-col span="3">
-          <el-button type="primary" style="margin: 0 5px"
-                     @click="searchName">查询</el-button>
+            <van-search
+                v-model="searchText"
+                show-action
+                label="名称"
+                placeholder="请输入搜索关键词"
+                @search="searchName"
+            >
+              <template #action>
+                <!--                <div @click="searchName">搜索</div>-->
+                <!--                <van-button type="primary" size="small" @click="searchName">搜索</van-button>-->
+              </template>
+            </van-search>
+            <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
+            <!--      <el-button type="primary" style="margin: 0 5px"-->
+            <!--                 @click="searchName">查询-->
+            <!--      </el-button>-->
+          </div>
         </van-col>
         <van-col span="3">
-          <el-button type="primary" @click="load">刷新</el-button>
+          <van-button type="primary" size="mini" @click="searchName">搜索</van-button>
         </van-col>
+        <van-col span="3">
+          <van-button type="primary" size="mini" @click="addUser" lay>新增</van-button>
+        </van-col>
+        <van-col :offset="0">
+          <van-button type="primary" size="mini" @click="load">刷新</van-button>
+        </van-col>
+
       </van-row>
-      <van-row justify="end">
-        <van-col span="3">
-          <el-button type="primary"
-                     @click="addUser">新增</el-button>
-        </van-col>
-      </van-row>
-      <!--
-      <van-icon name="delete-o" size="32px"/>
-      -->
     </div>
+
+
+<!--    <div class="searchBoard">-->
+
+<!--      <el-input v-model="searchText" placeholder="输入关键词" style="width: 100%" clearable>-->
+<!--      </el-input>-->
+<!--      <van-row justify="end">-->
+
+<!--        <van-col span="3">-->
+<!--          <el-button type="primary" style="margin: 0 5px"-->
+<!--                     @click="searchName">查询</el-button>-->
+<!--        </van-col>-->
+<!--        <van-col span="3">-->
+<!--          <el-button type="primary" @click="load">刷新</el-button>-->
+<!--        </van-col>-->
+<!--      </van-row>-->
+<!--      <van-row justify="end">-->
+<!--        <van-col span="3">-->
+<!--          <el-button type="primary"-->
+<!--                     @click="addUser">新增</el-button>-->
+<!--        </van-col>-->
+<!--      </van-row>-->
+<!--      &lt;!&ndash;-->
+<!--      <van-icon name="delete-o" size="32px"/>-->
+<!--      &ndash;&gt;-->
+<!--    </div>-->
 
     <div>
       <van-list
@@ -54,11 +90,11 @@
 <!--            <van-button plain type="success"  @click ="goDelete(item)">删除</van-button>-->
           </van-row>
           <van-row>
-            <van-col :offset="8" span="8">
-              <van-button plain type="primary" @click="editUser(item)">编辑</van-button>
+            <van-col :offset="16" span="4">
+              <van-button type="primary" size="small" @click="editUser(item)">编辑</van-button>
             </van-col>
-            <van-col :offset="2" span="6">
-              <van-button plain type="success" @click ="deleteUser(item.uid)">删除</van-button>
+            <van-col :offset="0" span="4">
+              <van-button type="danger" size="small" @click ="deleteUser(item.uid)">删除</van-button>
             </van-col>
           </van-row>
         </van-cell>
@@ -103,18 +139,18 @@
 <!--        </el-table-column>-->
 <!--      </el-table>-->
 <!--    </div>-->
-<!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+<!--&lt;!&ndash;    分页&ndash;&gt;-->
+<!--    <div style="margin: 10px">-->
+<!--      <el-pagination-->
+<!--          @size-change="handleSizeChange"-->
+<!--          @current-change="handleCurrentChange"-->
+<!--          :current-page="currentPage"-->
+<!--          :page-sizes="[5, 10, 20]"-->
+<!--          :page-size="pageSize"-->
+<!--          layout="total, sizes, prev, pager, next, jumper"-->
+<!--          :total="total">-->
+<!--      </el-pagination>-->
+<!--    </div>-->
 <!--    新增用户弹窗-->
     <div>
       <el-dialog
@@ -186,6 +222,12 @@ export default {
       isDelete:false,
       DataList:[],
       tableData : [],
+      loading: false,
+      finished: false,
+      options:[
+        { text: 'ID ', value: "uid" },
+        { text: '姓名', value: "uname" },
+      ],
       userForm:{},
 
     }
@@ -216,6 +258,8 @@ export default {
             e.sex = String(e.sex)
           }
         })//过滤null
+            this.finished = true
+            this.end = "共" + this.tableData.length + "条数据，已加载完毕"
       })
     },
     searchName(){

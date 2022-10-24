@@ -5,8 +5,8 @@
                 style=""
                 :src="good.picture">
         <template #error>
-          <div class="image-slot">
-            <el-icon><Picture /></el-icon>
+          <div class="image-slot" style="text-align: center;">
+            图片未上传
           </div>
         </template>
       </el-image>
@@ -16,27 +16,67 @@
     <div style="width: 100%">
       <p style="margin-top: 0;color: #fe4d19">￥{{good.price}}</p>
       <p style="margin-top: 0;">{{good.gname}}</p>
-      <el-table
-          :data="tableData"
-          stripe
-          :show-header="false"
-      >
-        <el-table-column
-            prop="type"
-            label="类型"
-            min-width="40%"
-            align="center">
-        </el-table-column>
-        <el-table-column
-            prop="information"
-            label="详情"
-            min-width="60%"
-            align="center">
-        </el-table-column>
-      </el-table>
-
+      <el-descriptions border column="3" title="">
+        <el-descriptions-item
+            label="大小"
+            label-align="center"
+            align="center"
+            label-class-name="my-label"
+            class-name="my-content"
+            width="150px">
+          <span>{{ good.size }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="能否议价"
+            label-align="center"
+            align="center"
+            label-class-name="Item"
+            width="150px">
+          <span>{{ this.good.bargain==true? '能' : '否' }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="库存"
+            label-align="center"
+            align="center"
+            label-class-name="Item"
+            width="150px">
+          <span>{{ good.storage }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="成色"
+            label-align="center"
+            align="center"
+            label-class-name="Item"
+            width="150px">
+          <span>{{ good.gcondition }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="销量"
+            label-align="center"
+            align="center"
+            label-class-name="Item"
+            width="150px">
+          <span>{{ good.sale }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="好评率"
+            label-align="center"
+            align="center"
+            label-class-name="Item"
+            width="150px">
+          <span>{{ good.likeRate }}</span>
+        </el-descriptions-item>
+        <el-descriptions-item
+            label="详情信息"
+            label-align="center"
+            align="center"
+            label-class-name="Item"
+            width="450px">
+          <span>{{ good.introduction }}</span>
+        </el-descriptions-item>
+      </el-descriptions>
     </div>
-    <div style="width: 100%">
+    <div style="width: 100%;margin-top: 10px">
       <el-table
           :data="reviewData"
           style="width: 100%">
@@ -82,6 +122,7 @@ export default {
   data(){
     return {
       gid: this.$route.query.gid,
+      uid: -1,
       num: 1,
       good: {},
       reviewData:[],
@@ -95,10 +136,14 @@ export default {
   },
   methods: {
     searchGood(){
+      let u = window.localStorage.getItem("uid")
+      if(u !== null) {
+        this.uid = u
+      }
       axios.get("http://39.105.220.225:8081/shop/goods/goodDetails", {
         params:{
           Gid: this.gid,
-          Uid: window.localStorage.getItem("uid")
+          Uid: this.uid
         }
       }).then(res => {
         console.log(res.data)

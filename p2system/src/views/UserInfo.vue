@@ -1,4 +1,3 @@
-
 <template>
   <div >
     <div class="infoBoard">
@@ -6,80 +5,78 @@
         <!-- <el-avatar class="headImg" :size="100" :src="require('@/assets/'+headSrc+'.jpg')" />
         <div class="headOpt">
         </div> -->
-      </div>
-
-
-  <div>
-
+    </div>
+    <div>
     <van-cell-group inset class="UserInfo">
      <div style="display:flex">
        <van-image class="headImg"  width="75"
                   height="75" :src="require('../assets/img/head.png')"/>
-<div style="margin:5px">
-   <div class="card-header">
-              <span> <b style="font-size:25px">我的账户信息</b></span>
-            </div>
-            <div >
-            <span style="font-size: 20px;"><b style="color:#FF6600;">余额:</b></span>{{userForm.account}} 元
-          </div>
-          <div class="likeRate" >
-            <span style="font-size: 20px;"><b style="color:#FF6600;">积分:</b></span>{{userForm.point}} 分
-          </div>
-  <VanDivider></VanDivider>
+       <div style="margin:5px">
+         <div class="card-header">
+           <span> <b style="font-size:25px">我的账户信息</b></span>
+         </div>
+         <div >
+           <span style="font-size: 20px;">
+             <b style="color:#FF6600;">余额:</b>
+           </span>{{userForm.account}} 元
+         </div>
+         <div class="likeRate" >
+            <span style="font-size: 20px;">
+              <b style="color:#FF6600;">积分:</b>
+            </span>
+           {{userForm.point}} 分
+         </div>
+         <VanDivider></VanDivider>
+       </div>
+     </div>
+        <div>
+          <!-- 输入任意文本 -->
+          <van-field v-model="userForm.uname" label="用户名" readonly />
+          <!-- 密码-->
+          <van-field v-model="userForm.upsw" type="number" label="密码" :disabled="diseditable" />
+          <!-- 允许输入正整数，调起纯数字键盘 -->
+          <!--  <van-field v-model="userForm.sex" type="text" label="性别" disable >-->
+          <!--  </van-field>-->
+          <!-- 输入手机号，调起手机号键盘 -->
+          <van-field v-model="userForm.phone" type="tel" label="手机号" :disabled="diseditable"  />
+          <!-- 输入城市名称 -->
+          <van-field v-model="userForm.city" type="text" label="城市" :disabled="diseditable" />
+          <!-- 输入邮件 -->
+          <van-field v-model="userForm.email" type="email" label="邮箱" :disabled="diseditable" />
+          <!-- 身份证 -->
+          <van-field
+              v-model="userForm.identityNumber"
+              required
+              label="身份证号"
+              placeholder="请输入身份证号:"
+              :disabled="diseditable"
+          />
+          <!-- 输入银行账户 -->
+          <van-field v-model="userForm.bank" type="email" label="银行账户" :disabled="diseditable" />
+          <!-- 输入收货地址 -->
+          <van-field v-model="userForm.address"  type="email" label="收货地址" />
+          <van-button round block type="primary"
+                      native-type="submit" @click="editInfo">
+            编辑
+          </van-button>
+          <van-button style="margin-top:5px" round block type="success"
+                      native-type="submit" @click="saveInfo" >
+            保存
+          </van-button>
         </div>
-</div> 
-
-
-<div>
-</div>
-  <!-- 输入任意文本 -->
-  <van-field v-model="userForm.uname" label="用户名" readonly />
-  <!-- 密码-->
-  <van-field v-model="userForm.upsw" type="number" label="密码" :disabled="diseditable" />
-  <!-- 允许输入正整数，调起纯数字键盘 -->
-<!--  <van-field v-model="userForm.sex" type="text" label="性别" disable >-->
-<!--  </van-field>-->
-  <!-- 输入手机号，调起手机号键盘 -->
-  <van-field v-model="userForm.phone" type="tel" label="手机号" :disabled="diseditable"  />
-  <!-- 输入城市名称 -->
-  <van-field v-model="userForm.city" type="text" label="城市" :disabled="diseditable" />
-  <!-- 输入邮件 -->
-  <van-field v-model="userForm.email" type="email" label="邮箱" :disabled="diseditable" />
-  <!-- 身份证 -->
-  <van-field
-    v-model="userForm.identityNumber"
-    required
-    label="身份证号"
-    placeholder="请输入身份证号:"
-    :disabled="diseditable" 
-  />
-  <!-- 输入邮件 -->
-  <van-field v-model="userForm.bank" type="email" label="银行账户" :disabled="diseditable" />
-  <!-- 输入邮件 -->
-  <van-field v-model="userForm.address"  type="email" label="收货地址" />
-  <van-button round block type="primary" native-type="submit" @click="editInfo">
-        编辑
-      </van-button>
-      <van-button style="margin-top:5px" round block type="success" native-type="submit" @click="saveInfo" >
-        保存
-      </van-button>
-</van-cell-group>
-</div>
-
-      
-     
-      <div class="displayBoard">
-        <van-popup
-  v-model:show="show"
-  round
-  position="bottom"
-  :style="{ height: '30%' }"
-/>
-      </div>
+      </van-cell-group>
     </div>
-
-    <!--    充值弹窗-->
-    <div>
+    <div class="displayBoard">
+<!--        <van-popup-->
+<!--          v-model:show="show"-->
+<!--          round-->
+<!--          position="bottom"-->
+<!--          :style="{ height: '30%' }"-->
+<!--        />-->
+      </div>
+  </div>
+<!--      充值弹窗-->
+  <div>
       <el-dialog
           v-model="investVisible"
           title="充值"
@@ -100,8 +97,7 @@
         </template>
       </el-dialog>
     </div>
-    <!--    成为商家弹窗-->
-
+  <!--    成为商家弹窗-->
 
   <!-- </div> -->
 </template>
