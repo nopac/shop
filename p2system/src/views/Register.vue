@@ -88,21 +88,21 @@
         </van-cell-group>
 
       </van-form>
-      <div class="codeArea">
-      </div>
-      <div class="opeBoard">
-        <van-button
-            round block type="primary"
-            class="opeButton"
-            @click="register">注册
-        </van-button>
-        <van-button
-            class="opeButton"
-            style="margin-top:5px"
-            round block plain type="primary"
-            @click="backToLogin" >返回登录界面
-        </van-button>
-      </div>
+      <div class="codeArea"></div>
+
+    </div>
+    <div class="opeBoard">
+      <van-button
+          round block type="primary"
+          class="opeButton"
+          @click="register">注册
+      </van-button>
+      <van-button
+          class="opeButton"
+          style="margin-top:5px"
+          round block plain type="primary"
+          @click="backToLogin" >返回登录界面
+      </van-button>
     </div>
   </div>
 </template>
@@ -167,6 +167,11 @@ export default {
 
   },
   methods:{
+    created() {
+      this.$nextTick(()=>{
+        this.initCharts();
+      })
+    },
     register(){
       //判断用户名密码非空
       if (this.userForm.uname===""||this.userForm.upsw===""){
@@ -189,11 +194,11 @@ export default {
         this.code_message = "验证码错误!"
         return;
       }
-      request.post("http://localhost:8081/shop/user",this.userForm).then(res =>{
+      request.post("http://39.105.220.225:8081/shop/user",this.userForm).then(res =>{
         if(res.code === '0'){
           this.$message({
             type:"success",
-            message: "注册成功",
+            message: "注册成功,请等待审核!",
           });
           this.$router.push("/login")
         }else if(res.code === '-2'){

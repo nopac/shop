@@ -12,6 +12,7 @@
 
       <!-- 输入密码 -->
       <van-field v-model="goodsForm.type" label="商品类型" />
+
       <van-field
           v-model="goodsForm.introduction"
           label="商品介绍:"
