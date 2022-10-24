@@ -11,7 +11,25 @@
 
 
       <!-- 输入密码 -->
-      <van-field v-model="goodsForm.type" label="商品类型" />
+      <van-field v-model="goodsForm.type" label="商品类型"/>
+      <van-checkbox-group v-model="isChecked" direction="horizontal" max="6">
+        <div>
+          <van-checkbox name="食品" icon-size="15px" style="font-size: 20px">食品</van-checkbox>
+          <van-checkbox name="文具" icon-size="15px" style="font-size: 20px">文具</van-checkbox>
+          <van-checkbox name="图书" icon-size="15px" style="font-size: 20px">图书</van-checkbox>
+          <van-checkbox name="手机" icon-size="15px" style="font-size: 20px">手机</van-checkbox>
+          <van-checkbox name="日用品" icon-size="15px" style="font-size: 20px">日用品</van-checkbox>
+        </div>
+        <div>
+<!--          <van-checkbox name="家具">家具</van-checkbox>-->
+          <van-checkbox name="电脑" icon-size="15px" style="font-size: 20px">电脑</van-checkbox>
+          <van-checkbox name="服装" icon-size="15px" style="font-size: 20px">服装</van-checkbox>
+          <van-checkbox name="数码" icon-size="15px" style="font-size: 20px">数码</van-checkbox>
+          <van-checkbox name="户外" icon-size="15px" style="font-size: 20px">户外</van-checkbox>
+          <van-checkbox name="运动" icon-size="15px" style="font-size: 20px">运动</van-checkbox>
+        </div>
+      </van-checkbox-group>
+
 
       <van-field
           v-model="goodsForm.introduction"
@@ -132,6 +150,7 @@
 <script>
 import { ShoppingCart,Picture } from '@element-plus/icons-vue'
 import request from "@/util/request";
+import {ref} from "@vue/reactivity";
 export default {
   name: "AddGood",
   components: {
@@ -139,6 +158,7 @@ export default {
   },
   data(){
     return {
+      isChecked: ref([]),
       checked: 1,
       gid: this.$route.query.gid,
       num: 1,
@@ -159,6 +179,10 @@ export default {
       } else {
         this.goodsForm.bargain = "false"
       }
+      this.goodsForm.type = this.isChecked
+      this.goodsForm.type.forEach((item)=>{
+        this.goodsForm.type = this.goodsForm.type + item +','
+      })
       this.goodsForm.mid=localStorage.getItem("uid")
       console.log("addGoods:"+this.goodsForm.picture)
       request.post("http://39.105.220.225:8081/shop/goods",this.goodsForm).then(res=>{
@@ -217,5 +241,10 @@ export default {
   .imageArea{
     width: 400px;
     height: 300px;
+  }
+  .check-group{
+    /*--van-checkbox-size: 20px;*/
+    /*height: 10px;*/
+    /*width: 200px;*/
   }
 </style>
