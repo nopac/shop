@@ -302,6 +302,10 @@ export default {
   padding-left: 0.1rem;
 }
 .opeBoard{
+  margin-top: 0.4rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 .opeButton{
   width: 8rem;
