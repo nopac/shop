@@ -16,7 +16,7 @@
                 @click="showInvest">
         <template #title>
           <span class="accountNum">我的余额：
-            <span style="color: #FF6600">{{userForm.account}}元</span>
+            <span style="color: #FF6600" v-if="hasLogin === true">{{userForm.account}}元</span>
           </span>
         </template>
         <van-button type="default" @click="showInvest">充值</van-button>
@@ -258,7 +258,7 @@ export default {
     },
     outLogin(){
       this.hasLogin=false
-      this.user=[]
+      this.userForm=[]
       localStorage.clear();
       this.$router.push("/userPage")
     }
