@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import ElementPlus from 'element-plus'
 import {
-    Button, Form, Field, CellGroup, NavBar, List, Checkbox,
+    Button, Form, Field, CellGroup, NavBar, List, Checkbox,Toast,
     CheckboxGroup, Sidebar, SidebarItem, Cell, Card, Rate, Popup,
     Divider, Image as VanImage, Uploader,Switch ,  Dialog,RadioGroup, Radio,PullRefresh
 } from 'vant'
@@ -40,6 +40,7 @@ createApp(App).use(store)
     .use(Divider)
     .use(Popup)
     .use(PullRefresh)
+    .use(Toast)
     .use(ElementPlus,{
         locale: zhCn,
     }).mount('#app')
