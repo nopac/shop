@@ -179,6 +179,7 @@ export default {
         this.uname_message="用户名不能为空"
         this.upsw_error=true
         this.upsw_message="密码不能为空"
+        Toast.fail("注册失败，请检查信息是否填写正确")
         return;
       }
       //二次确认密码与密码一致
@@ -186,12 +187,14 @@ export default {
         console.log("二次确认不一致")
         this.confirm_error = true
         this.confirm_message = "确认密码不一致!"
+        Toast.fail("注册失败，请检查信息是否填写正确")
         return;
       }
       if(this.inputCode !== this.rightCode){
         console.log("验证码错误")
         this.code_error = true
         this.code_message = "验证码错误!"
+        Toast.fail("注册失败，请检查信息是否填写正确")
         return;
       }
       request.post("http://localhost:8081/shop/user",this.userForm).then(res =>{
@@ -303,6 +306,7 @@ export default {
 }
 .opeBoard{
   margin-top: 0.4rem;
+  width: 8rem;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
