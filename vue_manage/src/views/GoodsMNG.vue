@@ -147,11 +147,11 @@
                 :rules="[{ required: true, message: '请填写商品价格' }]"
             />
 
-<!--            <van-field name="switch" label="是否可议价">-->
-<!--              <template #input>-->
-<!--                <van-switch v-model="buttomClose" size="20"/>-->
-<!--              </template>-->
-<!--            </van-field>-->
+            <!--            <van-field name="switch" label="是否可议价">-->
+            <!--              <template #input>-->
+            <!--                <van-switch v-model="buttomClose" size="20"/>-->
+            <!--              </template>-->
+            <!--            </van-field>-->
 
             <van-cell center title="是否可议价">
               <template #right-icon>
@@ -203,18 +203,26 @@
             <!--              <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
             <!--            </el-upload>-->
 
-            <van-uploader
-                v-show="this.operate=='addUser'"
-                v-model="fileList"
-                multiple :max-count="1"
-                :action="'https://jsonplaceholder.typicode.com/posts/'"
-            >
-              <template #tip>
-                <div class="el-upload__tip" style="width: 200px">
-                  jpg/png 文件大小需小于 500KB.
-                </div>
-              </template>
-            </van-uploader>
+            <el-form-item label-width="100px" label="商品图片">
+              <el-upload
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="3"
+                  :on-exceed="handleExceed"
+                  :file-list="fileList"
+              >
+                <el-button type="primary">点击上传商品图片</el-button>
+                <template #tip>
+                  <div class="el-upload__tip" style="width: 200px">
+                    jpg/png 文件大小需小于 500KB.
+                  </div>
+                </template>
+              </el-upload>
+            </el-form-item>
 
             <!--            <el-form-item label-width="100px" label="商品图片">-->
             <!--              <el-upload-->

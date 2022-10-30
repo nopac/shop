@@ -63,6 +63,7 @@
           v-model:show="reasonVisible"
           :before-close="refuse"
           teleport="body"
+          show-cancel-button
       >
         <van-field v-model="ordersForm.mnote" placeholder="填写拒绝退货原因" size="large"/>
       </van-dialog>
@@ -251,23 +252,26 @@ export default {
       this.reasonVisible = true;
       this.ordersForm = order;
     },
-    refuse() {
-      this.ordersForm = JSON.parse(JSON.stringify(this.ordersForm));
-      request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm, {
-        params: {status: -3}
-      }).then(res => {
-        if (res.code === '0') {
-          //console.log("reject:" + res);
-          this.$message({
-            type: "success",
-            message: "已拒绝退货！",
-          });
-          this.pullRefresh();
-          this.reasonVisible = false
-        } else {
-          Toast.fail(res.msg)
-        }
-      })
+    refuse(action) {
+      if(action === "confirm"){
+        this.ordersForm = JSON.parse(JSON.stringify(this.ordersForm));
+        request.put("http://39.105.220.225:8081/shop/orders", this.ordersForm, {
+          params: {status: -3}
+        }).then(res => {
+          if (res.code === '0') {
+            //console.log("reject:" + res);
+            Toast.success('已拒绝退货！')
+            this.pullRefresh();
+            this.reasonVisible = false
+          } else {
+            Toast.fail(res.msg)
+          }
+        })
+      }else {
+        this.ordersForm = {}
+        this.reasonVisible = false
+      }
+
     },
     tags(order) {
       switch (order.status) {

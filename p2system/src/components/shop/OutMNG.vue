@@ -63,6 +63,7 @@
           v-model:show="fillIDVisible"
           :before-close="outGoods"
           teleport="body"
+          show-cancel-button
       >
         <van-field v-model="ordersForm.deliverID" placeholder="填写快递单号" size="large"/>
       </van-dialog>
@@ -275,7 +276,8 @@ export default {
           }
         })
       }else{
-        this.ordersForm = {}
+        this.ordersForm = {};
+        this.fillIDVisible = false
       }
     },
     /*updateDeliderID() {

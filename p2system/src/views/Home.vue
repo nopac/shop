@@ -137,6 +137,7 @@ export default {
           pageSize: this.pageSize,
           search: this.search,
           sort: this.value,
+          uid: window.localStorage.getItem("uid")
         }
       }).then(res => {
             if(res.data.code === "0"){
@@ -186,6 +187,7 @@ export default {
           pageSize: this.pageSize,
           search: this.search,
           sort: this.value,
+          uid: window.localStorage.getItem("uid")
         }
       })
       .then(res => {
