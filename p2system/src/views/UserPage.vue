@@ -48,7 +48,9 @@
                closeable class="investPopUp">
       <span class="invest-Title">充值</span>
       <div class="popupBottom">
-        <van-field class="inputInvest" v-model="investNum" type="number" placeholder="请输入充值金额" label="充值金额"/>
+        <van-field class="inputInvest" v-model="investNum" type="number" placeholder="请输入充值金额" >
+
+        </van-field>
         <van-button type="primary" @click="submit" style="margin-right: 1rem">充值</van-button>
       </div>
     </van-popup>
@@ -134,7 +136,7 @@ export default {
       imageUrl:"",
       licenseUrl: "",
       idUrl: "",
-      investNum: 0,
+      investNum: null,
       headSrc: 'default_head',
       labelPosition: 'right',
       labelWith: '70px',
