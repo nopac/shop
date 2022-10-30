@@ -14,18 +14,49 @@
         </van-field>
       </van-cell-group>
     </div>
+
+
+<!--    <div class="displayBoard">-->
+<!--      <van-cell v-for="(item, index) in tableData" :key="item">-->
+<!--          <van-card-->
+<!--              :num="item.number"-->
+<!--              :price="item.price"-->
+<!--              :title="item.gname"-->
+<!--              :thumb="item.picture">-->
+<!--            <template #footer>-->
+<!--              <el-popconfirm title="确认取消订单吗？" @confirm="deleteGoods(item.oid),load()">-->
+<!--                <template #reference>-->
+<!--                  <van-button size="small">取消订单</van-button>-->
+<!--                </template>-->
+<!--              </el-popconfirm>-->
+<!--            </template>-->
+<!--          </van-card>-->
+<!--      </van-cell>-->
+<!--    </div>-->
+
     <div class="displayBoard">
-
-
-      <van-cell v-for="(item, index) in tableData" :key="item">
-
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="load"
+            loading-text="加载中"
+        >
           <van-card
-              :num="item.number"
-              :price="item.price"
-              :title="item.gname"
-              :thumb="item.picture">
+              v-for="order in tableData"
+              :num="order.number"
+              :price="order.price"
+              :title="order.gname"
+              :thumb="order.picture"
+          >
             <template #footer>
-              <el-popconfirm title="确认取消订单吗？" @confirm="deleteGoods(item.oid),load()">
+              <el-popconfirm title="确认取消订单吗？" @confirm="deleteGoods(order.oid),load()">
                 <template #reference>
                   <van-button size="small">取消订单</van-button>
                 </template>
@@ -33,23 +64,25 @@
             </template>
           </van-card>
 
-      </van-cell>
-
+        </van-list>
+      </van-pull-refresh>
     </div>
+
+
 
 
     <!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+<!--    <div style="margin: 10px">-->
+<!--      <el-pagination-->
+<!--          @size-change="handleSizeChange"-->
+<!--          @current-change="handleCurrentChange"-->
+<!--          :current-page="currentPage"-->
+<!--          :page-sizes="[5, 10, 20]"-->
+<!--          :page-size="pageSize"-->
+<!--          layout="total, sizes, prev, pager, next, jumper"-->
+<!--          :total="total">-->
+<!--      </el-pagination>-->
+<!--    </div>-->
 
   </div>
 </template>
@@ -68,6 +101,9 @@ export default {
   },
   data(){
     return{
+      finished: false,
+      loading: false,
+      refreshLoading:false,
       statusSelect: "",
       searchText: "",
       searchSelect: "gname",
@@ -112,10 +148,21 @@ export default {
                 item.picture = this.baseUrl + res.data.data.picture;
               })
             })
-
+            this.finished = true;
           })
     },
     search(){
+      this.load();
+    },
+
+    //下拉刷新
+    pullRefresh(){
+      this.tableData=[];
+      this.currentPage = 1;
+      this.form = {};
+      this.searchText = "";
+      this.finished = false;
+      this.refreshLoading = false;
       this.load();
     },
 

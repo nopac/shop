@@ -9,41 +9,72 @@
       <el-button type="primary" style="margin: 0 5px"
                  @click="search">查询</el-button>
     </div>
+
+
+<!--    <div class="displayBoard">-->
+<!--      <van-cell v-for="(item, index) in tableData" :key="item">-->
+<!--        <van-card-->
+<!--            :num="item.number"-->
+<!--            :price="item.price"-->
+<!--            :title="item.gname"-->
+<!--            :thumb="item.picture">-->
+<!--          <template #footer>-->
+<!--            <el-popconfirm title="确认收货吗？" @confirm="receiveGoods(item),load()">-->
+<!--              <template #reference>-->
+<!--                <el-button type="text" size="small">收货</el-button>-->
+<!--              </template>-->
+<!--            </el-popconfirm>-->
+<!--          </template>-->
+<!--        </van-card>-->
+<!--      </van-cell>-->
+<!--    </div>-->
+
     <div class="displayBoard">
+      <van-pull-refresh
+          v-model="refreshLoading"
+          success-text="刷新成功"
+          @refresh="pullRefresh"
+          pulling-text="下拉即可刷新"
+          style="min-height: 100vh">
+        <van-list
+            v-model:loading="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="load"
+            loading-text="加载中"
+        >
+          <van-card
+              v-for="order in tableData"
+              :num="order.number"
+              :price="order.price"
+              :title="order.gname"
+              :thumb="order.picture"
+          >
+            <template #footer>
+              <el-popconfirm title="确认收货吗？" @confirm="receiveGoods(order),load()">
+                <template #reference>
+                  <van-button size="small">收货</van-button>
+                </template>
+              </el-popconfirm>
+            </template>
+          </van-card>
 
-
-      <van-cell v-for="(item, index) in tableData" :key="item">
-
-        <van-card
-            :num="item.number"
-            :price="item.price"
-            :title="item.gname"
-            :thumb="item.picture">
-          <template #footer>
-            <el-popconfirm title="确认收货吗？" @confirm="receiveGoods(item),load()">
-              <template #reference>
-                <el-button type="text" size="small">收货</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </van-card>
-
-      </van-cell>
-
+        </van-list>
+      </van-pull-refresh>
     </div>
 
     <!--    分页-->
-    <div style="margin: 10px">
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+<!--    <div style="margin: 10px">-->
+<!--      <el-pagination-->
+<!--          @size-change="handleSizeChange"-->
+<!--          @current-change="handleCurrentChange"-->
+<!--          :current-page="currentPage"-->
+<!--          :page-sizes="[5, 10, 20]"-->
+<!--          :page-size="pageSize"-->
+<!--          layout="total, sizes, prev, pager, next, jumper"-->
+<!--          :total="total">-->
+<!--      </el-pagination>-->
+<!--    </div>-->
 
   </div>
 </template>
@@ -59,6 +90,9 @@ export default {
   },
   data(){
     return{
+      finished: false,
+      loading: false,
+      refreshLoading:false,
       searchText: "",
       currentPage: 1,
       pageSize: 5,
@@ -100,6 +134,7 @@ export default {
                 item.picture = this.baseUrl + res.data.data.picture;
               })
             })
+            this.finished = true;
 
 
           })
@@ -119,6 +154,7 @@ export default {
           Toast.fail(res.msg)
         }
       })
+      this.pullRefresh();
     },
     handleSizeChange(val) {//改变每页的显示条数
       this.pageSize = val;
@@ -128,6 +164,16 @@ export default {
       this.currentPage=val
       this.load()
     },
+    //下拉刷新
+    pullRefresh(){
+      this.tableData=[];
+      this.currentPage = 1;
+      this.form = {};
+      this.searchText = "";
+      this.finished = false;
+      this.refreshLoading = false;
+      this.load();
+    }
 
 
   }
