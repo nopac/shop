@@ -52,9 +52,9 @@
               <van-col :offset="1" span="7">
                 <div>库存:{{ order.storage }}</div>
               </van-col>
-              <van-col :offset="1" span="7">
-                <div>新旧程度:{{ order.gcondition }}</div>
-              </van-col>
+<!--              <van-col :offset="1" span="7">-->
+<!--                <div>新旧程度:{{ order.gcondition }}</div>-->
+<!--              </van-col>-->
             </van-row>
             <van-row>
               <van-col span="8">
@@ -71,12 +71,12 @@
               <van-col span="5">
                 <div>销量:{{ order.sale }}</div>
               </van-col>
-              <van-col :offset="1" span="12">
-                <div>是否可议价:
-                  <span v-show="order.bargain === 'true'">可议价</span>
-                  <span v-show="order.bargain === 'false'">一口价</span>
-                </div>
-              </van-col>
+<!--              <van-col :offset="1" span="12">-->
+<!--                <div>是否可议价:-->
+<!--                  <span v-show="order.bargain === 'true'">可议价</span>-->
+<!--                  <span v-show="order.bargain === 'false'">一口价</span>-->
+<!--                </div>-->
+<!--              </van-col>-->
             </van-row>
             <van-row>
               <van-col>
@@ -153,24 +153,24 @@
             <!--              </template>-->
             <!--            </van-field>-->
 
-            <van-cell center title="是否可议价">
-              <template #right-icon>
-                <van-switch v-model="this.buttomClose" size="24" />
-              </template>
-            </van-cell>
+<!--            <van-cell center title="是否可议价">-->
+<!--              <template #right-icon>-->
+<!--                <van-switch v-model="this.buttomClose" size="24" />-->
+<!--              </template>-->
+<!--            </van-cell>-->
 
             <van-field name="stepper" label="库存">
               <template #input>
                 <van-stepper v-model="goodsForm.storage"/>
               </template>
             </van-field>
-            <van-field
-                v-model="goodsForm.gcondition"
-                name="新旧程度"
-                label="新旧程度"
-                placeholder="新旧程度"
-                :rules="[{ required: true, message: '请填写新旧程度' }]"
-            />
+<!--            <van-field-->
+<!--                v-model="goodsForm.gcondition"-->
+<!--                name="新旧程度"-->
+<!--                label="新旧程度"-->
+<!--                placeholder="新旧程度"-->
+<!--                :rules="[{ required: true, message: '请填写新旧程度' }]"-->
+<!--            />-->
             <van-field
                 v-model="goodsForm.sale"
                 name="折扣"
