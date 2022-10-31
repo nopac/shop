@@ -149,28 +149,9 @@ export default {
         console.log(res.data)
         this.good = res.data.data;
         this.good.picture = this.baseURL+this.good.picture;
-        this.tableData=[{
-          type: '大小',
-          information: this.good.size,
-        },{
-          type: '能否议价',
-          information: this.good.bargain==true? '能' : '否',
-        },{
-          type: '库存',
-          information: this.good.storage,
-        },{
-          type: '成色',
-          information: this.good.gcondition,
-        },{
-          type: '销量',
-          information: this.good.sale,
-        },{
-          type: '好评率',
-          information: this.good.likeRate,
-        },{
-          type: '详情信息',
-          information: this.good.introduction,
-        }]
+        let lr = this.good.likeRate
+        lr = parseFloat(lr).toFixed(2)
+        this.good.likeRate = lr
       })
     },
     loadReview(){
