@@ -1,15 +1,17 @@
 <template>
   <div style="margin: 10px">
     <div class="opeBoard">
-      <el-button type="primary" @click="load">刷新</el-button>
+      <span style="float: left">
+        <van-button size="small" type="primary" @click="load">刷新</van-button>
+      </span>
+        <span style="float: left">
+          <van-field v-model="searchText" placeholder="输入商品名" clearable>
+          </van-field>
+        </span>
+      <span style="float: left">
+          <van-button size="small" type="primary" @click="search" style="margin-left: 20px">查询</van-button>
+      </span>
     </div>
-    <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入商品名" style="width: 20%" clearable>
-      </el-input>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="search">查询</el-button>
-    </div>
-
 
 <!--    <div class="displayBoard">-->
 <!--      <van-cell v-for="(item, index) in tableData" :key="item">-->
@@ -29,7 +31,7 @@
 <!--      </van-cell>-->
 <!--    </div>-->
 
-    <div class="displayBoard">
+    <div class="displayBoard" style="clear: both">
       <van-pull-refresh
           v-model="refreshLoading"
           success-text="刷新成功"
