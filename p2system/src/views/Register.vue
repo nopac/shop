@@ -197,7 +197,7 @@ export default {
         Toast.fail("注册失败，请检查信息是否填写正确")
         return;
       }
-      request.post("http://localhost:8081/shop/user",this.userForm).then(res =>{
+      request.post("http://39.105.220.225:8081/shop/user",this.userForm).then(res =>{
         if(res.code === '0'){
           Toast.success("注册成功")
           this.$router.push("/login")
