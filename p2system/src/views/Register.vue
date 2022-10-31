@@ -199,7 +199,10 @@ export default {
       }
       request.post("http://39.105.220.225:8081/shop/user",this.userForm).then(res =>{
         if(res.code === '0'){
-          Toast.success("注册成功")
+          Toast.success({
+            message: '注册成功',
+            position: 'bottom',
+          });
           this.$router.push("/login")
         }else if(res.code === '-2'){
           this.unameUnique=false
