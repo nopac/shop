@@ -283,6 +283,7 @@ export default {
       this.code_right= false
       this.confirm_right= false
       this.uname_right= false
+      this.code_message = ""
     }
   },
 }
