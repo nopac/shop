@@ -13,8 +13,8 @@
                 @search="searchName"
             >
               <template #action>
-<!--                <div @click="searchName">搜索</div>-->
-<!--                <van-button type="primary" size="small" @click="searchName">搜索</van-button>-->
+                <!--                <div @click="searchName">搜索</div>-->
+                <!--                <van-button type="primary" size="small" @click="searchName">搜索</van-button>-->
               </template>
             </van-search>
             <!--      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>-->
@@ -203,26 +203,36 @@
             <!--              <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
             <!--            </el-upload>-->
 
-            <el-form-item label-width="100px" label="商品图片">
-              <el-upload
-                  class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :before-remove="beforeRemove"
-                  multiple
-                  :limit="3"
-                  :on-exceed="handleExceed"
-                  :file-list="fileList"
-              >
-                <el-button type="primary">点击上传商品图片</el-button>
-                <template #tip>
-                  <div class="el-upload__tip" style="width: 200px">
-                    jpg/png 文件大小需小于 500KB.
-                  </div>
-                </template>
-              </el-upload>
-            </el-form-item>
+            <div>
+              <font size="2">上传图片:     </font>
+              <!--        <van-uploader v-model="fileList" multiple :max-count="1" :after-read="pictureUploadSuccess"/>-->
+
+              <div style="float: left;width: 35%;">
+                <el-image class="imageArea"
+                          style=""
+                          :src="this.showPictureUrl">
+                  <template #error>
+                    <div class="image-slot">
+                      <el-icon><Picture /></el-icon>
+                    </div>
+                  </template>
+                </el-image>
+                <div>
+                  <el-upload
+                      :action=pictureUrl
+                      :on-success="pictureUploadSuccess"
+                      :show-file-list="false"
+                      :on-change="handleChange"
+                      :file-list="fileList"
+                      :limit="1"
+                  >
+                    <el-button type="primary" size="medium">点击上传商品图片</el-button>
+                  </el-upload>
+                </div>
+
+              </div>
+
+            </div>
 
             <!--            <el-form-item label-width="100px" label="商品图片">-->
             <!--              <el-upload-->
@@ -330,6 +340,7 @@
 
 <script>
 // @ is an alias to /src
+import { ShoppingCart,Picture } from '@element-plus/icons-vue'
 import GoodsExpand from "@/components/GoodsExpand";
 import request from "@/util/request";
 import axios from "axios";
@@ -345,13 +356,16 @@ export default {
       isDelete: false,
       goodsDialogTitle: "",
       searchText: "",
+      pictureUrl:"",
       currentPage: 1,
+      showPictureUrl:"",
       pageSize: 5,
       total: 10,
       addGoodsVisible: false,
       DataList: [],
       tableData: [],
       goodsForm: {},
+      fileList:[],
       buttomClose: true,
       deleteid: "",
       deleteMessage: "",
@@ -360,6 +374,7 @@ export default {
   },
   created() {
     this.load()
+    this.pictureUrl = "http://39.105.220.225:8081/shop/files/upload"
   },
   methods: {
     load() {
@@ -388,7 +403,21 @@ export default {
     searchName() {
       this.load();
     },
-
+    pictureUploadSuccess(res){
+      console.log("第一次测试"+res.token)
+      this.goodsForm.picture = res.token
+      this.showPictureUrl = this.baseUrl+this.goodsForm.picture
+    },
+    handleChange(file){
+      console.log("第二次测试")
+      this.fileList=[file]
+      this.showPictureUrl = this.baseUrl+this.goodsForm.picture
+      console.log("第二次测试"+this.showPictureUrl)
+    },
+    getPicture(){
+      console.log(this.goodsForm.picture)
+      this.showPictureUrl = this.baseUrl+this.goodsForm.picture
+    },
     isDelete_(order) {
       this.isDelete = true
       this.deleteid = order.gid
@@ -517,5 +546,16 @@ export default {
 .formItem {
   display: inline-flex;
   width: 250px;
+}
+
+.image-slot{
+  width: 400px;
+  border: 1px solid;
+  height: 300px;
+}
+
+.imageArea{
+  width: 400px;
+  height: 300px;
 }
 </style>
