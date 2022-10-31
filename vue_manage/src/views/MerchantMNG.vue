@@ -52,7 +52,7 @@
           </van-search>
         </van-col>
         <van-col offset="1">
-          <van-button type="primary" @click="load">刷新</van-button>
+          <van-button type="primary" size="mini" @click="load">刷新</van-button>
         </van-col>
       </van-row>
     </div>

@@ -1,16 +1,21 @@
 <template>
   <div class="GoodsMNG">
-    <div class="opeBoard">
-      <el-button type="primary" @click="addGoods">新增</el-button>
-      <el-button type="primary" @click="load">刷新</el-button>
-    </div>
+
     <div class="searchBoard">
-      <el-input v-model="searchText" placeholder="输入关键字" style="width: 20%" clearable/>
-      <el-button type="primary" style="margin: 0 5px"
-                 @click="searchName">查询</el-button>
+      <el-input v-model="searchText" placeholder="输入关键字" style="width: 40%;height: 25px;margin-top: 0.5px" clearable/>
+      <!-- 可以使用 CellGroup 作为容器 -->
+<!--      <van-cell-group inset>-->
+<!--        <van-field v-model="searchText" border placeholder="请输入关键字" />-->
+<!--      </van-cell-group>-->
+
+      <van-button type="primary" size="small" style="margin: 0 5px;margin-bottom: 1px"
+                 @click="searchName">查询</van-button>
+      <van-button type="primary" size="small" style="margin: 0 5px" @click="addGoods">新增</van-button>
+      <van-button type="primary" size="small" style="margin: 0 5px" @click="load">刷新</van-button>
+      <div class="opeBoard">
+
+      </div>
     </div>
-
-
 
 
     <div class="displayBoard">
@@ -183,6 +188,7 @@
           </el-form-item>
           <!--    商品图片上传-->
           <el-form-item class="formItem" label-width="100px" label="商品图片">
+            <el-button type="primary">点击上传商品图片</el-button>
               <el-upload
                   :action=pictureUrl
                   :on-success="pictureUploadSuccess"
@@ -191,7 +197,7 @@
                   :file-list="fileList"
                   :limit="1"
               >
-                <el-button type="primary">点击上传商品图片</el-button>
+
               </el-upload>
           </el-form-item>
 
@@ -232,6 +238,7 @@ import GoodsExpand from "@/components/shop/GoodsExpand";
 import request from "@/util/request";
 import axios from "axios";
 import {ref} from "@vue/reactivity";
+import {Toast} from "vant";
 export default {
   name: 'GoodsMNG',
   components: {
@@ -239,6 +246,7 @@ export default {
   },
   data(){
     return {
+
       show: ref(false),
       operate: "",
       goodsDialogTitle: "",
@@ -248,8 +256,7 @@ export default {
       total: 10,
       addGoodsVisible: false,
       DataList:[],
-      tableData : [
-      ],
+      tableData : [],
       userForm:{},
       goodsForm:{},
       uid:"",
@@ -411,6 +418,8 @@ export default {
         this.tableData = []
         this.load();
       })
+      this.show = ref(false)
+      this.created()
     },
     saveGoods(){//新增商品
       this.goodsForm.status=3;
@@ -432,6 +441,8 @@ export default {
           Toast.fail(res.msg)
         }
       })
+      this.show = ref(false)
+      this.created()
     },
     handleSizeChange(val) {//改变每页的显示条数
       this.pageSize = val;

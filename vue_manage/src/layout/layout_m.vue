@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-row span="24"><!--顶部栏-->
+    <van-row><!--顶部栏-->
       <van-col span="24">
         <Header/>
       </van-col>

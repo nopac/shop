@@ -204,10 +204,10 @@
             <!--            </el-upload>-->
 
             <div>
-              <font size="2">上传图片:     </font>
+              <font size="2">上传图片: </font>
               <!--        <van-uploader v-model="fileList" multiple :max-count="1" :after-read="pictureUploadSuccess"/>-->
 
-              <div style="float: left;width: 35%;">
+              <div style="float: left;width: 40%;">
                 <el-image class="imageArea"
                           style=""
                           :src="this.showPictureUrl">
@@ -226,7 +226,7 @@
                       :file-list="fileList"
                       :limit="1"
                   >
-                    <el-button type="primary" size="medium">点击上传商品图片</el-button>
+                    <van-button type="primary" size="mini">点击上传商品图片</van-button><br><br>
                   </el-upload>
                 </div>
 

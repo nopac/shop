@@ -14,19 +14,19 @@
       <van-field v-model="goodsForm.type" label="商品类型"/>
       <van-checkbox-group v-model="isChecked" direction="horizontal" max="6">
         <div>
-          <van-checkbox name="食品" icon-size="15px" style="font-size: 20px">食品</van-checkbox>
-          <van-checkbox name="文具" icon-size="15px" style="font-size: 20px">文具</van-checkbox>
-          <van-checkbox name="图书" icon-size="15px" style="font-size: 20px">图书</van-checkbox>
-          <van-checkbox name="手机" icon-size="15px" style="font-size: 20px">手机</van-checkbox>
-          <van-checkbox name="日用品" icon-size="15px" style="font-size: 20px">日用品</van-checkbox>
+          <van-checkbox name="食品" icon-size="15px" style="font-size: 18px">食品</van-checkbox>
+          <van-checkbox name="文具" icon-size="15px" style="font-size: 18px">文具</van-checkbox>
+          <van-checkbox name="图书" icon-size="15px" style="font-size: 18px">图书</van-checkbox>
+          <van-checkbox name="手机" icon-size="15px" style="font-size: 18px">手机</van-checkbox>
+          <van-checkbox name="日用品" icon-size="15px" style="font-size: 18px">日用品</van-checkbox>
         </div>
         <div>
 <!--          <van-checkbox name="家具">家具</van-checkbox>-->
-          <van-checkbox name="电脑" icon-size="15px" style="font-size: 20px">电脑</van-checkbox>
-          <van-checkbox name="服装" icon-size="15px" style="font-size: 20px">服装</van-checkbox>
-          <van-checkbox name="数码" icon-size="15px" style="font-size: 20px">数码</van-checkbox>
-          <van-checkbox name="户外" icon-size="15px" style="font-size: 20px">户外</van-checkbox>
-          <van-checkbox name="运动" icon-size="15px" style="font-size: 20px">运动</van-checkbox>
+          <van-checkbox name="电脑" icon-size="15px" style="font-size: 18px">电脑</van-checkbox>
+          <van-checkbox name="服装" icon-size="15px" style="font-size: 18px">服装</van-checkbox>
+          <van-checkbox name="数码" icon-size="15px" style="font-size: 18px">数码</van-checkbox>
+          <van-checkbox name="户外" icon-size="15px" style="font-size: 18px">户外</van-checkbox>
+          <van-checkbox name="运动" icon-size="15px" style="font-size: 18px">运动</van-checkbox>
         </div>
       </van-checkbox-group>
 
@@ -47,7 +47,7 @@
       </div>
       <br>
       <div>
-        <font size="2">上传图片:     </font>
+        <font size="2">上传图片:</font>
 <!--        <van-uploader v-model="fileList" multiple :max-count="1" :after-read="pictureUploadSuccess"/>-->
 
               <div style="float: left;width: 35%;">
@@ -69,14 +69,14 @@
                       :file-list="fileList"
                       :limit="1"
                   >
-                    <el-button type="primary" size="medium">点击上传商品图片</el-button>
+                    <van-button type="primary" size="mini">点击上传商品图片</van-button><br><br>
                   </el-upload>
                 </div>
 
               </div>
 
       </div>
-      <van-button round block type="primary" native-type="submit">
+      <van-button round block type="primary" native-type="submit" style="margin-top: 0px">
         提交
       </van-button>
 
